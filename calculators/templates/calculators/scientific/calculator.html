@@ -1,0 +1,1063 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Scientific Calculator | CalcVerse</title>
+
+    <link rel="stylesheet" href="{% static 'calculators/css/calculator.css' %}">
+</head>
+
+<body>
+
+<header class="navbar">
+    <a href="/" class="logo">Calc<span>Verse</span></a>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/category/scientific/">Scientific</a>
+    </nav>
+</header>
+
+<main class="tool-container">
+
+    <div class="tool-hero">
+        <span class="hero-badge">SCIENTIFIC TOOL</span>
+
+        <h1>Scientific <span>Calculator</span></h1>
+
+        <p>Perform advanced mathematical calculations.</p>
+    </div>
+
+
+    <div class="calculator scientific-calculator">
+
+        <input
+            type="text"
+            id="display"
+            value="0"
+            readonly
+        >
+        <div class="angle-mode">
+            <button id="deg-btn" class="active" onclick="setAngleMode('DEG')">DEG</button>
+            <button id="rad-btn" onclick="setAngleMode('RAD')">RAD</button>
+        </div>
+
+        <div class="calculator-buttons">
+
+            <!-- TOP ACTIONS -->
+            <div class="top-actions">
+                <button onclick="clearDisplay()" class="clear-btn">AC</button>
+                <button onclick="deleteLast()" class="delete-btn">DEL</button>
+            </div>
+
+
+            <!-- SCIENTIFIC FUNCTIONS -->
+            <div class="scientific-grid">
+
+                <button onclick="appendValue('sin(')">sin</button>
+                <button onclick="appendValue('cos(')">cos</button>
+                <button onclick="appendValue('tan(')">tan</button>
+                <button onclick="appendValue('cot(')">cot</button>
+
+                <button onclick="appendValue('sec(')">sec</button>
+                <button onclick="appendValue('cosec(')">cosec</button>
+                <button onclick="appendValue('ln(')">ln</button>
+                <button onclick="appendValue('Math.log10(')">log</button>
+
+                <button onclick="appendValue('Math.sqrt(')">√</button>
+                <button onclick="appendValue('Math.PI')">π</button>
+                <button onclick="appendValue('Math.E')">e</button>
+                <button onclick="factorial()">n!</button>
+
+                <button onclick="appendValue('nCr')">nCr</button>
+                <button onclick="appendValue('nPr')">nPr</button>
+                <button onclick="appendValue('(')">(</button>
+                <button onclick="appendValue(')')">)</button>
+
+            </div>
+
+
+            <!-- KEYPAD -->
+            <div class="keypad-section">
+
+                <!-- LEFT OPERATORS -->
+                <div class="operator-column">
+                    <button onclick="appendValue('/')" class="operator-btn">÷</button>
+                    <button onclick="appendValue('*')" class="operator-btn">×</button>
+                    <button onclick="appendValue('-')" class="operator-btn">−</button>
+                    <button onclick="appendValue('+')" class="operator-btn">+</button>
+                    <button onclick="calculate()" class="equals-btn">=</button>
+                </div>
+
+
+                <!-- NUMBER GRID -->
+                <div class="number-grid">
+
+                    <button class="number-btn" onclick="appendValue('7')">7</button>
+                    <button class="number-btn" onclick="appendValue('8')">8</button>
+                    <button class="number-btn" onclick="appendValue('9')">9</button>
+
+                    <button onclick="appendValue('4')">4</button>
+                    <button onclick="appendValue('5')">5</button>
+                    <button onclick="appendValue('6')">6</button>
+
+                    <button onclick="appendValue('1')">1</button>
+                    <button onclick="appendValue('2')">2</button>
+                    <button onclick="appendValue('3')">3</button>
+
+                    <button onclick="appendValue('0')">0</button>
+                    <button onclick="appendValue('.')">.</button>
+                    <button onclick="convertToFraction()" class="frac-btn">Frac</button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+            <div class="history-container">
+
+                <div class="history-header">
+                    <h2>Calculation History</h2>
+
+                    <button onclick="clearHistory()" class="clear-history">
+                        Clear History
+                    </button>
+                </div>
+
+                <div id="history-list">
+                    <p class="empty-history">No calculations yet.</p>
+                </div>
+
+            </div>
+
+    </div>
+
+</main>
+
+
+<script>
+const display = document.getElementById("display");
+
+let lastExpression = "";
+let lastResult = null;
+let angleMode = "DEG";
+
+
+/* =========================
+   DEG / RAD MODE
+========================= */
+
+function setAngleMode(mode) {
+    angleMode = mode;
+
+    const degBtn = document.getElementById("deg-btn");
+    const radBtn = document.getElementById("rad-btn");
+
+    if (degBtn) {
+        degBtn.classList.toggle("active", mode === "DEG");
+    }
+
+    if (radBtn) {
+        radBtn.classList.toggle("active", mode === "RAD");
+    }
+}
+
+
+/* =========================
+   DISPLAY
+========================= */
+
+function appendValue(value) {
+    if (display.value === "0" || display.value === "Error") {
+        display.value = value;
+    } else {
+        display.value += value;
+    }
+}
+
+
+function clearDisplay() {
+    display.value = "0";
+    lastExpression = "";
+    lastResult = null;
+}
+
+
+function deleteLast() {
+    if (
+        display.value === "Error" ||
+        display.value.length <= 1
+    ) {
+        display.value = "0";
+    } else {
+        display.value = display.value.slice(0, -1);
+    }
+}
+
+
+/* =========================
+   ANGLE CONVERSION
+========================= */
+
+function toRadians(angle) {
+    if (angleMode === "DEG") {
+        return angle * Math.PI / 180;
+    }
+
+    return angle;
+}
+
+
+/* =========================
+   TRIG CALCULATION
+========================= */
+
+function calculateTrig(func, angle) {
+
+    // DEG mode-এ special undefined angles handle করা
+    if (angleMode === "DEG") {
+
+        let normalizedAngle =
+            ((angle % 360) + 360) % 360;
+
+        normalizedAngle =
+            Number(normalizedAngle.toFixed(10));
+
+
+        // tan এবং sec undefined at 90°, 270°
+        if (
+            (func === "tan" || func === "sec") &&
+            (normalizedAngle === 90 || normalizedAngle === 270)
+        ) {
+            return Infinity;
+        }
+
+
+        // cot এবং cosec undefined at 0°, 180°, 360°
+        if (
+            (func === "cot" || func === "cosec") &&
+            (
+                normalizedAngle === 0 ||
+                normalizedAngle === 180
+            )
+        ) {
+            return Infinity;
+        }
+    }
+
+
+    const radians = toRadians(angle);
+
+
+    switch (func) {
+
+        case "sin":
+            return Math.sin(radians);
+
+        case "cos":
+            return Math.cos(radians);
+
+        case "tan":
+            return Math.tan(radians);
+
+        case "cot":
+            return 1 / Math.tan(radians);
+
+        case "sec":
+            return 1 / Math.cos(radians);
+
+        case "cosec":
+            return 1 / Math.sin(radians);
+
+        default:
+            throw new Error("Unknown function");
+    }
+}
+
+
+/* =========================
+   CALCULATE
+========================= */
+
+function calculate() {
+
+    try {
+
+        const originalExpression = display.value;
+        let expression = originalExpression;
+
+
+        /*
+        IMPORTANT:
+        cosec আগে, তারপর sec/cot,
+        তারপর sin/cos/tan
+        */
+
+
+        // COSEC
+        expression = expression.replace(
+            /cosec\(([^()]+)\)/g,
+            (_, value) => {
+                const angle = eval(value);
+                return calculateTrig("cosec", angle);
+            }
+        );
+
+
+        // SEC
+        expression = expression.replace(
+            /sec\(([^()]+)\)/g,
+            (_, value) => {
+                const angle = eval(value);
+                return calculateTrig("sec", angle);
+            }
+        );
+
+
+        // COT
+        expression = expression.replace(
+            /cot\(([^()]+)\)/g,
+            (_, value) => {
+                const angle = eval(value);
+                return calculateTrig("cot", angle);
+            }
+        );
+
+
+        // SIN
+        expression = expression.replace(
+            /sin\(([^()]+)\)/g,
+            (_, value) => {
+                const angle = eval(value);
+                return calculateTrig("sin", angle);
+            }
+        );
+
+
+        // COS
+        expression = expression.replace(
+            /cos\(([^()]+)\)/g,
+            (_, value) => {
+                const angle = eval(value);
+                return calculateTrig("cos", angle);
+            }
+        );
+
+
+        // TAN
+        expression = expression.replace(
+            /tan\(([^()]+)\)/g,
+            (_, value) => {
+                const angle = eval(value);
+                return calculateTrig("tan", angle);
+            }
+        );
+
+        /* =========================
+           nCr / nPr
+        ========================= */
+
+        // nCr
+        expression = expression.replace(
+            /(\d+)\s*nCr\s*(\d+)/g,
+            (_, n, r) => {
+
+                n = Number(n);
+                r = Number(r);
+
+                if (
+                    !Number.isInteger(n) ||
+                    !Number.isInteger(r) ||
+                    n < 0 ||
+                    r < 0 ||
+                    r > n
+                ) {
+                    throw new Error("Invalid nCr");
+                }
+
+                let result = 1;
+
+                for (let i = 1; i <= r; i++) {
+                    result = result * (n - r + i) / i;
+                }
+
+                return result;
+            }
+        );
+
+
+        // nPr
+        expression = expression.replace(
+            /(\d+)\s*nPr\s*(\d+)/g,
+            (_, n, r) => {
+
+                n = Number(n);
+                r = Number(r);
+
+                if (
+                    !Number.isInteger(n) ||
+                    !Number.isInteger(r) ||
+                    n < 0 ||
+                    r < 0 ||
+                    r > n
+                ) {
+                    throw new Error("Invalid nPr");
+                }
+
+                let result = 1;
+
+                for (let i = 0; i < r; i++) {
+                    result *= (n - i);
+                }
+
+                return result;
+            }
+        );
+        /* =========================
+           OTHER FUNCTIONS
+        ========================= */
+
+
+        // √
+        expression = expression.replace(
+            /√\(([^()]+)\)/g,
+            (_, value) => {
+                return Math.sqrt(eval(value));
+            }
+        );
+
+
+        // sqrt()
+        expression = expression.replace(
+            /sqrt\(([^()]+)\)/g,
+            (_, value) => {
+                return Math.sqrt(eval(value));
+            }
+        );
+
+
+        // ln()
+        expression = expression.replace(
+            /ln\(([^()]+)\)/g,
+            (_, value) => {
+                return Math.log(eval(value));
+            }
+        );
+
+
+        // log()
+        expression = expression.replace(
+            /log\(([^()]+)\)/g,
+            (_, value) => {
+                return Math.log10(eval(value));
+            }
+        );
+
+
+        // π
+        expression = expression.replace(
+            /π/g,
+            "Math.PI"
+        );
+
+
+        // e
+        expression = expression.replace(
+            /(?<![a-zA-Z])e(?![a-zA-Z])/g,
+            "Math.E"
+        );
+
+
+        /* =========================
+           FINAL RESULT
+        ========================= */
+
+        const result = eval(expression);
+
+
+        if (!Number.isFinite(result)) {
+
+            lastExpression = originalExpression;
+            lastResult = null;
+
+            display.value = "Undefined";
+
+            addToHistory(
+                originalExpression,
+                "Undefined"
+            );
+
+            return;
+        }
+
+
+        const cleanResult = Number(
+            result.toFixed(12)
+        );
+
+
+        lastExpression = originalExpression;
+        lastResult = cleanResult;
+
+        display.value = cleanResult;
+
+        addToHistory(
+            originalExpression,
+            cleanResult
+        );
+
+    } catch (error) {
+
+        display.value = "Error";
+        lastResult = null;
+
+    }
+}
+
+
+/* =========================
+   FRACTION / EXACT VALUE
+========================= */
+
+function convertToFraction() {
+
+    if (!lastExpression) {
+        display.value = "Error";
+        return;
+    }
+
+
+    const expression = lastExpression
+        .replace(/\s/g, "");
+
+
+    /*
+    DEG mode হলে আগে
+    exact trig value খুঁজবে
+    */
+
+    if (angleMode === "DEG") {
+
+        const exactResult =
+            getExactTrigValue(expression);
+
+
+        if (exactResult !== null) {
+
+            display.value = exactResult;
+            updateLastHistory(exactResult);
+            return;
+        }
+    }
+
+
+    /*
+    Exact special angle না হলে
+    decimal → normal fraction
+    */
+
+    if (
+        lastResult === null ||
+        !Number.isFinite(lastResult)
+    ) {
+        display.value = "Error";
+        return;
+    }
+
+
+    const fraction =
+        decimalToFraction(lastResult);
+
+
+    let fractionResult;
+
+
+    if (fraction.denominator === 1) {
+
+        fractionResult =
+            fraction.numerator.toString();
+
+    } else {
+
+        fractionResult =
+            `${fraction.numerator}/${fraction.denominator}`;
+
+    }
+
+
+    display.value = fractionResult;
+
+    updateLastHistory(fractionResult);
+}
+
+
+/* =========================
+   UNIVERSAL SPECIAL ANGLES
+========================= */
+
+function getExactTrigValue(expression) {
+
+    const match = expression.match(
+        /^(sin|cos|tan|cot|sec|cosec)\((-?\d+(?:\.\d+)?)\)$/
+    );
+
+
+    if (!match) {
+        return null;
+    }
+
+
+    const func = match[1];
+    let angle = Number(match[2]);
+
+
+    /*
+    390 → 30
+    450 → 90
+    -30 → 330
+    720 → 0
+    */
+
+    angle = ((angle % 360) + 360) % 360;
+
+    angle = Number(angle.toFixed(10));
+
+
+    /*
+    Reference angle বের করা
+    */
+
+    let referenceAngle;
+
+
+    if (angle <= 90) {
+
+        referenceAngle = angle;
+
+    } else if (angle <= 180) {
+
+        referenceAngle = 180 - angle;
+
+    } else if (angle <= 270) {
+
+        referenceAngle = angle - 180;
+
+    } else {
+
+        referenceAngle = 360 - angle;
+
+    }
+
+
+    referenceAngle =
+        Number(referenceAngle.toFixed(10));
+
+
+    /*
+    শুধু যেসব angle-এর
+    simple exact value আছে
+    */
+
+    const specialAngles = [
+        0, 30, 45, 60, 90
+    ];
+
+
+    if (!specialAngles.includes(referenceAngle)) {
+        return null;
+    }
+
+
+    /* =========================
+       EXACT BASE VALUES
+    ========================= */
+
+    const values = {
+
+        sin: {
+            0: "0",
+            30: "1/2",
+            45: "1/√2",
+            60: "√3/2",
+            90: "1"
+        },
+
+        cos: {
+            0: "1",
+            30: "√3/2",
+            45: "1/√2",
+            60: "1/2",
+            90: "0"
+        },
+
+        tan: {
+            0: "0",
+            30: "1/√3",
+            45: "1",
+            60: "√3",
+            90: "Undefined"
+        },
+
+        cot: {
+            0: "Undefined",
+            30: "√3",
+            45: "1",
+            60: "1/√3",
+            90: "0"
+        },
+
+        sec: {
+            0: "1",
+            30: "2/√3",
+            45: "√2",
+            60: "2",
+            90: "Undefined"
+        },
+
+        cosec: {
+            0: "Undefined",
+            30: "2",
+            45: "√2",
+            60: "2/√3",
+            90: "1"
+        }
+
+    };
+
+
+    let result =
+        values[func][referenceAngle];
+
+
+    if (result === undefined) {
+        return null;
+    }
+
+
+    /*
+    Undefined হলে sign লাগবে না
+    */
+
+    if (result === "Undefined") {
+        return "Undefined";
+    }
+
+
+    /*
+    Zero হলে minus লাগবে না
+    */
+
+    if (result === "0") {
+        return "0";
+    }
+
+
+    /* =========================
+       SIGN DETECTION
+    ========================= */
+
+    let sign = 1;
+
+
+    // SIN / COSEC
+    if (
+        func === "sin" ||
+        func === "cosec"
+    ) {
+
+        if (angle > 180 && angle < 360) {
+            sign = -1;
+        }
+    }
+
+
+    // COS / SEC
+    else if (
+        func === "cos" ||
+        func === "sec"
+    ) {
+
+        if (angle > 90 && angle < 270) {
+            sign = -1;
+        }
+    }
+
+
+    // TAN / COT
+    else if (
+        func === "tan" ||
+        func === "cot"
+    ) {
+
+        if (
+            (angle > 90 && angle < 180) ||
+            (angle > 270 && angle < 360)
+        ) {
+            sign = -1;
+        }
+    }
+
+
+    if (sign === -1) {
+        return "-" + result;
+    }
+
+
+    return result;
+}
+
+
+/* =========================
+   DECIMAL → FRACTION
+========================= */
+
+function decimalToFraction(value) {
+
+    const sign =
+        value < 0 ? -1 : 1;
+
+    value = Math.abs(value);
+
+
+    if (Number.isInteger(value)) {
+
+        return {
+            numerator: sign * value,
+            denominator: 1
+        };
+
+    }
+
+
+    let bestNumerator = 0;
+    let bestDenominator = 1;
+    let smallestError = Infinity;
+
+
+    for (
+        let denominator = 1;
+        denominator <= 10000;
+        denominator++
+    ) {
+
+        const numerator =
+            Math.round(value * denominator);
+
+        const approximation =
+            numerator / denominator;
+
+        const error =
+            Math.abs(value - approximation);
+
+
+        if (error < smallestError) {
+
+            smallestError = error;
+
+            bestNumerator = numerator;
+            bestDenominator = denominator;
+
+        }
+
+
+        if (error < 1e-10) {
+            break;
+        }
+    }
+
+
+    return {
+        numerator:
+            sign * bestNumerator,
+
+        denominator:
+            bestDenominator
+    };
+}
+
+
+/* =========================
+   HISTORY
+========================= */
+
+function addToHistory(expression, result) {
+
+    const historyList =
+        document.getElementById("history-list");
+
+
+    if (!historyList) return;
+
+
+    const emptyMessage =
+        historyList.querySelector(
+            ".empty-history"
+        );
+
+
+    if (emptyMessage) {
+        emptyMessage.remove();
+    }
+
+
+    const historyItem =
+        document.createElement("div");
+
+
+    historyItem.classList.add(
+        "history-item"
+    );
+
+
+    historyItem.innerHTML = `
+        <span>${expression}</span>
+        <strong>= ${result}</strong>
+    `;
+
+
+    historyList.prepend(historyItem);
+}
+
+
+function clearHistory() {
+
+    const historyList =
+        document.getElementById("history-list");
+
+
+    if (!historyList) return;
+
+
+    historyList.innerHTML = `
+        <p class="empty-history">
+            No calculations yet.
+        </p>
+    `;
+}
+
+function updateLastHistory(result) {
+
+    const historyList =
+        document.getElementById("history-list");
+
+    if (!historyList) return;
+
+    const firstHistoryItem =
+        historyList.querySelector(".history-item");
+
+    if (!firstHistoryItem) return;
+
+    const resultElement =
+        firstHistoryItem.querySelector("strong");
+
+    if (resultElement) {
+        resultElement.textContent = `= ${result}`;
+    }
+}
+
+/* =========================
+   FACTORIAL
+========================= */
+
+function factorial() {
+
+    try {
+
+        const value =
+            Number(display.value);
+
+
+        if (
+            !Number.isInteger(value) ||
+            value < 0
+        ) {
+            throw new Error(
+                "Invalid factorial"
+            );
+        }
+
+
+        let result = 1;
+
+
+        for (
+            let i = 2;
+            i <= value;
+            i++
+        ) {
+            result *= i;
+        }
+
+
+        lastExpression = `${value}!`;
+        lastResult = result;
+
+        display.value = result;
+
+
+        addToHistory(
+            lastExpression,
+            result
+        );
+
+    } catch (error) {
+
+        display.value = "Error";
+
+    }
+}
+
+function combination(n, r) {
+
+    if (
+        !Number.isInteger(n) ||
+        !Number.isInteger(r) ||
+        n < 0 ||
+        r < 0 ||
+        r > n
+    ) {
+        return null;
+    }
+
+    let result = 1;
+
+    // ছোট r ব্যবহার করলে calculation better হয়
+    r = Math.min(r, n - r);
+
+    for (let i = 1; i <= r; i++) {
+        result = result * (n - r + i) / i;
+    }
+
+    return result;
+}
+
+
+function permutation(n, r) {
+
+    if (
+        !Number.isInteger(n) ||
+        !Number.isInteger(r) ||
+        n < 0 ||
+        r < 0 ||
+        r > n
+    ) {
+        return null;
+    }
+
+    let result = 1;
+
+    for (let i = 0; i < r; i++) {
+        result *= (n - i);
+    }
+
+    return result;
+}
+</script>
+
+</body>
+</html>

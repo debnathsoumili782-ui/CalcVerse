@@ -1,0 +1,409 @@
+/* =========================================
+   WORD COUNTER PAGE
+========================================= */
+
+.word-counter-page {
+    min-height: 100vh;
+    background: #090D1A;
+    color: #f3f1ed;
+    padding: 0 20px 90px;
+}
+
+
+/* =========================================
+   HERO
+========================================= */
+
+.word-counter-hero {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 0 55px;
+    text-align: center;
+}
+
+.word-counter-tag {
+    display: inline-block;
+    padding: 9px 18px;
+    margin-bottom: 24px;
+
+    border: 1px solid rgba(126, 87, 194, 0.45);
+    border-radius: 999px;
+
+    background: rgba(107, 70, 160, 0.12);
+    color: #b9a7ff;
+
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.word-counter-hero h1 {
+    margin: 0;
+
+    color: #f3f1ed;
+
+    font-size: clamp(42px, 5vw, 72px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -2px;
+}
+
+.word-counter-hero h1 span {
+    background: linear-gradient(
+        90deg,
+        #a86bd7,
+        #e25598,
+        #ffae35
+    );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.word-counter-hero p {
+    max-width: 650px;
+    margin: 20px auto 0;
+
+    color: #aeb8c9;
+
+    font-size: 17px;
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   COUNTER CARD
+========================================= */
+
+.word-counter-card {
+    width: 100%;
+    max-width: 780px;
+
+    margin: 0 auto;
+    padding: 30px;
+
+    background: #202B3B;
+
+    border: 1px solid #34465d;
+    border-radius: 18px;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================
+   CARD HEADING
+========================================= */
+
+.word-counter-heading {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.word-counter-heading h2 {
+    margin: 0 0 10px;
+
+    color: #f3f1ed;
+
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.word-counter-heading p {
+    margin: 0;
+
+    color: #afbacb;
+
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+
+/* =========================================
+   TEXT INPUT
+========================================= */
+
+.word-counter-form-group {
+    margin-bottom: 14px;
+}
+
+.word-counter-form-group label {
+    display: block;
+    margin-bottom: 10px;
+
+    color: #f0ece5;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.word-counter-textarea {
+    width: 100%;
+    min-height: 250px;
+
+    padding: 16px;
+
+    border: 1px solid #41536b;
+    border-radius: 12px;
+
+    background: #263345;
+    color: #f2f4f7;
+
+    font-family: inherit;
+    font-size: 16px;
+    line-height: 1.6;
+
+    resize: vertical;
+    outline: none;
+    box-sizing: border-box;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.word-counter-textarea::placeholder {
+    color: #8997aa;
+}
+
+.word-counter-textarea:focus {
+    border-color: #8055ba;
+
+    box-shadow:
+        0 0 0 3px rgba(128, 85, 186, 0.12);
+}
+
+
+/* =========================================
+   CLEAR BUTTON
+========================================= */
+
+.clear-text-button {
+    width: 100%;
+    height: 48px;
+
+    margin-bottom: 24px;
+
+    border: 1px solid rgba(128, 85, 186, 0.45);
+    border-radius: 12px;
+
+    background: rgba(104, 71, 154, 0.10);
+    color: #c8b7ff;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.clear-text-button:hover {
+    background: rgba(128, 85, 186, 0.18);
+
+    border-color: #8055ba;
+
+    color: #ffffff;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 8px 20px rgba(105, 70, 157, 0.18);
+}
+
+.clear-text-button:active {
+    transform: translateY(0);
+
+    box-shadow: none;
+}
+
+
+/* =========================================
+   STATISTICS GRID
+========================================= */
+
+.text-statistics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+
+/* =========================================
+   STAT BOX
+========================================= */
+
+.stat-box {
+    min-height: 110px;
+
+    padding: 18px 12px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    background: #263345;
+
+    border: 1px solid #3a4c63;
+    border-radius: 14px;
+
+    text-align: center;
+
+    box-sizing: border-box;
+
+    transition:
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.stat-box:hover {
+    border-color: #7654ad;
+    transform: translateY(-2px);
+}
+
+.stat-label {
+    color: #9caabd;
+
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.3px;
+}
+
+.stat-value {
+    color: #f5f2ed;
+
+    font-size: 26px;
+    font-weight: 800;
+
+    word-break: break-word;
+}
+
+
+/* =========================================
+   READING TIME
+========================================= */
+
+.reading-time-box {
+    margin-top: 18px;
+    padding: 18px 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    background: #222d3e;
+
+    border: 1px solid #7654ad;
+    border-radius: 14px;
+}
+
+.reading-time-box span {
+    color: #b9a7ff;
+
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+.reading-time-box strong {
+    color: #f5f2ed;
+
+    font-size: 22px;
+    font-weight: 800;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 768px) {
+
+    .word-counter-page {
+        padding: 0 16px 70px;
+    }
+
+    .word-counter-hero {
+        padding: 60px 10px 45px;
+    }
+
+    .word-counter-hero h1 {
+        font-size: 48px;
+        letter-spacing: -1px;
+    }
+
+    .word-counter-hero p {
+        font-size: 15px;
+    }
+
+    .word-counter-card {
+        padding: 24px 18px;
+        border-radius: 16px;
+    }
+
+    .text-statistics {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+
+@media (max-width: 520px) {
+
+    .word-counter-hero {
+        padding-top: 45px;
+    }
+
+    .word-counter-hero h1 {
+        font-size: 38px;
+    }
+
+    .word-counter-tag {
+        padding: 8px 15px;
+        font-size: 10px;
+    }
+
+    .word-counter-card {
+        padding: 20px 14px;
+    }
+
+    .word-counter-heading h2 {
+        font-size: 22px;
+    }
+
+    .word-counter-textarea {
+        min-height: 220px;
+    }
+
+    .text-statistics {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .stat-box {
+        min-height: 95px;
+        padding: 14px 8px;
+    }
+
+    .stat-value {
+        font-size: 22px;
+    }
+
+    .reading-time-box {
+        flex-direction: column;
+        text-align: center;
+        gap: 8px;
+    }
+
+}

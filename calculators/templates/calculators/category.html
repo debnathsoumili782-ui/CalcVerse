@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ category_name|title }} | CalcVerse</title>
+
+    <link rel="stylesheet" href="{% static 'calculators/css/calculator.css' %}">
+</head>
+
+<body>
+
+<header class="navbar">
+    <a href="/" class="logo">Calc<span>Verse</span></a>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="#calculators">Calculators</a>
+    </nav>
+</header>
+
+<main class="category-container">
+
+    <div class="category-hero">
+        <span class="hero-badge">CALCULATOR CATEGORY</span>
+        <h1>{{ category_name|title }} <span>Calculators</span></h1>
+        <p>Choose a calculator and get your result instantly.</p>
+    </div>
+
+    {% if category_name == "basic" %}
+
+    <section id="calculators">
+        <h2>Basic & Everyday Calculators</h2>
+
+        <div class="category-grid">
+
+            <a href="/basic/calculator/" class="category-card">
+                <div class="category-icon">🔢</div>
+                <h3>Basic Calculator</h3>
+                <p>Add, subtract, multiply and divide numbers.</p>
+            </a>
+
+            <a href="/percentage/calculator/" class="category-card">
+                <div class="category-icon">%</div>
+                <h3>Percentage Calculator</h3>
+                <p>Calculate percentages quickly and easily.</p>
+            </a>
+
+            <a href="/average/calculator/" class="category-card">
+                <div class="category-icon">📊</div>
+                <h3>Average Calculator</h3>
+                <p>Find the average of multiple numbers.</p>
+            </a>
+
+            <a href="/discount/calculator/" class="category-card">
+                <div class="category-icon">🏷️</div>
+                <h3>Discount Calculator</h3>
+                <p>Calculate discounts and final prices.</p>
+            </a>
+
+            <a href="/ratio/calculator/" class="category-card">
+                <div class="category-icon">⚖️</div>
+                <h3>Ratio Calculator</h3>
+                <p>Simplify and calculate number ratios.</p>
+            </a>
+
+            <a href="/profit-loss/calculator/" class="category-card">
+                <div class="category-icon">📈</div>
+                <h3>Profit & Loss</h3>
+                <p>Calculate profit, loss and percentage.</p>
+            </a>
+
+        </div>
+    </section>
+    {% elif category_name == "scientific" %}
+
+    <section id="calculators">
+        <h2>Scientific Calculators</h2>
+
+        <div class="category-grid">
+
+            <!-- Scientific Calculator -->
+            <a href="/scientific/calculator/" class="category-card">
+                <div class="category-icon">🔬</div>
+                <h3>Scientific Calculator</h3>
+                <p>Perform advanced mathematical calculations.</p>
+            </a>
+
+
+            <!-- Quadratic Equation -->
+            <a href="/scientific/quadratic/" class="category-card">
+                <div class="category-icon">𝒙²</div>
+                <h3>Quadratic Equation</h3>
+                <p>Solve quadratic equations and find roots.</p>
+            </a>
+
+
+            <!-- Square Root -->
+            <a href="/scientific/square-root/" class="category-card">
+                <div class="category-icon">√</div>
+                <h3>Square Root Calculator</h3>
+                <p>Find the square root of any number.</p>
+            </a>
+
+
+            <!--s Power -->
+            <a href="/scientific/power/" class="category-card">
+                <div class="category-icon">𝑥ʸ</div>
+                <h3>Power Calculator</h3>
+                <p>Calculate powers and exponents easily.</p>
+            </a>
+
+
+            <!-- Geometry -->
+            <a href="/scientific/geometry/" class="category-card">
+                <div class="category-icon">📐</div>
+                <h3>Geometry Calculator</h3>
+                <p>Calculate area, perimeter, volume and more.</p>
+            </a>
+
+
+            <!-- Derivative -->
+            <a href="/scientific/derivative/" class="category-card">
+                <div class="category-icon">d/dx</div>
+                <h3>Derivative Calculator</h3>
+                <p>Solve derivative problems with step-by-step solutions.</p>
+            </a>
+
+
+            <!-- Integration -->
+            <a href="/scientific/integration/" class="category-card">
+                <div class="category-icon">∫</div>
+                <h3>Integration Calculator</h3>
+                <p>Solve integration problems with step-by-step solutions.</p>
+            </a>
+
+
+            <!-- Equation Solver -->
+            <a href="/scientific/equation-solver/" class="category-card">
+                <div class="category-icon">𝒙 = ?</div>
+                <h3>Equation Solver</h3>
+                <p>Solve mathematical equations and find unknown values.</p>
+            </a>
+
+
+        </div>
+    </section>
+    {% elif category_name == "banking-finance" %}
+
+    <section id="calculators">
+        <h2>Banking & Finance Calculators</h2>
+
+        <div class="category-grid">
+
+            <a href="{% url 'sip_calculator' %}" class="category-card">
+                <div class="category-icon">📈</div>
+                <h3>SIP Calculator</h3>
+                <p>Calculate SIP returns and estimated investment growth.</p>
+            </a>
+
+            <a href="{% url 'fd_calculator' %}" class="category-card">
+                <div class="category-icon">🏦</div>
+                <h3>FD Calculator</h3>
+                <p>Calculate fixed deposit maturity amount and interest.</p>
+            </a>
+
+            <a href="{% url 'rd_calculator' %}" class="category-card">
+                <div class="category-icon">💰</div>
+                <h3>RD Calculator</h3>
+                <p>Calculate recurring deposit maturity and returns.</p>
+            </a>
+
+            <a href="{% url 'emi_calculator' %}" class="category-card">
+                <div class="category-icon">🏠</div>
+                <h3>EMI Calculator</h3>
+                <p>Calculate your monthly loan EMI and repayment details.</p>
+            </a>
+
+            <a href="{% url 'simple_interest_calculator' %}" class="category-card">
+                <div class="category-icon">📊</div>
+                <h3>Simple Interest</h3>
+                <p>Calculate simple interest on your principal amount.</p>
+            </a>
+
+            <a href="{% url 'compound_interest_calculator' %}" class="category-card">
+                <div class="category-icon">📈</div>
+                <h3>Compound Interest</h3>
+                <p>Calculate compound interest and investment growth.</p>
+            </a>
+
+            <a href="{% url 'cagr_calculator' %}" class="category-card">
+                <div class="category-icon">📉</div>
+                <h3>CAGR Calculator</h3>
+                <p>Calculate the compound annual growth rate.</p>
+            </a>
+
+            <a href="{% url 'roi_calculator' %}" class="category-card">
+                <div class="category-icon">💹</div>
+                <h3>ROI Calculator</h3>
+                <p>Calculate your return on investment.</p>
+            </a>
+
+        </div>
+    </section>
+
+
+    {% elif category_name == "academic" %}
+
+    <section id="calculators">
+        <h2>Academic Calculators</h2>
+
+        <div class="category-grid">
+
+            <a href="{% url 'cgpa_calculator' %}" class="category-card">
+                <div class="category-icon">🎓</div>
+                <h3>CGPA Calculator</h3>
+                <p>Calculate your Cumulative Grade Point Average.</p>
+            </a>
+
+            <a href="{% url 'sgpa_calculator' %}" class="category-card">
+                <div class="category-icon">📚</div>
+                <h3>SGPA Calculator</h3>
+                <p>Calculate your Semester Grade Point Average.</p>
+            </a>
+
+            <a href="{% url 'ygpa_calculator' %}" class="category-card">
+                <div class="category-icon">📖</div>
+                <h3>YGPA Calculator</h3>
+                <p>Calculate your Yearly Grade Point Average.</p>
+            </a>
+
+            <a href="{% url 'dgpa_calculator' %}" class="category-card">
+                <div class="category-icon">🏆</div>
+                <h3>DGPA Calculator</h3>
+                <p>Calculate your Diploma Grade Point Average.</p>
+            </a>
+
+            <a href="{% url 'percentage_converter' %}" class="category-card">
+                <div class="category-icon">%</div>
+                <h3>Percentage Converter</h3>
+                <p>Convert your marks and grades into percentage.</p>
+            </a>
+
+        </div>
+    </section>
+
+
+    {% elif category_name == "health-body" %}
+
+    <section id="calculators">
+        <h2>Health & Body Calculators</h2>
+
+        <div class="category-grid">
+
+            <a href="{% url 'bmi_calculator' %}" class="category-card">
+                <div class="category-icon">⚖️</div>
+                <h3>BMI Calculator</h3>
+                <p>Calculate your Body Mass Index and check your weight range.</p>
+            </a>
+
+            <a href="{% url 'bmr_calculator' %}" class="category-card">
+                <div class="category-icon">🔥</div>
+                <h3>BMR Calculator</h3>
+                <p>Estimate how many calories your body burns at complete rest.</p>
+            </a>
+
+            <a href="{% url 'ideal_weight_calculator' %}" class="category-card">
+                <div class="category-icon">🎯</div>
+                <h3>Ideal Weight Calculator</h3>
+                <p>Find your estimated healthy weight range based on your height.</p>
+            </a>
+
+        </div>
+    </section>
+    {% else %}
+
+        <section id="calculators">
+            <h2>{{ category_name|title }} Calculators</h2>
+
+            <div class="coming-soon">
+                <h3>More calculators coming soon</h3>
+                <p>We're building this category.</p>
+            </div>
+        </section>
+
+    {% endif %}
+
+</main>
+
+<footer>
+    © 2026 CalcVerse — Calculate Smarter.
+</footer>
+
+</body>
+</html>

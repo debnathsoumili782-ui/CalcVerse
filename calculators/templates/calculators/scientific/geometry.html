@@ -1,0 +1,573 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Geometry Calculator | CalcVerse</title>
+
+    <link rel="stylesheet"
+          href="{% static 'calculators/css/calculator.css' %}">
+</head>
+
+<body>
+
+<header class="navbar">
+    <a href="/" class="logo">Calc<span>Verse</span></a>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/category/scientific/">Scientific</a>
+    </nav>
+</header>
+
+
+<main class="tool-container">
+
+    <div class="tool-hero">
+        <span class="hero-badge">SCIENTIFIC TOOL</span>
+
+        <h1>Geometry <span>Calculator</span></h1>
+
+        <p>Calculate area, perimeter and volume instantly.</p>
+    </div>
+
+
+    <div class="geometry-card">
+
+        <h2>Select a Shape</h2>
+
+        <div class="shape-grid">
+
+            <button class="shape-btn active"
+                    onclick="showShape('rectangle', this)">
+                ▭
+                <span>Rectangle</span>
+            </button>
+
+            <button class="shape-btn"
+                    onclick="showShape('square', this)">
+                □
+                <span>Square</span>
+            </button>
+
+            <button class="shape-btn"
+                    onclick="showShape('circle', this)">
+                ○
+                <span>Circle</span>
+            </button>
+
+            <button class="shape-btn"
+                    onclick="showShape('triangle', this)">
+                △
+                <span>Triangle</span>
+            </button>
+            <button class="shape-btn"
+                    onclick="showShape('parallelogram', this)">
+                ▱
+                <span>Parallelogram</span>
+            </button>
+
+            <button class="shape-btn"
+                    onclick="showShape('trapezium', this)">
+                ⏢
+                <span>Trapezium</span>
+            </button>
+
+        </div>
+
+
+        <!-- RECTANGLE -->
+
+        <div id="rectangle" class="shape-form active-form">
+
+            <div class="geometry-inputs">
+
+                <div class="input-group">
+                    <label>Length</label>
+                    <input type="number"
+                           id="rectangle-length"
+                           placeholder="Enter length">
+                </div>
+
+                <div class="input-group">
+                    <label>Width</label>
+                    <input type="number"
+                           id="rectangle-width"
+                           placeholder="Enter width">
+                </div>
+
+            </div>
+
+            <button class="calculate-btn"
+                    onclick="calculateRectangle()">
+                Calculate Rectangle
+            </button>
+
+        </div>
+
+
+        <!-- SQUARE -->
+
+        <div id="square" class="shape-form">
+
+            <div class="input-group">
+                <label>Side Length</label>
+                <input type="number"
+                       id="square-side"
+                       placeholder="Enter side length">
+            </div>
+
+            <button class="calculate-btn"
+                    onclick="calculateSquare()">
+                Calculate Square
+            </button>
+
+        </div>
+
+
+        <!-- CIRCLE -->
+
+        <div id="circle" class="shape-form">
+
+            <div class="input-group">
+                <label>Radius</label>
+                <input type="number"
+                       id="circle-radius"
+                       placeholder="Enter radius">
+            </div>
+
+            <button class="calculate-btn"
+                    onclick="calculateCircle()">
+                Calculate Circle
+            </button>
+
+        </div>
+
+
+        <!-- TRIANGLE -->
+
+        <div id="triangle" class="shape-form">
+
+            <div class="geometry-inputs">
+
+                <div class="input-group">
+                    <label>Side A</label>
+                    <input type="number"
+                           id="triangle-side-a"
+                           placeholder="Enter side A">
+                </div>
+
+                <div class="input-group">
+                    <label>Side B</label>
+                    <input type="number"
+                           id="triangle-side-b"
+                           placeholder="Enter side B">
+                </div>
+
+                <div class="input-group">
+                    <label>Side C</label>
+                    <input type="number"
+                           id="triangle-side-c"
+                           placeholder="Enter side C">
+                </div>
+
+            </div>
+
+            <button class="calculate-btn"
+                    onclick="calculateTriangle()">
+                Calculate Triangle
+            </button>
+
+        </div>
+        <!-- PARALLELOGRAM -->
+
+        <div id="parallelogram" class="shape-form">
+
+            <div class="geometry-inputs">
+
+                <div class="input-group">
+                    <label>Base</label>
+                    <input type="number"
+                           id="parallelogram-base"
+                           placeholder="Enter base">
+                </div>
+
+                <div class="input-group">
+                    <label>Side Length</label>
+                    <input type="number"
+                           id="parallelogram-side"
+                           placeholder="Enter side length">
+                </div>
+
+                <div class="input-group">
+                    <label>Height</label>
+                    <input type="number"
+                           id="parallelogram-height"
+                           placeholder="Enter height">
+                </div>
+
+            </div>
+
+            <button class="calculate-btn"
+                    onclick="calculateParallelogram()">
+                Calculate Parallelogram
+            </button>
+
+        </div>
+        <!-- TRAPEZIUM -->
+
+        <div id="trapezium" class="shape-form">
+
+            <div class="geometry-inputs">
+
+                <div class="input-group">
+                    <label>Top Base</label>
+                    <input type="number"
+                           id="trapezium-a"
+                           placeholder="Enter top base">
+                </div>
+
+                <div class="input-group">
+                    <label>Bottom Base</label>
+                    <input type="number"
+                           id="trapezium-b"
+                           placeholder="Enter bottom base">
+                </div>
+
+                <div class="input-group">
+                    <label>Height</label>
+                    <input type="number"
+                           id="trapezium-height"
+                           placeholder="Enter height">
+                </div>
+
+                <div class="input-group">
+                    <label>Side C</label>
+                    <input type="number"
+                           id="trapezium-c"
+                           placeholder="Enter side C">
+                </div>
+
+                <div class="input-group">
+                    <label>Side D</label>
+                    <input type="number"
+                           id="trapezium-d"
+                           placeholder="Enter side D">
+                </div>
+
+            </div>
+
+            <button class="calculate-btn"
+                    onclick="calculateTrapezium()">
+                Calculate Trapezium
+            </button>
+
+        </div>
+
+        <!-- RESULT -->
+
+        <div class="geometry-result">
+
+            <h3>Result</h3>
+
+            <div class="result-grid">
+
+                <div class="result-item">
+                    <span id="result-label-1">Area</span>
+                    <strong id="result-value-1">—</strong>
+                </div>
+
+                <div class="result-item">
+                    <span id="result-label-2">Perimeter</span>
+                    <strong id="result-value-2">—</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script>
+
+function showShape(shapeId, button) {
+
+    document.querySelectorAll(".shape-form").forEach(form => {
+        form.classList.remove("active-form");
+    });
+
+    document.getElementById(shapeId).classList.add("active-form");
+
+
+    document.querySelectorAll(".shape-btn").forEach(btn => {
+        btn.classList.remove("active");
+    });
+
+    button.classList.add("active");
+
+
+    document.getElementById("result-label-1").textContent = "Area";
+    document.getElementById("result-label-2").textContent = "Perimeter";
+
+    document.getElementById("result-value-1").textContent = "—";
+    document.getElementById("result-value-2").textContent = "—";
+}
+
+
+/* RECTANGLE */
+
+function calculateRectangle() {
+
+    const length = parseFloat(
+        document.getElementById("rectangle-length").value
+    );
+
+    const width = parseFloat(
+        document.getElementById("rectangle-width").value
+    );
+
+    if (isNaN(length) || isNaN(width)) {
+        showError();
+        return;
+    }
+
+    showResult(
+        length * width,
+        2 * (length + width)
+    );
+}
+
+
+/* SQUARE */
+
+function calculateSquare() {
+
+    const side = parseFloat(
+        document.getElementById("square-side").value
+    );
+
+    if (isNaN(side)) {
+        showError();
+        return;
+    }
+
+    showResult(
+        side * side,
+        4 * side
+    );
+}
+
+
+/* CIRCLE */
+
+function calculateCircle() {
+
+    const radius = parseFloat(
+        document.getElementById("circle-radius").value
+    );
+
+    if (isNaN(radius)) {
+        showError();
+        return;
+    }
+
+    showResult(
+        Math.PI * radius * radius,
+        2 * Math.PI * radius
+    );
+}
+
+
+/* TRIANGLE */
+
+function calculateTriangle() {
+
+    const a = parseFloat(
+        document.getElementById("triangle-side-a").value
+    );
+
+    const b = parseFloat(
+        document.getElementById("triangle-side-b").value
+    );
+
+    const c = parseFloat(
+        document.getElementById("triangle-side-c").value
+    );
+
+
+    /* Check empty / invalid values */
+
+    if (
+        isNaN(a) ||
+        isNaN(b) ||
+        isNaN(c) ||
+        a <= 0 ||
+        b <= 0 ||
+        c <= 0
+    ) {
+        showError();
+        return;
+    }
+
+
+    /* Check whether a valid triangle is possible */
+
+    if (
+        a + b <= c ||
+        a + c <= b ||
+        b + c <= a
+    ) {
+        document.getElementById("result-value-1").textContent =
+            "Invalid triangle";
+
+        document.getElementById("result-value-2").textContent =
+            "Check side lengths";
+
+        return;
+    }
+
+
+    /* Perimeter */
+
+    const perimeter = a + b + c;
+
+
+    /* Heron's Formula */
+
+    const s = perimeter / 2;
+
+    const area = Math.sqrt(
+        s *
+        (s - a) *
+        (s - b) *
+        (s - c)
+    );
+
+
+    /* Labels */
+
+    document.getElementById("result-label-1").textContent =
+        "Area";
+
+    document.getElementById("result-label-2").textContent =
+        "Perimeter";
+
+
+    /* Show results */
+
+    showResult(area, perimeter);
+}
+
+/* RESULT */
+
+function showResult(value1, value2) {
+
+    document.getElementById("result-value-1").textContent =
+        Number(value1).toFixed(4).replace(/\.?0+$/, "");
+
+    document.getElementById("result-value-2").textContent =
+        value2 === "—"
+            ? "—"
+            : Number(value2).toFixed(4).replace(/\.?0+$/, "");
+}
+
+
+function showError() {
+
+    document.getElementById("result-value-1").textContent =
+        "Enter valid values";
+
+    document.getElementById("result-value-2").textContent =
+        "—";
+}
+    function calculateParallelogram() {
+
+    const base = parseFloat(
+        document.getElementById("parallelogram-base").value
+    );
+
+    const side = parseFloat(
+        document.getElementById("parallelogram-side").value
+    );
+
+    const height = parseFloat(
+        document.getElementById("parallelogram-height").value
+    );
+
+    if (
+        isNaN(base) ||
+        isNaN(side) ||
+        isNaN(height) ||
+        base <= 0 ||
+        side <= 0 ||
+        height <= 0
+    ) {
+        showError();
+        return;
+    }
+
+    const area = base * height;
+    const perimeter = 2 * (base + side);
+
+    document.getElementById("result-label-1").textContent = "Area";
+    document.getElementById("result-label-2").textContent = "Perimeter";
+
+    showResult(area, perimeter);
+}
+
+function calculateTrapezium() {
+
+    const a = parseFloat(
+        document.getElementById("trapezium-a").value
+    );
+
+    const b = parseFloat(
+        document.getElementById("trapezium-b").value
+    );
+
+    const height = parseFloat(
+        document.getElementById("trapezium-height").value
+    );
+
+    const c = parseFloat(
+        document.getElementById("trapezium-c").value
+    );
+
+    const d = parseFloat(
+        document.getElementById("trapezium-d").value
+    );
+
+    if (
+        isNaN(a) ||
+        isNaN(b) ||
+        isNaN(height) ||
+        isNaN(c) ||
+        isNaN(d) ||
+        a <= 0 ||
+        b <= 0 ||
+        height <= 0 ||
+        c <= 0 ||
+        d <= 0
+    ) {
+        showError();
+        return;
+    }
+
+    const area = ((a + b) / 2) * height;
+    const perimeter = a + b + c + d;
+
+    document.getElementById("result-label-1").textContent = "Area";
+    document.getElementById("result-label-2").textContent = "Perimeter";
+
+    showResult(area, perimeter);
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,162 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Age, Date & Time — CalcVerse</title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'calculators/css/style.css' %}"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- NAVBAR -->
+
+<header class="navbar">
+
+    <div class="nav-container">
+
+        <a href="/" class="logo">
+            Calc<span>Verse</span>
+        </a>
+
+        <nav>
+            <a href="/">Home</a>
+            <a href="/age-date-time/">Age, Date & Time</a>
+        </nav>
+
+    </div>
+
+</header>
+
+
+
+<main>
+
+
+    <!-- HERO -->
+
+    <section class="hero calculator-hero">
+
+        <div class="badge">
+            AGE • DATE • TIME
+        </div>
+
+        <h1>
+            Age, Date <span>& Time</span>
+        </h1>
+
+        <p>
+            Calculate age, date differences,
+            days and time easily.
+        </p>
+
+    </section>
+
+
+
+    <!-- CALCULATOR CARDS -->
+
+    <section class="categories">
+
+        <div class="section-heading">
+
+            <p>
+                CALCULATORS
+            </p>
+
+            <h2>
+                Choose a Calculator
+            </h2>
+
+        </div>
+
+
+        <div class="category-grid">
+
+
+            <!-- AGE CALCULATOR -->
+
+            <a href="{% url 'age_calculator' %}" class="category-card">
+                <div class="category-icon">🎂</div>
+                <h3>Age Calculator</h3>
+                <p>Calculate your exact age in years, months and days.</p>
+            </a>
+
+            <!-- DATE DIFFERENCE -->
+
+            <a href="{% url 'date_difference' %}" class="category-card">
+                <div class="category-icon">📅</div>
+                <h3>Date Difference</h3>
+                <p>Find the exact difference between two dates.</p>
+            </a>
+
+
+
+            <!-- DAY CALCULATOR -->
+
+            <a href="{% url 'day_calculator' %}" class="category-card">
+                <div class="category-icon">📆</div>
+                <h3>Day Calculator</h3>
+                <p>Find which day of the week falls on any date.</p>
+            </a>
+
+            <!-- TIME DURATION -->
+
+            <a href="{% url 'time_duration' %}" class="category-card">
+                <div class="category-icon">⏱️</div>
+                <h3>Time Duration Calculator</h3>
+                <p>Calculate the duration between two times.</p>
+            </a>
+
+            <!-- DATE CALCULATOR -->
+
+            <a href="{% url 'date_calculator' %}" class="category-card">
+                <div class="icon">➕</div>
+                <h3>Date Calculator</h3>
+                <p>Add or subtract days, months and years from a date.</p>
+            </a>
+
+            <a href="{% url 'time_addition' %}" class="category-card">
+                <div class="icon">⏱️</div>
+                <h3>Time Add & Subtract</h3>
+                <p>Add or subtract hours and minutes from any time.</p>
+            </a>
+        </div>
+
+    </section>
+
+
+</main>
+
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <p>
+        © 2026 CalcVerse — Calculate Smarter.
+    </p>
+
+</footer>
+
+
+</body>
+
+</html>

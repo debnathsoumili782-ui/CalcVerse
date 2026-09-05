@@ -1,0 +1,776 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Percentage Converter — CalcVerse</title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'calculators/css/style.css' %}"
+    >
+
+</head>
+
+
+<body>
+
+
+<header class="navbar">
+
+    <div class="nav-container">
+
+        <a href="/" class="logo">
+            Calc<span>Verse</span>
+        </a>
+
+        <nav>
+
+            <a href="/">Home</a>
+
+            <a href="{% url 'academic' %}">
+                Academic
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+
+<main>
+
+
+    <!-- HERO -->
+
+    <section class="hero calculator-hero">
+
+        <div class="badge">
+            ACADEMIC
+        </div>
+
+        <h1>
+            Percentage <span>Converter</span>
+        </h1>
+
+        <p>
+            Convert your CGPA, SGPA, YGPA or DGPA into percentage.
+        </p>
+
+    </section>
+
+
+
+    <!-- CALCULATOR -->
+
+    <section class="calculator-section">
+
+        <div class="banking-calculator-card">
+
+
+            <!-- SELECTED UNIVERSITY -->
+
+            <div class="input-group">
+
+                <label>
+                    Selected University
+                </label>
+
+                <input
+                    type="text"
+                    id="selectedUniversity"
+                    readonly
+                >
+
+            </div>
+
+
+
+            <!-- RESULT TYPE -->
+
+            <div class="input-group">
+
+                <label for="resultType">
+                    Select Result Type
+                </label>
+
+                <select
+                    id="resultType"
+                    onchange="updateInputLabel()"
+                >
+
+                    <option value="">
+                        Select result type
+                    </option>
+
+                    <option value="cgpa">
+                        CGPA
+                    </option>
+
+                    <option value="sgpa">
+                        SGPA
+                    </option>
+
+                    <option value="ygpa">
+                        YGPA
+                    </option>
+
+                    <option value="dgpa">
+                        DGPA
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <!-- VALUE -->
+
+            <div class="input-group">
+
+                <label id="valueLabel" for="resultValue">
+                    Enter Your Result
+                </label>
+
+                <input
+                    type="number"
+                    id="resultValue"
+                    placeholder="Enter your value"
+                    min="0"
+                    max="10"
+                    step="0.01"
+                >
+
+            </div>
+
+
+
+            <!-- CONVERT BUTTON -->
+
+            <button
+                type="button"
+                class="calculate-btn"
+                onclick="convertToPercentage()"
+            >
+                Convert to Percentage
+            </button>
+
+
+
+            <!-- RESULT -->
+
+            <div
+                class="result-box"
+                id="resultBox"
+                style="display: none;"
+            >
+
+                <span>
+                    YOUR PERCENTAGE
+                </span>
+
+                <strong id="percentageResult">
+                    0.00%
+                </strong>
+
+            </div>
+
+
+
+            <!-- DETAILS -->
+
+            <div
+                class="solution-box"
+                id="solutionBox"
+                style="display: none;"
+            >
+
+                <h2>
+                    Conversion Details
+                </h2>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Result Type
+                    </strong>
+
+                    <p id="selectedType">
+                        —
+                    </p>
+
+                </div>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Entered Value
+                    </strong>
+
+                    <p id="enteredValue">
+                        0
+                    </p>
+
+                </div>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Formula Used
+                    </strong>
+
+                    <p id="formulaUsed">
+                        —
+                    </p>
+
+                </div>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Final Percentage
+                    </strong>
+
+                    <p id="finalPercentage">
+                        0.00%
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+
+<footer>
+
+    <p>
+        © 2026 CalcVerse — Calculate Smarter.
+    </p>
+
+</footer>
+
+
+
+<script>
+
+
+/* ================================
+   UNIVERSITY NAMES
+================================ */
+
+const universityNames = {
+
+    makaut: "MAKAUT",
+
+    calcutta: "University of Calcutta",
+
+    wbsu: "West Bengal State University",
+
+    burdwan: "University of Burdwan",
+
+    aktu: "Dr. A.P.J. Abdul Kalam Technical University",
+
+    brainware: "Brainware University",
+
+    adamas: "Adamas University",
+
+    other: "Other University"
+
+};
+
+
+const savedUniversity =
+    localStorage.getItem(
+        "selectedUniversity"
+    );
+
+
+const universityDisplayName =
+    universityNames[savedUniversity]
+    || "Not selected";
+
+
+document.getElementById(
+    "selectedUniversity"
+).value =
+    universityDisplayName;
+
+
+
+/* ================================
+   UPDATE INPUT LABEL
+================================ */
+
+function updateInputLabel() {
+
+
+    const resultType =
+        document.getElementById(
+            "resultType"
+        ).value;
+
+
+    const valueLabel =
+        document.getElementById(
+            "valueLabel"
+        );
+
+
+    const resultValue =
+        document.getElementById(
+            "resultValue"
+        );
+
+
+    if (resultType === "cgpa") {
+
+        valueLabel.textContent =
+            "Enter Your CGPA";
+
+        resultValue.placeholder =
+            "Enter your CGPA";
+
+    }
+
+
+    else if (resultType === "sgpa") {
+
+        valueLabel.textContent =
+            "Enter Your SGPA";
+
+        resultValue.placeholder =
+            "Enter your SGPA";
+
+    }
+
+
+    else if (resultType === "ygpa") {
+
+        valueLabel.textContent =
+            "Enter Your YGPA";
+
+        resultValue.placeholder =
+            "Enter your YGPA";
+
+    }
+
+
+    else if (resultType === "dgpa") {
+
+        valueLabel.textContent =
+            "Enter Your DGPA";
+
+        resultValue.placeholder =
+            "Enter your DGPA";
+
+    }
+
+
+    else {
+
+        valueLabel.textContent =
+            "Enter Your Result";
+
+        resultValue.placeholder =
+            "Enter your value";
+
+    }
+
+}
+
+
+
+/* ================================
+   UNIVERSITY CONVERSION FORMULAS
+
+   IMPORTANT:
+   Formula values should be updated
+   university-wise after verification.
+================================ */
+
+function getConversionFormula(
+    university,
+    resultType,
+    value
+) {
+
+    const type =
+        resultType.toUpperCase();
+
+
+    /* ================================
+       MAKAUT
+    ================================ */
+
+    if (university === "makaut") {
+
+        return {
+
+            percentage:
+                (value - 0.75) * 10,
+
+            formula:
+                `(${type} - 0.75) × 10`
+
+        };
+
+    }
+
+
+    /* ================================
+       UNIVERSITY OF CALCUTTA
+       CGPA → CGPA × 10
+    ================================ */
+
+    else if (university === "calcutta") {
+
+        if (resultType === "cgpa") {
+
+            return {
+
+                percentage:
+                    value * 10,
+
+                formula:
+                    "CGPA × 10"
+
+            };
+
+        }
+
+
+        return {
+
+            percentage: null,
+
+            formula:
+                `Percentage conversion is not configured for ${type}.`
+
+        };
+
+    }
+
+
+    /* ================================
+       WBSU
+       Value → Value × 9.5
+    ================================ */
+
+    else if (university === "wbsu") {
+
+        return {
+
+            percentage:
+                value * 9.5,
+
+            formula:
+                `${type} × 9.5`
+
+        };
+
+    }
+
+
+    /* ================================
+       UNIVERSITY OF BURDWAN
+       SGPA → (SGPA × 10) - 5
+    ================================ */
+
+    else if (university === "burdwan") {
+
+        if (resultType === "sgpa") {
+
+            return {
+
+                percentage:
+                    (value * 10) - 5,
+
+                formula:
+                    "(SGPA × 10) - 5"
+
+            };
+
+        }
+
+
+        return {
+
+            percentage: null,
+
+            formula:
+                `Percentage conversion is not configured for ${type}.`
+
+        };
+
+    }
+
+
+    /* ================================
+       AKTU
+       CGPA → (CGPA - 0.75) × 10
+    ================================ */
+
+    else if (university === "aktu") {
+
+        if (resultType === "cgpa") {
+
+            return {
+
+                percentage:
+                    (value - 0.75) * 10,
+
+                formula:
+                    "(CGPA - 0.75) × 10"
+
+            };
+
+        }
+
+
+        return {
+
+            percentage: null,
+
+            formula:
+                `Percentage conversion is not configured for ${type}.`
+
+        };
+
+    }
+
+
+    /* ================================
+       BRAINWARE UNIVERSITY
+       Formula not configured
+    ================================ */
+
+    else if (university === "brainware") {
+
+        return {
+
+            percentage: null,
+
+            formula:
+                "Official percentage conversion formula is not configured."
+
+        };
+
+    }
+
+
+    /* ================================
+       ADAMAS UNIVERSITY
+       CGPA → CGPA × 10
+    ================================ */
+
+    else if (university === "adamas") {
+
+        if (resultType === "cgpa") {
+
+            return {
+
+                percentage:
+                    value * 10,
+
+                formula:
+                    "CGPA × 10"
+
+            };
+
+        }
+
+
+        return {
+
+            percentage: null,
+
+            formula:
+                `Percentage conversion is not configured for ${type}.`
+
+        };
+
+    }
+
+
+    /* ================================
+       OTHER UNIVERSITY
+    ================================ */
+
+    else {
+
+        return {
+
+            percentage: null,
+
+            formula:
+                "Formula not available for this university."
+
+        };
+
+    }
+
+}
+
+
+/* ================================
+   CONVERT TO PERCENTAGE
+================================ */
+
+function convertToPercentage() {
+
+
+    const resultType =
+        document.getElementById(
+            "resultType"
+        ).value;
+
+
+    const resultValue =
+        parseFloat(
+            document.getElementById(
+                "resultValue"
+            ).value
+        );
+
+
+    if (resultType === "") {
+
+        alert(
+            "Please select a result type."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        isNaN(resultValue) ||
+        resultValue < 0 ||
+        resultValue > 10
+    ) {
+
+        alert(
+            "Please enter a valid value between 0 and 10."
+        );
+
+        return;
+
+    }
+
+
+
+    const conversion =
+        getConversionFormula(
+            savedUniversity,
+            resultType,
+            resultValue
+        );
+
+
+    const percentage =
+        conversion.percentage;
+
+
+    if (percentage === null) {
+
+        alert(
+            conversion.formula
+        );
+
+        return;
+
+    }
+    /* RESULT */
+
+    document.getElementById(
+        "percentageResult"
+    ).textContent =
+        percentage.toFixed(2) + "%";
+
+
+
+    /* DETAILS */
+
+    document.getElementById(
+        "selectedType"
+    ).textContent =
+        resultType.toUpperCase();
+
+
+    document.getElementById(
+        "enteredValue"
+    ).textContent =
+        resultValue.toFixed(2);
+
+
+    document.getElementById(
+        "formulaUsed"
+    ).textContent =
+        conversion.formula;
+
+
+    document.getElementById(
+        "finalPercentage"
+    ).textContent =
+        percentage.toFixed(2) + "%";
+
+
+
+    /* SHOW */
+
+    document.getElementById(
+        "resultBox"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "solutionBox"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "resultBox"
+    ).scrollIntoView({
+
+        behavior: "smooth",
+
+        block: "center"
+
+    });
+
+}
+
+
+</script>
+
+
+</body>
+</html>

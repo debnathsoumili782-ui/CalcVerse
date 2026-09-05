@@ -1,0 +1,953 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Derivative Calculator | CalcVerse</title>
+
+    <link rel="stylesheet"
+          href="{% static 'calculators/css/calculator.css' %}">
+</head>
+
+<body>
+
+<header class="navbar">
+    <a href="/" class="logo">Calc<span>Verse</span></a>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/category/scientific/">Scientific</a>
+    </nav>
+</header>
+
+
+<main class="tool-container">
+
+    <div class="tool-hero">
+        <span class="hero-badge">SCIENTIFIC TOOL</span>
+
+        <h1>Derivative <span>Calculator</span></h1>
+
+        <p>Solve derivative problems and get the result instantly.</p>
+    </div>
+
+
+    <div class="tool-card derivative-card">
+
+        <div class="input-group">
+            <label for="derivative-input">
+                Enter a Function
+            </label>
+
+            <input
+                type="text"
+                id="derivative-input"
+                placeholder="Example: x^2 + 3x + 5"
+            >
+        </div>
+        <div class="input-group order-group">
+            <label for="derivative-order">Derivative Order</label>
+
+            <select id="derivative-order">
+                <option value="1">First Order</option>
+                <option value="2">Second Order</option>
+                <option value="3">Third Order</option>
+                <option value="4">Fourth Order</option>
+                <option value="5">Fifth Order</option>
+            </select>
+        </div>
+
+        <div class="example-box">
+            <span>Examples:</span>
+
+            <button onclick="setExample('x^2 + 3x + 5')">
+                x² + 3x + 5
+            </button>
+
+            <button onclick="setExample('sin(x)')">
+                sin(x)
+            </button>
+
+            <button onclick="setExample('x^3 - 4x')">
+                x³ − 4x
+            </button>
+        </div>
+
+
+        <button
+            class="calculate-btn"
+            onclick="calculateDerivative()"
+        >
+            Solve Derivative
+        </button>
+
+
+        <div class="result-box derivative-result">
+
+            <span>Derivative</span>
+
+            <strong id="result">
+                —
+            </strong>
+
+        </div>
+
+
+        <div class="solution-box">
+
+            <h2>Solution</h2>
+
+            <div id="solution-content">
+
+                <p class="empty-solution">
+                    Enter a function to see the derivative.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/nerdamer.core.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Calculus.min.js"></script>
+
+<script>
+
+
+/* =========================
+   GET HTML ELEMENTS
+========================= */
+
+const functionInput =
+    document.getElementById("derivative-input");
+
+const derivativeOrder =
+    document.getElementById("derivative-order");
+
+const derivativeResult =
+    document.getElementById("result");
+
+const solutionSteps =
+    document.getElementById("solution-content");
+
+
+/* =========================
+   EXAMPLE BUTTONS
+========================= */
+
+function setExample(expression) {
+
+    functionInput.value = expression;
+
+}
+
+
+/* =========================
+   NORMALIZE INPUT
+========================= */
+
+function normalizeExpression(expression) {
+
+    return expression
+
+        .replace(/\s+/g, "")
+
+        // Superscript numbers
+        .replace(/⁰/g, "^0")
+        .replace(/¹/g, "^1")
+        .replace(/²/g, "^2")
+        .replace(/³/g, "^3")
+        .replace(/⁴/g, "^4")
+        .replace(/⁵/g, "^5")
+        .replace(/⁶/g, "^6")
+        .replace(/⁷/g, "^7")
+        .replace(/⁸/g, "^8")
+        .replace(/⁹/g, "^9")
+
+        // Mathematical symbols
+        .replace(/×/g, "*")
+        .replace(/÷/g, "/")
+        .replace(/−/g, "-")
+
+        // Common mathematical notation
+        .replace(/π/g, "PI")
+
+        // x²sin(x) → x^2*sin(x)
+        .replace(/(x|\))(?=(sin|cos|tan|log|ln|sqrt|exp)\()/gi, "$1*")
+
+        // 3x → 3*x
+        .replace(/(\d)x/g, "$1*x")
+
+        // x(x+1) → x*(x+1)
+        .replace(/x\(/g, "x*(")
+
+        // 3(x+1) → 3*(x+1)
+        .replace(/(\d)\(/g, "$1*(")
+
+        // )( → )*(
+        .replace(/\)\(/g, ")*(")
+
+        // )(x) → )*x
+        .replace(/\)x/g, ")*x");
+}
+
+
+/* =========================
+   FORMAT NUMBER
+========================= */
+
+function formatNumber(number) {
+
+    if (Number.isInteger(number)) {
+        return String(number);
+    }
+
+    return String(
+        Number(number.toFixed(10))
+    );
+}
+
+
+/* =========================
+   PARSE POLYNOMIAL
+========================= */
+
+function parsePolynomial(expression) {
+
+    expression = expression
+        .replace(/\*/g, "");
+
+    /*
+        Convert minus signs into separate terms.
+
+        Example:
+
+        x^3-4x+5
+
+        becomes:
+
+        x^3 + (-4x) + 5
+    */
+
+    let prepared =
+        expression.replace(/-/g, "+-");
+
+
+    if (prepared.startsWith("+")) {
+        prepared = prepared.substring(1);
+    }
+
+
+    const terms =
+        prepared.split("+");
+
+
+    const polynomial = [];
+
+
+    for (let term of terms) {
+
+        if (term === "") {
+            continue;
+        }
+
+
+        let coefficient;
+        let power;
+
+
+        /* =====================
+           x^n
+        ===================== */
+
+        let match =
+            term.match(
+                /^(-?\d*\.?\d*)x\^(-?\d+)$/
+            );
+
+
+        if (match) {
+
+            let coefficientText =
+                match[1];
+
+            power =
+                parseInt(match[2]);
+
+
+            if (
+                coefficientText === "" ||
+                coefficientText === "+"
+            ) {
+
+                coefficient = 1;
+
+            }
+
+            else if (
+                coefficientText === "-"
+            ) {
+
+                coefficient = -1;
+
+            }
+
+            else {
+
+                coefficient =
+                    parseFloat(coefficientText);
+
+            }
+
+
+            if (
+                isNaN(coefficient) ||
+                isNaN(power)
+            ) {
+                return null;
+            }
+
+
+            polynomial.push({
+                coefficient: coefficient,
+                power: power
+            });
+
+
+            continue;
+        }
+
+
+        /* =====================
+           x
+        ===================== */
+
+        match =
+            term.match(
+                /^(-?\d*\.?\d*)x$/
+            );
+
+
+        if (match) {
+
+            let coefficientText =
+                match[1];
+
+
+            if (
+                coefficientText === "" ||
+                coefficientText === "+"
+            ) {
+
+                coefficient = 1;
+
+            }
+
+            else if (
+                coefficientText === "-"
+            ) {
+
+                coefficient = -1;
+
+            }
+
+            else {
+
+                coefficient =
+                    parseFloat(coefficientText);
+
+            }
+
+
+            polynomial.push({
+                coefficient: coefficient,
+                power: 1
+            });
+
+
+            continue;
+        }
+
+
+        /* =====================
+           CONSTANT
+        ===================== */
+
+        if (
+            /^-?\d*\.?\d+$/.test(term)
+        ) {
+
+            coefficient =
+                parseFloat(term);
+
+            polynomial.push({
+                coefficient: coefficient,
+                power: 0
+            });
+
+
+            continue;
+        }
+
+
+        /*
+            Unknown term
+        */
+
+        return null;
+    }
+
+
+    return polynomial;
+}
+
+
+/* =========================
+   DIFFERENTIATE ONCE
+========================= */
+
+function differentiatePolynomial(polynomial) {
+
+    const result = [];
+
+
+    for (const term of polynomial) {
+
+        /*
+            d/dx(constant) = 0
+        */
+
+        if (term.power === 0) {
+            continue;
+        }
+
+
+        result.push({
+
+            coefficient:
+                term.coefficient *
+                term.power,
+
+            power:
+                term.power - 1
+        });
+    }
+
+
+    return result;
+}
+
+
+/* =========================
+   FORMAT POLYNOMIAL
+========================= */
+
+function formatPolynomial(polynomial) {
+
+    if (
+        !polynomial ||
+        polynomial.length === 0
+    ) {
+
+        return "0";
+    }
+
+
+    let output = "";
+
+
+    polynomial.forEach(
+        (term, index) => {
+
+            const coefficient =
+                term.coefficient;
+
+            const power =
+                term.power;
+
+
+            if (coefficient === 0) {
+                return;
+            }
+
+
+            const absolute =
+                Math.abs(coefficient);
+
+
+            /*
+                SIGN
+            */
+
+            if (index === 0) {
+
+                if (coefficient < 0) {
+                    output += "-";
+                }
+
+            }
+
+            else {
+
+                if (coefficient < 0) {
+                    output += " − ";
+                }
+
+                else {
+                    output += " + ";
+                }
+            }
+
+
+            /*
+                CONSTANT
+            */
+
+            if (power === 0) {
+
+                output +=
+                    formatNumber(absolute);
+
+                return;
+            }
+
+
+            /*
+                x
+            */
+
+            if (power === 1) {
+
+                if (absolute === 1) {
+
+                    output += "x";
+
+                }
+
+                else {
+
+                    output +=
+                        formatNumber(absolute)
+                        + "x";
+                }
+
+                return;
+            }
+
+
+            /*
+                x^n
+            */
+
+            if (absolute === 1) {
+
+                output +=
+                    "x^" + power;
+
+            }
+
+            else {
+
+                output +=
+                    formatNumber(absolute)
+                    + "x^"
+                    + power;
+            }
+
+        }
+    );
+
+
+    return output || "0";
+}
+
+
+/* =========================
+   TRIGONOMETRY
+========================= */
+
+function getTrigDerivative(
+    functionName,
+    order
+) {
+
+    /*
+        sin cycle:
+
+        sin
+        cos
+        -sin
+        -cos
+    */
+
+    if (functionName === "sin") {
+
+        const cycle = [
+            "sin(x)",
+            "cos(x)",
+            "−sin(x)",
+            "−cos(x)"
+        ];
+
+        return cycle[
+            (order - 1) % 4
+        ];
+    }
+
+
+    /*
+        cos cycle:
+
+        cos
+        -sin
+        -cos
+        sin
+    */
+
+    if (functionName === "cos") {
+
+        const cycle = [
+            "cos(x)",
+            "−sin(x)",
+            "−cos(x)",
+            "sin(x)"
+        ];
+
+        return cycle[
+            (order - 1) % 4
+        ];
+    }
+
+
+    /*
+        tan first derivative
+    */
+
+    if (
+        functionName === "tan" &&
+        order === 1
+    ) {
+
+        return "sec²(x)";
+    }
+
+
+    return null;
+}
+
+
+/* =========================
+   CHECK TRIG FUNCTION
+========================= */
+
+function detectTrig(expression) {
+
+    const match =
+        expression.match(
+            /^(sin|cos|tan)\(x\)$/i
+        );
+
+
+    if (!match) {
+        return null;
+    }
+
+
+    return match[1].toLowerCase();
+}
+
+
+/* =========================
+   ORDINAL NAME
+========================= */
+
+function getOrderName(order) {
+
+    const names = {
+
+        1: "First",
+
+        2: "Second",
+
+        3: "Third",
+
+        4: "Fourth",
+
+        5: "Fifth"
+    };
+
+
+    return names[order] || "";
+}
+
+
+/* =========================
+   SHOW ERROR
+========================= */
+
+function showError(message) {
+
+    derivativeResult.textContent =
+        "Error";
+
+
+    solutionSteps.innerHTML = `
+        <div class="problem-warning">
+            ${message}
+        </div>
+    `;
+}
+
+function formatMathOutput(expression) {
+
+    let output = String(expression).replace(/\s/g, "");
+
+    // FIRST: Handle x powers with trig functions
+    output = output
+        .replace(/sin\(x\)\*x\^(\d+)/g, "x^$1*sin(x)")
+        .replace(/cos\(x\)\*x\^(\d+)/g, "x^$1*cos(x)")
+        .replace(/tan\(x\)\*x\^(\d+)/g, "x^$1*tan(x)");
+
+    // Then handle normal x with trig functions
+    output = output
+        .replace(/sin\(x\)\*x(?!\^)/g, "x*sin(x)")
+        .replace(/cos\(x\)\*x(?!\^)/g, "x*cos(x)")
+        .replace(/tan\(x\)\*x(?!\^)/g, "x*tan(x)");
+
+    // Convert powers
+    output = output
+        .replace(/\^2/g, "²")
+        .replace(/\^3/g, "³")
+        .replace(/\^4/g, "⁴")
+        .replace(/\^5/g, "⁵")
+        .replace(/\^6/g, "⁶")
+        .replace(/\^7/g, "⁷")
+        .replace(/\^8/g, "⁸")
+        .replace(/\^9/g, "⁹");
+
+    // Remove multiplication signs
+    output = output.replace(/\*/g, "");
+
+    // Space before trig functions
+    output = output.replace(
+        /(\d|x|²|³|⁴|⁵|⁶|⁷|⁸|⁹)(sin|cos|tan)/g,
+        "$1 $2"
+    );
+
+    // Space around operators
+    output = output
+        .replace(/\+/g, " + ")
+        .replace(/-/g, " − ");
+
+    return output.replace(/\s+/g, " ").trim();
+}
+
+/* =========================
+   MAIN CALCULATOR
+========================= */
+
+function calculateDerivative() {
+
+    const originalExpression =
+        functionInput.value.trim();
+
+    const order =
+        parseInt(derivativeOrder.value);
+
+
+    /* =====================
+       EMPTY INPUT
+    ===================== */
+
+    if (!originalExpression) {
+
+        showError(
+            "Please enter a mathematical function."
+        );
+
+        return;
+    }
+
+
+    /* =====================
+       ORDER CHECK
+    ===================== */
+
+    if (
+        isNaN(order) ||
+        order < 1 ||
+        order > 5
+    ) {
+
+        showError(
+            "Please select a derivative order from 1 to 5."
+        );
+
+        return;
+    }
+
+
+    /* =====================
+       INTEGRATION DETECTION
+    ===================== */
+
+    const lower =
+        originalExpression.toLowerCase();
+
+
+    if (
+        originalExpression.includes("∫") ||
+        lower.includes("integral") ||
+        lower.includes("integrate")
+    ) {
+
+        derivativeResult.textContent =
+            "Wrong Problem";
+
+        solutionSteps.innerHTML = `
+            <div class="problem-warning">
+                <strong>
+                    This is not a derivative problem.
+                </strong>
+
+                <br><br>
+
+                It appears to be an
+                <strong>integration problem</strong>.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    /* =====================
+       NORMALIZE INPUT
+    ===================== */
+
+    const expression =
+        normalizeExpression(originalExpression);
+
+
+    try {
+
+        /* =====================
+           CALCULATE DERIVATIVES
+        ===================== */
+
+        let steps = "";
+
+        steps += `
+            <div class="step-item">
+
+                <strong>
+                    Given Function
+                </strong>
+
+                <p>
+                    f(x) = ${originalExpression}
+                </p>
+
+            </div>
+        `;
+
+
+        let currentExpression =
+            expression;
+
+
+        for (
+            let i = 1;
+            i <= order;
+            i++
+        ) {
+
+            const derivative =
+                nerdamer.diff(
+                    currentExpression,
+                    "x"
+                );
+
+
+            const currentResult =
+                derivative.expand().toString();
+
+
+            steps += `
+                <div class="step-item">
+
+                    <strong>
+                        ${getOrderName(i)}
+                        Order Derivative
+                    </strong>
+
+                    <p>
+                        ${
+                            i === 1
+                                ? "f′(x)"
+                                : `f<sup>(${i})</sup>(x)`
+                        }
+                        =
+                        ${formatMathOutput(currentResult)}
+                    </p>
+
+                </div>
+            `;
+
+
+            currentExpression =
+                currentResult;
+        }
+
+
+        /* =====================
+           FINAL RESULT
+        ===================== */
+
+        const finalResult =
+            formatMathOutput(
+                currentExpression
+            );
+
+
+        derivativeResult.innerHTML =
+            finalResult;
+
+
+        solutionSteps.innerHTML =
+            steps;
+
+    }
+
+    catch (error) {
+
+        derivativeResult.textContent =
+            "Error";
+
+
+        solutionSteps.innerHTML = `
+            <div class="problem-warning">
+
+                <strong>
+                    Unable to calculate this derivative.
+                </strong>
+
+                <br><br>
+
+                Please enter a valid mathematical expression.
+
+            </div>
+        `;
+
+    }
+}
+
+</script>
+</body>
+</html>

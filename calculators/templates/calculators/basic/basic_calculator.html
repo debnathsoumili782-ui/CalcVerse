@@ -1,0 +1,175 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Basic Calculator | CalcVerse</title>
+
+    <link rel="stylesheet" href="{% static 'calculators/css/style.css' %}">
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="nav-container">
+        <a href="/" class="logo">
+            Calc<span>Verse</span>
+        </a>
+
+        <nav>
+            <a href="/">Home</a>
+            <a href="/category/basic/">Basic</a>
+        </nav>
+    </div>
+</header>
+
+
+<main>
+
+    <section class="calculator-page">
+
+        <div class="calculator-header">
+            <p class="badge">EVERYDAY MATH TOOL</p>
+            <h1>Basic <span>Calculator</span></h1>
+            <p>Perform quick and accurate everyday calculations.</p>
+        </div>
+
+
+        <div class="calculator-box">
+
+            <input
+                type="text"
+                id="display"
+                class="calculator-display"
+                value="0"
+                readonly
+            >
+
+            <div class="calculator-buttons">
+
+                <button class="clear-btn" onclick="clearDisplay()">AC</button>
+                <button onclick="deleteLast()">DEL</button>
+                <button onclick="appendValue('%')">%</button>
+                <button class="operator" onclick="appendValue('/')">÷</button>
+
+                <button onclick="appendValue('7')">7</button>
+                <button onclick="appendValue('8')">8</button>
+                <button onclick="appendValue('9')">9</button>
+                <button class="operator" onclick="appendValue('*')">×</button>
+
+                <button onclick="appendValue('4')">4</button>
+                <button onclick="appendValue('5')">5</button>
+                <button onclick="appendValue('6')">6</button>
+                <button class="operator" onclick="appendValue('-')">−</button>
+
+                <button onclick="appendValue('1')">1</button>
+                <button onclick="appendValue('2')">2</button>
+                <button onclick="appendValue('3')">3</button>
+                <button class="operator" onclick="appendValue('+')">+</button>
+
+                <button class="zero-btn" onclick="appendValue('0')">0</button>
+                <button onclick="appendValue('.')">.</button>
+                <button class="equal-btn" onclick="calculate()">=</button>
+
+            </div>
+
+        </div>
+        <div class="history-box">
+            <div class="history-header">
+                <h2>Calculation History</h2>
+                <button class="clear-history-btn" onclick="clearHistory()">
+                    Clear History
+                </button>
+            </div>
+
+            <div id="history-list" class="history-list">
+                <p class="empty-history">No calculations yet.</p>
+            </div>
+        </div>
+
+    </section>
+
+</main>
+
+
+<script>
+    let display = document.getElementById("display");
+
+    function appendValue(value) {
+        if (display.value === "0" || display.value === "Error") {
+            display.value = value;
+        } else {
+            display.value += value;
+        }
+    }
+
+    function clearDisplay() {
+        display.value = "0";
+    }
+
+    function deleteLast() {
+        if (display.value.length <= 1) {
+            display.value = "0";
+        } else {
+            display.value = display.value.slice(0, -1);
+        }
+    }
+
+    function calculate() {
+        try {
+            const expression = display.value;
+
+            // Percentage handling
+            let formattedExpression = expression.replace(
+                /(\d+(\.\d+)?)%/g,
+                "($1/100)"
+            );
+
+            const result = eval(formattedExpression);
+
+            display.value = result;
+
+            addToHistory(expression, result);
+
+        } catch (error) {
+            display.value = "Error";
+        }
+    }
+
+
+    function addToHistory(expression, result) {
+        const historyList = document.getElementById("history-list");
+
+        const emptyMessage = historyList.querySelector(".empty-history");
+
+        if (emptyMessage) {
+            emptyMessage.remove();
+        }
+
+        const historyItem = document.createElement("div");
+
+        historyItem.classList.add("history-item");
+
+        historyItem.innerHTML = `
+            <span>${expression}</span>
+            <strong>= ${result}</strong>
+        `;
+
+        historyList.prepend(historyItem);
+    }
+
+
+    function clearHistory() {
+        const historyList = document.getElementById("history-list");
+
+        historyList.innerHTML = `
+            <p class="empty-history">No calculations yet.</p>
+        `;
+    }
+</script>
+
+</body>
+</html>

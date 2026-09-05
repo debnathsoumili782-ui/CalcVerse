@@ -1,0 +1,772 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Time Addition & Subtraction Calculator — CalcVerse</title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'calculators/css/style.css' %}"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- NAVBAR -->
+
+<header class="navbar">
+
+    <div class="nav-container">
+
+        <a href="/" class="logo">
+            Calc<span>Verse</span>
+        </a>
+
+        <nav>
+
+            <a href="/">
+                Home
+            </a>
+
+            <a href="{% url 'age_date_time' %}">
+                Age, Date & Time
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+
+<main>
+
+
+    <!-- HERO -->
+
+    <section class="hero calculator-hero">
+
+        <div class="badge">
+            TIME CALCULATOR
+        </div>
+
+        <h1>
+            Add or <span>Subtract Time</span>
+        </h1>
+
+        <p>
+            Add or subtract hours and minutes from any starting time.
+        </p>
+
+    </section>
+
+
+
+    <!-- CALCULATOR -->
+
+    <section class="calculator-section">
+
+        <div class="banking-calculator-card">
+
+
+            <div class="academic-heading">
+
+                <h2>
+                    Calculate Time
+                </h2>
+
+                <p>
+                    Choose an operation, enter a starting time and calculate instantly.
+                </p>
+
+            </div>
+
+
+
+            <!-- TIME FORMAT -->
+
+            <div class="input-group">
+
+                <label>
+                    Time Format
+                </label>
+
+                <div class="format-toggle">
+
+                    <button
+                        type="button"
+                        class="format-option active"
+                        id="additionFormat12"
+                        onclick="setAdditionFormat(12)"
+                    >
+                        12 Hour
+                    </button>
+
+                    <button
+                        type="button"
+                        class="format-option"
+                        id="additionFormat24"
+                        onclick="setAdditionFormat(24)"
+                    >
+                        24 Hour
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- OPERATION -->
+
+            <div class="input-group">
+
+                <label>
+                    Choose Operation
+                </label>
+
+                <div class="format-toggle">
+
+                    <button
+                        type="button"
+                        class="format-option active"
+                        id="addOperation"
+                        onclick="setTimeOperation('add')"
+                    >
+                        + Add
+                    </button>
+
+                    <button
+                        type="button"
+                        class="format-option"
+                        id="subtractOperation"
+                        onclick="setTimeOperation('subtract')"
+                    >
+                        − Subtract
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- STARTING TIME -->
+
+            <div class="input-group">
+
+                <label for="additionStartTime">
+                    Starting Time
+                </label>
+
+                <div class="time-field-wrapper">
+
+                    <input
+                        type="time"
+                        id="additionStartTime"
+                    >
+
+                    <select
+                        id="additionPeriod"
+                        class="ampm-select"
+                    >
+
+                        <option value="AM">
+                            AM
+                        </option>
+
+                        <option value="PM">
+                            PM
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- HOURS -->
+
+            <div class="input-group">
+
+                <label for="hoursToAdd">
+                    Hours
+                </label>
+
+                <input
+                    type="number"
+                    id="hoursToAdd"
+                    min="0"
+                    value="0"
+                    placeholder="Enter hours"
+                >
+
+            </div>
+
+
+
+            <!-- MINUTES -->
+
+            <div class="input-group">
+
+                <label for="minutesToAdd">
+                    Minutes
+                </label>
+
+                <input
+                    type="number"
+                    id="minutesToAdd"
+                    min="0"
+                    value="0"
+                    placeholder="Enter minutes"
+                >
+
+            </div>
+
+
+
+            <!-- CALCULATE -->
+
+            <button
+                type="button"
+                class="calculate-btn"
+                onclick="calculateTime()"
+            >
+                Calculate Time
+            </button>
+
+
+
+            <!-- RESULT -->
+
+            <div
+                class="result-box"
+                id="additionResultBox"
+                style="display: none;"
+            >
+
+                <span>
+                    RESULTING TIME
+                </span>
+
+                <strong id="additionResult">
+                    --
+                </strong>
+
+            </div>
+
+
+
+            <!-- DETAILS -->
+
+            <div
+                class="solution-box"
+                id="additionDetails"
+                style="display: none;"
+            >
+
+                <h2>
+                    Calculation Details
+                </h2>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Starting Time
+                    </strong>
+
+                    <p id="displayAdditionStart">
+                        -
+                    </p>
+
+                </div>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Operation
+                    </strong>
+
+                    <p id="displayOperation">
+                        -
+                    </p>
+
+                </div>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Time Value
+                    </strong>
+
+                    <p id="displayTimeAdded">
+                        -
+                    </p>
+
+                </div>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Final Time
+                    </strong>
+
+                    <p id="displayFinalTime">
+                        -
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+
+<footer>
+
+    <p>
+        © 2026 CalcVerse — Calculate Smarter.
+    </p>
+
+</footer>
+
+
+
+<script>
+
+
+let additionTimeFormat = 12;
+let timeOperation = "add";
+
+
+/* =========================
+   TIME FORMAT
+========================= */
+
+function setAdditionFormat(format) {
+
+
+    additionTimeFormat = format;
+
+
+    const format12 =
+        document.getElementById(
+            "additionFormat12"
+        );
+
+
+    const format24 =
+        document.getElementById(
+            "additionFormat24"
+        );
+
+
+    const periodSelect =
+        document.getElementById(
+            "additionPeriod"
+        );
+
+
+    if (format === 12) {
+
+        format12.classList.add("active");
+        format24.classList.remove("active");
+
+        periodSelect.style.display = "block";
+
+    } else {
+
+        format24.classList.add("active");
+        format12.classList.remove("active");
+
+        periodSelect.style.display = "none";
+
+    }
+
+
+    hideTimeResult();
+
+}
+
+
+
+/* =========================
+   ADD / SUBTRACT TOGGLE
+========================= */
+
+function setTimeOperation(operation) {
+
+
+    timeOperation = operation;
+
+
+    const addButton =
+        document.getElementById(
+            "addOperation"
+        );
+
+
+    const subtractButton =
+        document.getElementById(
+            "subtractOperation"
+        );
+
+
+    if (operation === "add") {
+
+        addButton.classList.add("active");
+        subtractButton.classList.remove("active");
+
+    } else {
+
+        subtractButton.classList.add("active");
+        addButton.classList.remove("active");
+
+    }
+
+
+    hideTimeResult();
+
+}
+
+
+
+/* =========================
+   HIDE OLD RESULT
+========================= */
+
+function hideTimeResult() {
+
+    document.getElementById(
+        "additionResultBox"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "additionDetails"
+    ).style.display = "none";
+
+}
+
+
+
+/* =========================
+   CALCULATE TIME
+========================= */
+
+function calculateTime() {
+
+
+    const startTime =
+        document.getElementById(
+            "additionStartTime"
+        ).value;
+
+
+    const period =
+        document.getElementById(
+            "additionPeriod"
+        ).value;
+
+
+    const hoursValue =
+        Number(
+            document.getElementById(
+                "hoursToAdd"
+            ).value
+        );
+
+
+    const minutesValue =
+        Number(
+            document.getElementById(
+                "minutesToAdd"
+            ).value
+        );
+
+
+    /* VALIDATION */
+
+    if (!startTime) {
+
+        alert(
+            "Please select a starting time."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        !Number.isFinite(hoursValue) ||
+        !Number.isFinite(minutesValue) ||
+        hoursValue < 0 ||
+        minutesValue < 0
+    ) {
+
+        alert(
+            "Please enter valid hours and minutes."
+        );
+
+        return;
+
+    }
+
+
+    /* GET START TIME */
+
+    const timeParts =
+        startTime.split(":");
+
+
+    let startHours =
+        Number(timeParts[0]);
+
+
+    const startMinutes =
+        Number(timeParts[1]);
+
+
+    /* CONVERT 12-HOUR INPUT */
+
+    if (additionTimeFormat === 12) {
+
+        startHours =
+            startHours % 12;
+
+
+        if (period === "PM") {
+
+            startHours += 12;
+
+        }
+
+    }
+
+
+    const startTotalMinutes =
+        (startHours * 60)
+        + startMinutes;
+
+
+    const durationMinutes =
+        (hoursValue * 60)
+        + minutesValue;
+
+
+    let finalTotalMinutes;
+
+
+    /* ADD OR SUBTRACT */
+
+    if (timeOperation === "add") {
+
+        finalTotalMinutes =
+            startTotalMinutes
+            + durationMinutes;
+
+    } else {
+
+        finalTotalMinutes =
+            startTotalMinutes
+            - durationMinutes;
+
+    }
+
+
+    /* KEEP INSIDE 24 HOURS */
+
+    finalTotalMinutes =
+        (
+            (finalTotalMinutes % 1440)
+            + 1440
+        ) % 1440;
+
+
+    const finalHours =
+        Math.floor(
+            finalTotalMinutes / 60
+        );
+
+
+    const finalMinutes =
+        finalTotalMinutes % 60;
+
+
+    let finalTimeText;
+
+
+    /* =========================
+       24 HOUR RESULT
+    ========================= */
+
+    if (additionTimeFormat === 24) {
+
+        finalTimeText =
+            `${String(finalHours).padStart(2, "0")}:${String(finalMinutes).padStart(2, "0")}`;
+
+    }
+
+
+    /* =========================
+       12 HOUR RESULT
+    ========================= */
+
+    else {
+
+        const finalPeriod =
+            finalHours >= 12
+                ? "PM"
+                : "AM";
+
+
+        let displayHour =
+            finalHours % 12;
+
+
+        if (displayHour === 0) {
+
+            displayHour = 12;
+
+        }
+
+
+        finalTimeText =
+            `${displayHour}:${String(finalMinutes).padStart(2, "0")} ${finalPeriod}`;
+
+    }
+
+
+
+    /* =========================
+       START TIME DISPLAY
+    ========================= */
+
+    let startDisplay;
+
+
+    if (additionTimeFormat === 24) {
+
+        startDisplay =
+            `${String(startHours).padStart(2, "0")}:${String(startMinutes).padStart(2, "0")}`;
+
+    }
+
+    else {
+
+        let displayStartHour =
+            startHours % 12;
+
+
+        if (displayStartHour === 0) {
+
+            displayStartHour = 12;
+
+        }
+
+
+        startDisplay =
+            `${displayStartHour}:${String(startMinutes).padStart(2, "0")} ${period}`;
+
+    }
+
+
+
+    /* OPERATION TEXT */
+
+    const operationText =
+        timeOperation === "add"
+            ? "Add"
+            : "Subtract";
+
+
+    /* TIME VALUE TEXT */
+
+    const timeValueText =
+        `${hoursValue} Hour${hoursValue !== 1 ? "s" : ""}, `
+        + `${minutesValue} Minute${minutesValue !== 1 ? "s" : ""}`;
+
+
+
+    /* =========================
+       SHOW RESULT
+    ========================= */
+
+    document.getElementById(
+        "additionResult"
+    ).textContent =
+        finalTimeText;
+
+
+    document.getElementById(
+        "displayAdditionStart"
+    ).textContent =
+        startDisplay;
+
+
+    document.getElementById(
+        "displayOperation"
+    ).textContent =
+        operationText;
+
+
+    document.getElementById(
+        "displayTimeAdded"
+    ).textContent =
+        timeValueText;
+
+
+    document.getElementById(
+        "displayFinalTime"
+    ).textContent =
+        finalTimeText;
+
+
+    document.getElementById(
+        "additionResultBox"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "additionDetails"
+    ).style.display =
+        "block";
+
+}
+
+
+</script>
+
+
+</body>
+</html>

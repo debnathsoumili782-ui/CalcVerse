@@ -1,0 +1,168 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>More Tools | CalcVerse</title>
+
+    <link rel="stylesheet" href="{% static 'calculators/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'calculators/css/more-tools.css' %}">
+</head>
+
+<body>
+
+    <!-- ================================
+         NAVBAR
+    ================================= -->
+    <header class="navbar">
+        <div class="nav-container">
+
+            <a href="/" class="logo">
+                Calc<span>Verse</span>
+            </a>
+
+            <nav>
+                <a href="/">Home</a>
+                <a href="/category/">Categories</a>
+            </nav>
+
+        </div>
+    </header>
+
+
+    <!-- ================================
+         MAIN PAGE
+    ================================= -->
+    <main class="more-tools-page">
+
+
+        <!-- HERO -->
+        <section class="more-tools-hero">
+
+            <div class="more-tools-tag">
+                MORE CALCULATORS
+            </div>
+
+            <h1>
+                More <span>Useful Tools</span>
+            </h1>
+
+            <p>
+                Explore additional useful calculators and tools
+                for work, study and everyday life.
+            </p>
+
+        </section>
+
+
+        <!-- TOOLS SECTION -->
+        <section class="more-tools-section">
+
+            <h2>More Tools</h2>
+
+            <div class="more-tools-grid">
+
+                <a href="{% url 'random_number' %}" class="category-card">
+
+                    <div class="more-tool-icon">🎲</div>
+
+                    <h3>Random Number Generator</h3>
+
+                    <p>
+                        Generate random numbers quickly
+                        within your selected range.
+                    </p>
+
+                </a>
+
+
+                <a href="{% url 'random_picker' %}" class="more-tool-card">
+
+                    <div class="more-tool-icon">🎯</div>
+
+                    <h3>Random Picker</h3>
+
+                    <p>
+                        Randomly pick an option from
+                        your custom list.
+                    </p>
+
+                </a>
+
+
+                <a href="{% url 'roman_numeral' %}" class="more-tool-card">
+
+                    <div class="more-tool-icon">🏛️</div>
+
+                    <h3>Roman Numeral Converter</h3>
+
+                    <p>
+                        Convert numbers into Roman numerals
+                        and Roman numerals back into numbers.
+                    </p>
+
+                </a>
+
+
+                <a href="{% url 'word_counter' %}" class="more-tool-card">
+
+                    <div class="more-tool-icon">📝</div>
+
+                    <h3>Word Counter</h3>
+
+                    <p>
+                        Count words, characters, sentences,
+                        paragraphs and more from your text.
+                    </p>
+
+                </a>
+
+
+                <a href="{% url 'text_case_converter' %}" class="more-tool-card">
+
+                    <div class="more-tool-icon">🔤</div>
+
+                    <h3>Text Case Converter</h3>
+
+                    <p>
+                        Convert text to uppercase, lowercase, title case,
+                        sentence case and other formats instantly.
+                    </p>
+
+                </a>
+
+
+                <a href="{% url 'coin_toss' %}" class="more-tool-card">
+
+                    <div class="more-tool-icon">🪙</div>
+
+                    <h3>Coin Toss</h3>
+
+                    <p>
+                        Toss a virtual coin and instantly get
+                        Heads or Tails.
+                    </p>
+
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ================================
+         FOOTER
+    ================================= -->
+    <footer>
+        <p>© 2026 CalcVerse — Calculate Smarter.</p>
+    </footer>
+
+
+</body>
+</html>

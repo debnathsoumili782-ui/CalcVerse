@@ -1,0 +1,1268 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CalcVerse — BMR Calculator</title>
+
+    <link rel="stylesheet" href="{% static 'calculators/css/bmr.css' %}">
+</head>
+
+<body class="bmr-page">
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="nav-container">
+
+            <a href="/" class="logo">
+                Calc<span>Verse</span>
+            </a>
+
+            <nav>
+                <a href="/">Home</a>
+                <a href="{% url 'health_body' %}">Health & Body</a>
+            </nav>
+
+        </div>
+    </header>
+
+
+    <main>
+
+        <!-- HERO -->
+        <section class="hero">
+
+            <div class="badge">
+                HEALTH CALCULATOR
+            </div>
+
+            <h1>
+                Calculate Your <span>BMR</span>
+            </h1>
+
+            <p>
+                Find out how many calories your body needs each day at complete rest.
+            </p>
+
+        </section>
+
+
+        <!-- BMR CALCULATOR -->
+        <section class="calculator-section">
+
+            <div class="calculator-box">
+
+
+                <!-- HEADING -->
+                <div class="calculator-heading">
+
+                    <h2>Enter Your Details</h2>
+
+                    <p>
+                        Enter your information to estimate your Basal Metabolic Rate.
+                    </p>
+
+                </div>
+
+
+                <!-- AGE -->
+                <div class="input-group">
+
+                    <label for="age">Age</label>
+
+                    <div class="age-input">
+
+                        <input
+                            type="number"
+                            id="age"
+                            placeholder="Enter your age"
+                            min="1"
+                            max="120"
+                        >
+
+                        <span>years</span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- GENDER -->
+                <div class="input-group">
+
+                    <label>Gender</label>
+
+                    <div class="toggle-group">
+
+                        <button
+                            type="button"
+                            class="toggle-btn active"
+                            id="maleBtn"
+                        >
+                            Male
+                        </button>
+
+                        <button
+                            type="button"
+                            class="toggle-btn"
+                            id="femaleBtn"
+                        >
+                            Female
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- WEIGHT UNIT -->
+                <div class="input-group">
+
+                    <label>Weight Unit</label>
+
+                    <div class="toggle-group">
+
+                        <button
+                            type="button"
+                            class="toggle-btn active"
+                            id="kgBtn"
+                        >
+                            Kilograms (kg)
+                        </button>
+
+                        <button
+                            type="button"
+                            class="toggle-btn"
+                            id="lbBtn"
+                        >
+                            Pounds (lb)
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- WEIGHT -->
+                <div class="input-group">
+
+                    <label id="weightLabel">
+                        Weight (kg)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="weight"
+                        placeholder="Enter your weight"
+                        step="0.1"
+                        min="1"
+                    >
+
+                </div>
+
+
+                <!-- HEIGHT UNIT -->
+                <div class="input-group">
+
+                    <label>Height Unit</label>
+
+                    <div class="toggle-group">
+
+                        <button
+                            type="button"
+                            class="toggle-btn active"
+                            id="cmBtn"
+                        >
+                            Centimeters (cm)
+                        </button>
+
+                        <button
+                            type="button"
+                            class="toggle-btn"
+                            id="ftBtn"
+                        >
+                            Feet & Inches
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- HEIGHT -->
+                <div class="input-group">
+
+                    <label id="heightLabel">
+                        Height (cm)
+                    </label>
+
+
+                    <!-- CENTIMETERS -->
+                    <div id="cmHeightBox">
+
+                        <input
+                            type="number"
+                            id="heightCm"
+                            placeholder="Enter your height"
+                            step="0.1"
+                            min="1"
+                        >
+
+                    </div>
+
+
+                    <!-- FEET & INCHES -->
+                    <div
+                        id="feetHeightBox"
+                        class="height-row hidden"
+                    >
+
+                        <div class="small-input">
+
+                            <input
+                                type="number"
+                                id="heightFt"
+                                placeholder="Feet"
+                                min="1"
+                            >
+
+                            <span>ft</span>
+
+                        </div>
+
+
+                        <div class="small-input">
+
+                            <input
+                                type="number"
+                                id="heightIn"
+                                placeholder="Inches"
+                                min="0"
+                                max="11.9"
+                                step="0.1"
+                            >
+
+                            <span>in</span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CALCULATE BUTTON -->
+                <button
+                    type="button"
+                    class="calculate-btn"
+                    id="calculateBtn"
+                >
+                    Calculate BMR
+                </button>
+
+
+                <!-- =========================
+                     MAIN RESULT
+                ========================== -->
+                <div
+                    class="result-box hidden"
+                    id="resultBox"
+                >
+
+                    <span class="result-label">
+                        YOUR ESTIMATED BMR
+                    </span>
+
+                    <h3 id="bmrResult">
+                        0
+                    </h3>
+
+                    <p>
+                        Calories per day
+                    </p>
+
+                </div>
+
+
+                <!-- =========================
+                     BMR CONTEXT SCALE
+                ========================== -->
+                <div
+                    class="bmr-scale-box hidden"
+                    id="bmrScaleBox"
+                >
+
+
+                    <!-- SCALE HEADER -->
+                    <div class="bmr-scale-header">
+
+                        <div class="bmr-scale-title">
+
+                            <span class="scale-label">
+                                BMR REFERENCE
+                            </span>
+
+                            <h3>
+                                Where Does Your BMR Stand?
+                            </h3>
+
+                            <p>
+                                See where your estimated daily calorie needs fall
+                                on this general adult reference scale.
+                            </p>
+
+                        </div>
+
+
+                        <div class="your-bmr-mini">
+
+                            <span>Your BMR</span>
+
+                            <strong id="scaleBmrValue">
+                                0
+                            </strong>
+
+                            <small>calories/day</small>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- REFERENCE TEXT -->
+                    <div class="bmr-reference-heading">
+
+                        <span>
+                            Estimated energy your body uses during complete rest
+                        </span>
+
+                    </div>
+
+
+                    <!-- SCALE -->
+                    <div class="bmr-bar-section">
+
+                        <!-- MARKER -->
+                        <div
+                            class="bmr-marker"
+                            id="bmrMarker"
+                        >
+
+                            <span id="markerValue">
+                                0
+                            </span>
+
+                            <div class="marker-line"></div>
+
+                        </div>
+
+
+                        <!-- COLOUR BAR -->
+                        <div class="bmr-bar">
+
+                            <div class="bar-segment lower"></div>
+
+                            <div class="bar-segment typical"></div>
+
+                            <div class="bar-segment higher"></div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- RANGE CARDS -->
+                    <div class="bmr-range-labels">
+
+
+                        <div class="bmr-range-card lower-range">
+
+                            <strong>
+                                Below 1,200
+                            </strong>
+
+                            <span>
+                                Lower energy needs
+                            </span>
+
+                        </div>
+
+
+                        <div class="bmr-range-card typical-range">
+
+                            <strong>
+                                1,200 – 1,800
+                            </strong>
+
+                            <span>
+                                Typical reference
+                            </span>
+
+                        </div>
+
+
+                        <div class="bmr-range-card higher-range">
+
+                            <strong>
+                                Above 1,800
+                            </strong>
+
+                            <span>
+                                Higher energy needs
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- PERSONALIZED MESSAGE -->
+                    <div
+                        class="bmr-context-message"
+                        id="bmrContextMessage"
+                    >
+
+                        Your estimated BMR will be shown on the scale above.
+
+                    </div>
+
+
+                    <!-- IMPORTANT NOTE -->
+                    <p class="bmr-scale-note">
+
+                        BMR does not have one universal “healthy” range.
+                        Your result naturally changes depending on factors such
+                        as age, sex, height and body weight.
+
+                    </p>
+
+
+                </div>
+
+
+                <!-- =========================
+                     RESULT EXPLANATION
+                ========================== -->
+                <div
+                    class="bmr-info hidden"
+                    id="bmrInfo"
+                >
+
+                    <h3>
+                        What Does This Mean?
+                    </h3>
+
+                    <p>
+                        Your BMR is the estimated number of calories your body
+                        burns in a day while at complete rest. This energy is used
+                        for essential functions such as breathing, circulation and
+                        maintaining body temperature.
+                    </p>
+
+
+                    <div class="info-card">
+
+                        <span>
+                            Your Daily Baseline
+                        </span>
+
+                        <strong id="baselineCalories">
+                            0 calories/day
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================
+                     CALCULATION DETAILS
+                ========================== -->
+                <div
+                    class="details-box hidden"
+                    id="detailsBox"
+                >
+
+                    <h3>
+                        BMR Details
+                    </h3>
+
+
+                    <div class="detail-card">
+
+                        <strong>
+                            Formula
+                        </strong>
+
+                        <span id="formulaUsed">
+                            Mifflin-St Jeor Equation
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-card">
+
+                        <strong>
+                            Age
+                        </strong>
+
+                        <span id="ageDetail">
+                            —
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-card">
+
+                        <strong>
+                            Gender
+                        </strong>
+
+                        <span id="genderDetail">
+                            —
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-card">
+
+                        <strong>
+                            Weight Used
+                        </strong>
+
+                        <span id="weightDetail">
+                            —
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-card">
+
+                        <strong>
+                            Height Used
+                        </strong>
+
+                        <span id="heightDetail">
+                            —
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-card final-detail">
+
+                        <strong>
+                            Your BMR
+                        </strong>
+
+                        <span id="bmrDetail">
+                            —
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer>
+        <p>
+            © 2026 CalcVerse — Calculate Smarter.
+        </p>
+    </footer>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================== -->
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+
+            /* =========================
+               DEFAULT VALUES
+            ========================== */
+
+            let gender = "male";
+            let weightUnit = "kg";
+            let heightUnit = "cm";
+
+
+            /* =========================
+               BUTTONS
+            ========================== */
+
+            const maleBtn =
+                document.getElementById("maleBtn");
+
+            const femaleBtn =
+                document.getElementById("femaleBtn");
+
+
+            const kgBtn =
+                document.getElementById("kgBtn");
+
+            const lbBtn =
+                document.getElementById("lbBtn");
+
+
+            const cmBtn =
+                document.getElementById("cmBtn");
+
+            const ftBtn =
+                document.getElementById("ftBtn");
+
+
+            const calculateBtn =
+                document.getElementById("calculateBtn");
+
+
+            /* =========================
+               LABELS
+            ========================== */
+
+            const weightLabel =
+                document.getElementById("weightLabel");
+
+            const heightLabel =
+                document.getElementById("heightLabel");
+
+
+            /* =========================
+               INPUT BOXES
+            ========================== */
+
+            const ageInput =
+                document.getElementById("age");
+
+            const weightInput =
+                document.getElementById("weight");
+
+            const heightCmInput =
+                document.getElementById("heightCm");
+
+            const heightFtInput =
+                document.getElementById("heightFt");
+
+            const heightInInput =
+                document.getElementById("heightIn");
+
+
+            /* =========================
+               HEIGHT BOXES
+            ========================== */
+
+            const cmHeightBox =
+                document.getElementById("cmHeightBox");
+
+            const feetHeightBox =
+                document.getElementById("feetHeightBox");
+
+
+            /* =========================
+               RESULT
+            ========================== */
+
+            const resultBox =
+                document.getElementById("resultBox");
+
+            const bmrResult =
+                document.getElementById("bmrResult");
+
+
+            /* =========================
+               BMR SCALE
+            ========================== */
+
+            const bmrScaleBox =
+                document.getElementById("bmrScaleBox");
+
+            const scaleBmrValue =
+                document.getElementById("scaleBmrValue");
+
+            const markerValue =
+                document.getElementById("markerValue");
+
+            const bmrMarker =
+                document.getElementById("bmrMarker");
+
+            const bmrContextMessage =
+                document.getElementById("bmrContextMessage");
+
+
+            /* =========================
+               BMR INFO
+            ========================== */
+
+            const bmrInfo =
+                document.getElementById("bmrInfo");
+
+            const baselineCalories =
+                document.getElementById("baselineCalories");
+
+
+            /* =========================
+               DETAILS
+            ========================== */
+
+            const detailsBox =
+                document.getElementById("detailsBox");
+
+            const formulaUsed =
+                document.getElementById("formulaUsed");
+
+            const ageDetail =
+                document.getElementById("ageDetail");
+
+            const genderDetail =
+                document.getElementById("genderDetail");
+
+            const weightDetail =
+                document.getElementById("weightDetail");
+
+            const heightDetail =
+                document.getElementById("heightDetail");
+
+            const bmrDetail =
+                document.getElementById("bmrDetail");
+
+
+            /* =========================
+               GENDER TOGGLE
+            ========================== */
+
+            maleBtn.addEventListener(
+                "click",
+                function () {
+
+                    gender = "male";
+
+                    maleBtn.classList.add("active");
+                    femaleBtn.classList.remove("active");
+
+                }
+            );
+
+
+            femaleBtn.addEventListener(
+                "click",
+                function () {
+
+                    gender = "female";
+
+                    femaleBtn.classList.add("active");
+                    maleBtn.classList.remove("active");
+
+                }
+            );
+
+
+            /* =========================
+               WEIGHT UNIT TOGGLE
+            ========================== */
+
+            kgBtn.addEventListener(
+                "click",
+                function () {
+
+                    weightUnit = "kg";
+
+                    kgBtn.classList.add("active");
+                    lbBtn.classList.remove("active");
+
+                    weightLabel.textContent =
+                        "Weight (kg)";
+
+                    weightInput.placeholder =
+                        "Enter your weight in kg";
+
+                }
+            );
+
+
+            lbBtn.addEventListener(
+                "click",
+                function () {
+
+                    weightUnit = "lb";
+
+                    lbBtn.classList.add("active");
+                    kgBtn.classList.remove("active");
+
+                    weightLabel.textContent =
+                        "Weight (lb)";
+
+                    weightInput.placeholder =
+                        "Enter your weight in pounds";
+
+                }
+            );
+
+
+            /* =========================
+               HEIGHT UNIT TOGGLE
+            ========================== */
+
+            cmBtn.addEventListener(
+                "click",
+                function () {
+
+                    heightUnit = "cm";
+
+                    cmBtn.classList.add("active");
+                    ftBtn.classList.remove("active");
+
+                    cmHeightBox.classList.remove("hidden");
+                    feetHeightBox.classList.add("hidden");
+
+                    heightLabel.textContent =
+                        "Height (cm)";
+
+                }
+            );
+
+
+            ftBtn.addEventListener(
+                "click",
+                function () {
+
+                    heightUnit = "ft";
+
+                    ftBtn.classList.add("active");
+                    cmBtn.classList.remove("active");
+
+                    cmHeightBox.classList.add("hidden");
+                    feetHeightBox.classList.remove("hidden");
+
+                    heightLabel.textContent =
+                        "Height";
+
+                }
+            );
+
+
+            /* =========================
+               CALCULATE BMR
+            ========================== */
+
+            calculateBtn.addEventListener(
+                "click",
+                function () {
+
+
+                    /* =========================
+                       GET INPUT VALUES
+                    ========================== */
+
+                    const age =
+                        parseFloat(ageInput.value);
+
+                    let weight =
+                        parseFloat(weightInput.value);
+
+                    let height;
+
+
+                    /* =========================
+                       VALIDATE AGE
+                    ========================== */
+
+                    if (!age || age < 1 || age > 120) {
+
+                        alert(
+                            "Please enter a valid age between 1 and 120."
+                        );
+
+                        ageInput.focus();
+
+                        return;
+
+                    }
+
+
+                    /* =========================
+                       VALIDATE WEIGHT
+                    ========================== */
+
+                    if (!weight || weight <= 0) {
+
+                        alert(
+                            "Please enter a valid weight."
+                        );
+
+                        weightInput.focus();
+
+                        return;
+
+                    }
+
+
+                    /* =========================
+                       CONVERT POUNDS TO KG
+                    ========================== */
+
+                    if (weightUnit === "lb") {
+
+                        weight =
+                            weight * 0.45359237;
+
+                    }
+
+
+                    /* =========================
+                       GET HEIGHT IN CM
+                    ========================== */
+
+                    if (heightUnit === "cm") {
+
+
+                        height =
+                            parseFloat(heightCmInput.value);
+
+
+                        if (!height || height <= 0) {
+
+                            alert(
+                                "Please enter a valid height."
+                            );
+
+                            heightCmInput.focus();
+
+                            return;
+
+                        }
+
+
+                    } else {
+
+
+                        const feet =
+                            parseFloat(heightFtInput.value) || 0;
+
+                        const inches =
+                            parseFloat(heightInInput.value) || 0;
+
+
+                        if (feet <= 0 && inches <= 0) {
+
+                            alert(
+                                "Please enter a valid height."
+                            );
+
+                            heightFtInput.focus();
+
+                            return;
+
+                        }
+
+
+                        if (inches >= 12) {
+
+                            alert(
+                                "Inches must be less than 12."
+                            );
+
+                            heightInInput.focus();
+
+                            return;
+
+                        }
+
+
+                        /* FEET + INCHES TO CM */
+
+                        height =
+                            ((feet * 12) + inches) * 2.54;
+
+                    }
+
+
+                    /* =========================
+                       MIFFLIN-ST JEOR FORMULA
+                    ========================== */
+
+                    let bmr;
+
+
+                    if (gender === "male") {
+
+
+                        bmr =
+                            (10 * weight) +
+                            (6.25 * height) -
+                            (5 * age) +
+                            5;
+
+
+                    } else {
+
+
+                        bmr =
+                            (10 * weight) +
+                            (6.25 * height) -
+                            (5 * age) -
+                            161;
+
+                    }
+
+
+                    /* =========================
+                       ROUND RESULT
+                    ========================== */
+
+                    bmr =
+                        Math.round(bmr);
+
+
+                    /* =========================
+                       SHOW RESULT SECTIONS
+                    ========================== */
+
+                    resultBox.classList.remove("hidden");
+
+                    bmrScaleBox.classList.remove("hidden");
+
+                    bmrInfo.classList.remove("hidden");
+
+                    detailsBox.classList.remove("hidden");
+
+
+                    /* =========================
+                       MAIN RESULT
+                    ========================== */
+
+                    bmrResult.textContent =
+                        bmr.toLocaleString();
+
+
+                    baselineCalories.textContent =
+                        bmr.toLocaleString() +
+                        " calories/day";
+
+
+                    /* =========================
+                       UPDATE BMR SCALE
+                    ========================== */
+
+                    scaleBmrValue.textContent =
+                        bmr.toLocaleString();
+
+
+                    markerValue.textContent =
+                        bmr.toLocaleString();
+
+
+                    /*
+                        VISUAL SCALE:
+
+                        800  = left edge
+                        2400 = right edge
+
+                        Anything outside this
+                        stays near the respective edge.
+                    */
+
+                    const scaleMin = 800;
+                    const scaleMax = 2400;
+
+
+                    let markerPosition =
+                        (
+                            (bmr - scaleMin) /
+                            (scaleMax - scaleMin)
+                        ) * 100;
+
+
+                    /*
+                        Prevent marker from
+                        going outside the bar.
+                    */
+
+                    markerPosition =
+                        Math.max(
+                            3,
+                            Math.min(
+                                97,
+                                markerPosition
+                            )
+                        );
+
+
+                    bmrMarker.style.left =
+                        markerPosition + "%";
+
+
+                    /* =========================
+                       PERSONALIZED BMR MESSAGE
+                    ========================== */
+
+                    if (bmr < 1200) {
+
+
+                        bmrContextMessage.innerHTML =
+                            "<strong>Your estimated BMR falls in the lower energy-needs area of this reference scale.</strong> " +
+                            "This means your body is estimated to use fewer than 1,200 calories per day while at complete rest.";
+
+
+                    } else if (
+                        bmr >= 1200 &&
+                        bmr <= 1800
+                    ) {
+
+
+                        bmrContextMessage.innerHTML =
+                            "<strong>Your estimated BMR falls within the typical adult reference area shown on the scale.</strong> " +
+                            "Your body is estimated to use " +
+                            bmr.toLocaleString() +
+                            " calories per day while at complete rest.";
+
+
+                    } else {
+
+
+                        bmrContextMessage.innerHTML =
+                            "<strong>Your estimated BMR falls in the higher energy-needs area of this reference scale.</strong> " +
+                            "Your body is estimated to use more than 1,800 calories per day while at complete rest.";
+
+                    }
+
+
+                    /* =========================
+                       DETAILS
+                    ========================== */
+
+                    formulaUsed.textContent =
+                        "Mifflin-St Jeor Equation";
+
+
+                    ageDetail.textContent =
+                        age + " years";
+
+
+                    genderDetail.textContent =
+                        gender === "male"
+                            ? "Male"
+                            : "Female";
+
+
+                    /* =========================
+                       ORIGINAL WEIGHT DISPLAY
+                    ========================== */
+
+                    if (weightUnit === "kg") {
+
+
+                        weightDetail.textContent =
+                            parseFloat(
+                                weightInput.value
+                            ) + " kg";
+
+
+                    } else {
+
+
+                        weightDetail.textContent =
+                            parseFloat(
+                                weightInput.value
+                            ) +
+                            " lb (" +
+                            weight.toFixed(1) +
+                            " kg)";
+
+                    }
+
+
+                    /* =========================
+                       ORIGINAL HEIGHT DISPLAY
+                    ========================== */
+
+                    if (heightUnit === "cm") {
+
+
+                        heightDetail.textContent =
+                            parseFloat(
+                                heightCmInput.value
+                            ) +
+                            " cm";
+
+
+                    } else {
+
+
+                        const feet =
+                            parseFloat(
+                                heightFtInput.value
+                            ) || 0;
+
+
+                        const inches =
+                            parseFloat(
+                                heightInInput.value
+                            ) || 0;
+
+
+                        heightDetail.textContent =
+                            feet +
+                            " ft " +
+                            inches +
+                            " in (" +
+                            height.toFixed(1) +
+                            " cm)";
+
+                    }
+
+
+                    /* =========================
+                       FINAL BMR DETAIL
+                    ========================== */
+
+                    bmrDetail.textContent =
+                        bmr.toLocaleString() +
+                        " calories/day";
+
+
+                    /* =========================
+                       SMOOTH SCROLL
+                    ========================== */
+
+                    setTimeout(
+                        function () {
+
+                            resultBox.scrollIntoView({
+                                behavior: "smooth",
+                                block: "center"
+                            });
+
+                        },
+                        100
+                    );
+
+
+                }
+            );
+
+
+        });
+
+    </script>
+
+</body>
+
+</html>

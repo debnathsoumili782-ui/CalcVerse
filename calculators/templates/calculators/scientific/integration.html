@@ -1,0 +1,1314 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Integration Calculator | CalcVerse</title>
+
+    <link rel="stylesheet"
+          href="{% static 'calculators/css/calculator.css' %}">
+</head>
+
+<body>
+
+<header class="navbar">
+    <a href="/" class="logo">Calc<span>Verse</span></a>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/category/scientific/">Scientific</a>
+    </nav>
+</header>
+
+
+<main class="tool-container">
+
+    <!-- HERO -->
+    <div class="tool-hero">
+        <span class="hero-badge">SCIENTIFIC TOOL</span>
+
+        <h1>Integration <span>Calculator</span></h1>
+
+        <p>Solve integration problems step by step.</p>
+    </div>
+
+
+    <!-- CALCULATOR -->
+    <div class="tool-card integration-card">
+
+        <!-- FUNCTION -->
+        <div class="input-group">
+            <label for="functionInput">Enter a Function</label>
+
+            <input
+                type="text"
+                id="functionInput"
+                placeholder="Example: x^2 + 3x + 5"
+            >
+        </div>
+
+
+        <!-- INTEGRATION TYPE -->
+        <div class="input-group">
+            <label for="integrationType">Integration Type</label>
+
+            <select id="integrationType">
+                <option value="indefinite">
+                    Indefinite Integration
+                </option>
+
+                <option value="definite">
+                    Definite Integration
+                </option>
+            </select>
+        </div>
+
+
+        <!-- DEFINITE LIMITS -->
+        <div
+            class="integration-limits"
+            id="integrationLimits"
+            style="display: none;"
+        >
+
+            <div class="input-group">
+                <label for="lowerLimit">Lower Limit</label>
+
+                <input
+                    type="number"
+                    id="lowerLimit"
+                    placeholder="Example: 0"
+                >
+            </div>
+
+
+            <div class="input-group">
+                <label for="upperLimit">Upper Limit</label>
+
+                <input
+                    type="number"
+                    id="upperLimit"
+                    placeholder="Example: 2"
+                >
+            </div>
+
+        </div>
+
+
+        <!-- EXAMPLES -->
+        <div class="examples">
+
+            <span>Examples:</span>
+
+            <button
+                type="button"
+                onclick="setExample('x^2 + 3x + 5')"
+            >
+                x² + 3x + 5
+            </button>
+
+            <button
+                type="button"
+                onclick="setExample('3x^2 - 4x')"
+            >
+                3x² − 4x
+            </button>
+
+            <button
+                type="button"
+                onclick="setExample('sin(x)')"
+            >
+                sin(x)
+            </button>
+
+            <button
+                type="button"
+                onclick="setExample('cos(x)')"
+            >
+                cos(x)
+            </button>
+
+        </div>
+
+
+        <!-- BUTTON -->
+        <button
+            class="calculate-btn"
+            onclick="solveIntegration()"
+        >
+            Solve Integration
+        </button>
+
+
+        <!-- RESULT -->
+        <div class="integration-result">
+
+            <span class="result-label">
+                INTEGRAL
+            </span>
+
+            <strong id="integrationResult">
+                Enter a function
+            </strong>
+
+        </div>
+
+
+        <!-- SOLUTION -->
+        <div
+            class="solution-box"
+            id="solutionBox"
+            style="display: none;"
+        >
+
+            <h2>Solution</h2>
+
+            <div id="solutionSteps"></div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script>
+
+const integrationType = document.getElementById("integrationType");
+const integrationLimits = document.getElementById("integrationLimits");
+
+
+/* =========================
+   SHOW / HIDE LIMITS
+========================= */
+
+integrationType.addEventListener("change", function () {
+
+    if (this.value === "definite") {
+        integrationLimits.style.display = "grid";
+    } else {
+        integrationLimits.style.display = "none";
+    }
+
+});
+
+
+/* =========================
+   SET EXAMPLE
+========================= */
+
+function setExample(value) {
+    document.getElementById("functionInput").value = value;
+}
+
+
+/* =========================
+   MAIN SOLVER
+========================= */
+
+function solveIntegration() {
+
+    const input = document
+        .getElementById("functionInput")
+        .value
+        .trim();
+
+    const result = document.getElementById("integrationResult");
+    const solutionBox = document.getElementById("solutionBox");
+    const solutionSteps = document.getElementById("solutionSteps");
+
+    const type = integrationType.value;
+
+
+    if (!input) {
+        result.textContent = "Please enter a function";
+        solutionBox.style.display = "none";
+        return;
+    }
+
+
+    /* NORMALIZE INPUT */
+
+    const expression = input
+        .toLowerCase()
+        .replace(/²/g, "^2")
+        .replace(/³/g, "^3")
+        .replace(/⁴/g, "^4")
+        .replace(/⁵/g, "^5")
+        .replace(/⁶/g, "^6")
+        .replace(/⁷/g, "^7")
+        .replace(/⁸/g, "^8")
+        .replace(/⁹/g, "^9")
+        .replace(/−/g, "-")
+        .replace(/\s+/g, "");
+
+
+    /* =========================
+       SIN(X)
+    ========================= */
+
+    if (expression === "sin(x)") {
+
+        if (type === "definite") {
+
+            const lower = parseFloat(
+                document.getElementById("lowerLimit").value
+            );
+
+            const upper = parseFloat(
+                document.getElementById("upperLimit").value
+            );
+
+            if (isNaN(lower) || isNaN(upper)) {
+                result.textContent = "Enter both integration limits";
+                solutionBox.style.display = "none";
+                return;
+            }
+
+            const value =
+                (-Math.cos(upper)) - (-Math.cos(lower));
+
+            result.textContent = formatNumber(value);
+
+            solutionSteps.innerHTML = `
+                <div class="solution-step">
+                    <h3>Given Function</h3>
+                    <p>∫ sin(x) dx</p>
+                </div>
+
+                <div class="solution-step">
+                    <h3>Integration Rule</h3>
+                    <p>∫ sin(x) dx = −cos(x)</p>
+                </div>
+
+                <div class="solution-step">
+                    <h3>Apply Limits</h3>
+                    <p>F(${upper}) − F(${lower})</p>
+                </div>
+
+                <div class="solution-step">
+                    <h3>Final Answer</h3>
+                    <p>${formatNumber(value)}</p>
+                </div>
+            `;
+
+        } else {
+
+            const integrated = "−cos(x) + C";
+
+            result.innerHTML =
+                "∫ (" +
+                formatExpression(input) +
+                ") dx = " +
+                integrated;
+
+            solutionSteps.innerHTML = `
+                <div class="solution-step">
+                    <h3>Given Function</h3>
+                    <p>∫ ${formatExpression(input)} dx</p>
+                </div>
+
+                <div class="solution-step">
+                    <h3>Integration Rule</h3>
+                    <p>∫ sin(x) dx = −cos(x) + C</p>
+                </div>
+
+                <div class="solution-step">
+                    <h3>Integrated Result</h3>
+                    <p>−cos(x) + C</p>
+                </div>
+            `;
+        }
+
+        solutionBox.style.display = "block";
+        return;
+    }
+
+
+    /* =========================
+       COS(X)
+    ========================= */
+
+    if (expression === "cos(x)") {
+
+        if (type === "definite") {
+
+            const lower = parseFloat(
+                document.getElementById("lowerLimit").value
+            );
+
+            const upper = parseFloat(
+                document.getElementById("upperLimit").value
+            );
+
+            if (isNaN(lower) || isNaN(upper)) {
+                result.textContent = "Enter both integration limits";
+                solutionBox.style.display = "none";
+                return;
+            }
+
+            const value =
+                Math.sin(upper) - Math.sin(lower);
+
+            result.textContent = formatNumber(value);
+
+            solutionSteps.innerHTML = `
+                <div class="solution-step">
+                    <h3>Given Function</h3>
+                    <p>∫ cos(x) dx</p>
+                </div>
+
+                <div class="solution-step">
+                    <h3>Integration Rule</h3>
+                    <p>∫ cos(x) dx = sin(x)</p>
+                </div>
+
+                <div class="solution-step">
+                    <h3>Apply Limits</h3>
+                    <p>F(${upper}) − F(${lower})</p>
+                </div>
+
+                <div class="solution-step">
+                    <h3>Final Answer</h3>
+                    <p>${formatNumber(value)}</p>
+                </div>
+            `;
+
+        } else {
+
+            const integrated = "sin(x) + C";
+
+            result.innerHTML =
+                "∫ (" +
+                formatExpression(input) +
+                ") dx = " +
+                integrated;
+
+            solutionSteps.innerHTML = `
+                <div class="solution-step">
+                    <h3>Given Function</h3>
+                    <p>∫ cos(x) dx</p>
+                </div>
+
+                <div class="solution-step">
+                    <h3>Integration Rule</h3>
+                    <p>∫ cos(x) dx = sin(x) + C</p>
+                </div>
+
+                <div class="solution-step">
+                    <h3>Integrated Result</h3>
+                    <p>sin(x) + C</p>
+                </div>
+            `;
+        }
+
+        solutionBox.style.display = "block";
+        return;
+    }
+
+
+    /* =========================
+       POLYNOMIAL
+    ========================= */
+
+    try {
+        if (type === "definite") {
+
+            const lower = parseFloat(
+                document.getElementById("lowerLimit").value
+            );
+
+            const upper = parseFloat(
+                document.getElementById("upperLimit").value
+            );
+
+            if (isNaN(lower) || isNaN(upper)) {
+                result.textContent = "Enter both integration limits";
+                solutionBox.style.display = "none";
+                return;
+            }
+
+            const value = evaluatePolynomialIntegral(
+                expression,
+                lower,
+                upper
+            );
+
+            if (value === null) {
+                result.textContent = "Unsupported function";
+                solutionBox.style.display = "none";
+                return;
+            }
+
+            result.innerHTML = `
+                <span class="integral-expression">
+                    <span class="integral-symbol">
+                        ∫<sub>${lower}</sub><sup>${upper}</sup>
+                    </span>
+                    <span>(${formatExpression(input)}) dx =</span>
+                    <strong>${formatFractionOrMixed(value)}</strong>
+                </span>
+            `;
+
+            solutionSteps.innerHTML = `
+                <div class="solution-step">
+                    <h3>Given Function</h3>
+                    <p>
+                        ∫<sub>${lower}</sub><sup>${upper}</sup>
+                        ${formatExpression(input)} dx
+                    </p>
+                </div>
+
+                <div class="solution-step">
+                    <h3>Final Answer</h3>
+                    <p>${formatNumber(value)}</p>
+                </div>
+            `;
+
+            solutionBox.style.display = "block";
+            return;
+        }
+        if (type === "indefinite") {
+
+            const integrated = integratePolynomial(expression);
+
+            result.innerHTML =
+                "∫ (" +
+                formatExpression(input) +
+                ") dx = " +
+                integrated;
+
+
+            solutionSteps.innerHTML = `
+                <div class="solution-step">
+                    <h3>Given Function</h3>
+                    <p>∫ ${formatExpression(input)} dx</p>
+                </div>
+
+                <div class="solution-step">
+                    <h3>Apply Power Rule</h3>
+                    <p>
+                        ∫ x<sup>n</sup> dx =
+                        x<sup>n+1</sup> / (n+1)
+                    </p>
+                </div>
+
+                <div class="solution-step">
+                    <h3>Integrated Result</h3>
+                    <p>${integrated}</p>
+                </div>
+            `;
+
+        } else {
+
+            const lower = parseFloat(
+                document.getElementById("lowerLimit").value
+            );
+
+            const upper = parseFloat(
+                document.getElementById("upperLimit").value
+            );
+
+            if (isNaN(lower) || isNaN(upper)) {
+                result.textContent = "Enter both integration limits";
+                solutionBox.style.display = "none";
+                return;
+            }
+
+            const antiderivative = integratePolynomial(expression)
+                .replace(/\s*\+\s*C$/, "");
+
+            const value = evaluatePolynomialIntegral(
+                expression,
+                lower,
+                upper
+            );
+
+            if (value === null) {
+                result.textContent = "Unsupported function";
+                solutionBox.style.display = "none";
+                return;
+            }
+
+            const formattedAnswer = formatFractionOrMixed(value);
+
+            result.textContent =
+                `∫ ${formatExpression(input)} dx = ${formattedAnswer}`;
+
+            solutionSteps.innerHTML = `
+                <div class="solution-step">
+                    <h3>Given Function</h3>
+                    <p>∫ ${formatExpression(input)} dx</p>
+                </div>
+
+                <div class="solution-step">
+                    <h3>Integrated Function</h3>
+                    <p>F(x) = ${formatExpression(antiderivative)}</p>
+                </div>
+
+                <div class="solution-step">
+                    <h3>Apply Limits</h3>
+                    <p>[ ${formatExpression(antiderivative)} ]<sub>${lower}</sub><sup>${upper}</sup></p>
+                </div>
+
+                <div class="solution-step">
+                    <h3>Evaluate</h3>
+                    <p>F(${upper}) − F(${lower})</p>
+                </div>
+
+                <div class="solution-step">
+                    <h3>Final Answer</h3>
+                    <p>${formattedAnswer}</p>
+                </div>
+            `;
+        }
+
+        solutionBox.style.display = "block";
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        result.textContent = "Unsupported function";
+        solutionBox.style.display = "none";
+
+    }
+
+}
+
+
+/* =========================
+   PARSE POLYNOMIAL
+========================= */
+
+function parsePolynomial(expression) {
+
+    const terms = expression
+        .replace(/-/g, "+-")
+        .split("+")
+        .filter(term => term !== "");
+
+    const parsedTerms = [];
+
+
+    terms.forEach(term => {
+
+        let coefficient;
+        let power;
+
+
+        /* CONSTANT */
+
+        if (!term.includes("x")) {
+
+            coefficient = Number(term);
+
+            if (isNaN(coefficient)) {
+                throw new Error("Invalid constant");
+            }
+
+            power = 0;
+        }
+
+
+        /* x */
+
+        else if (term === "x") {
+
+            coefficient = 1;
+            power = 1;
+
+        }
+
+
+        else if (term === "-x") {
+
+            coefficient = -1;
+            power = 1;
+
+        }
+
+
+        /* ax^n */
+
+        else if (term.includes("^")) {
+
+            const match =
+                term.match(/^(-?\d*\.?\d*)x\^(-?\d+)$/);
+
+            if (!match) {
+                throw new Error("Invalid power term");
+            }
+
+            coefficient =
+                match[1] === ""
+                    ? 1
+                    : match[1] === "-"
+                        ? -1
+                        : Number(match[1]);
+
+            power = Number(match[2]);
+
+        }
+
+
+        /* ax */
+
+        else {
+
+            const match =
+                term.match(/^(-?\d*\.?\d*)x$/);
+
+            if (!match) {
+                throw new Error("Invalid x term");
+            }
+
+            coefficient =
+                match[1] === ""
+                    ? 1
+                    : match[1] === "-"
+                        ? -1
+                        : Number(match[1]);
+
+            power = 1;
+
+        }
+
+
+        if (isNaN(coefficient) || isNaN(power)) {
+            throw new Error("Invalid expression");
+        }
+
+
+        parsedTerms.push({
+            coefficient,
+            power
+        });
+
+    });
+
+
+    return parsedTerms;
+
+}
+
+
+/* =========================
+   INTEGRATE POLYNOMIAL
+========================= */
+
+function integratePolynomial(expression) {
+
+    const terms = parsePolynomial(expression);
+
+    const results = terms.map(term => {
+
+        const newPower = term.power + 1;
+
+        if (newPower === 0) {
+            throw new Error("Unsupported x^-1 term");
+        }
+
+        return createFractionTerm(
+            term.coefficient,
+            newPower,
+            newPower
+        );
+
+    });
+
+
+    return results
+        .join(" + ")
+        .replace(/\+ -/g, "− ")
+        + " + C";
+
+}
+
+
+/* =========================
+   CREATE FRACTION TERM
+========================= */
+
+function createFractionTerm(
+    numerator,
+    denominator,
+    power
+) {
+
+    /* Reduce the fraction */
+
+    if (
+        Number.isInteger(numerator) &&
+        Number.isInteger(denominator)
+    ) {
+
+        const divisor = gcd(
+            Math.abs(numerator),
+            Math.abs(denominator)
+        );
+
+        numerator = numerator / divisor;
+        denominator = denominator / divisor;
+    }
+
+
+    const variablePart = formatPower(power);
+
+
+    /* Whole number coefficient */
+
+    if (denominator === 1) {
+
+        if (numerator === 1) {
+            return variablePart;
+        }
+
+        if (numerator === -1) {
+            return "-" + variablePart;
+        }
+
+        return `${numerator}${variablePart}`;
+    }
+
+
+    /*
+       IMPORTANT:
+       This creates:
+       5x⁴/4
+
+       NOT:
+       5/4x⁴
+    */
+
+    if (numerator === 1) {
+        return `${variablePart}/${denominator}`;
+    }
+
+    if (numerator === -1) {
+        return `-${variablePart}/${denominator}`;
+    }
+
+    return `${numerator}${variablePart}/${denominator}`;
+
+}
+
+
+/* =========================
+   FORMAT POWER
+========================= */
+
+function formatPower(power) {
+
+    const powers = {
+        0: "",
+        1: "x",
+        2: "x²",
+        3: "x³",
+        4: "x⁴",
+        5: "x⁵",
+        6: "x⁶",
+        7: "x⁷",
+        8: "x⁸",
+        9: "x⁹",
+        10: "x¹⁰"
+    };
+
+
+    if (powers.hasOwnProperty(power)) {
+        return powers[power];
+    }
+
+    return `x^${power}`;
+
+}
+
+
+/* =========================
+   GCD
+========================= */
+
+function gcd(a, b) {
+
+    a = Math.abs(a);
+    b = Math.abs(b);
+
+    while (b !== 0) {
+
+        const temp = b;
+        b = a % b;
+        a = temp;
+
+    }
+
+    return a || 1;
+
+}
+
+
+/* =========================
+   DEFINITE INTEGRATION
+========================= */
+
+function evaluatePolynomialIntegral(
+    expression,
+    lower,
+    upper
+) {
+
+    try {
+
+        const terms = parsePolynomial(expression);
+
+        let total = 0;
+
+
+        terms.forEach(term => {
+
+            const newPower =
+                term.power + 1;
+
+            if (newPower === 0) {
+                throw new Error("Unsupported x^-1");
+            }
+
+
+            const coefficient =
+                term.coefficient / newPower;
+
+
+            const upperValue =
+                coefficient *
+                Math.pow(upper, newPower);
+
+
+            const lowerValue =
+                coefficient *
+                Math.pow(lower, newPower);
+
+
+            total += upperValue - lowerValue;
+
+        });
+
+
+        return Number(
+            total.toFixed(10)
+        );
+
+    }
+
+    catch {
+
+        return null;
+
+    }
+
+}
+
+
+/* =========================
+   FORMAT NUMBER
+========================= */
+
+function formatNumber(value) {
+
+    if (!Number.isFinite(value)) {
+        return "Unsupported result";
+    }
+
+    const rounded = Number(value.toFixed(10));
+
+    if (Number.isInteger(rounded)) {
+        return String(rounded);
+    }
+
+    const sign = rounded < 0 ? "−" : "";
+    const absoluteValue = Math.abs(rounded);
+
+    const whole = Math.floor(absoluteValue);
+    const decimal = absoluteValue - whole;
+
+    let bestNumerator = 0;
+    let bestDenominator = 1;
+    let smallestError = Infinity;
+
+    for (let denominator = 1; denominator <= 1000; denominator++) {
+
+        const numerator = Math.round(decimal * denominator);
+        const approximation = numerator / denominator;
+        const error = Math.abs(decimal - approximation);
+
+        if (error < smallestError) {
+            smallestError = error;
+            bestNumerator = numerator;
+            bestDenominator = denominator;
+        }
+
+        if (error < 0.000000001) {
+            break;
+        }
+    }
+
+    if (smallestError > 0.000001) {
+        return sign + rounded;
+    }
+
+    const divisor = gcd(bestNumerator, bestDenominator);
+
+    bestNumerator /= divisor;
+    bestDenominator /= divisor;
+
+    if (whole === 0) {
+        return sign + bestNumerator + "/" + bestDenominator;
+    }
+
+    return (
+        sign +
+        whole +
+        " " +
+        bestNumerator +
+        "/" +
+        bestDenominator
+    );
+}
+
+function formatFractionOrMixed(value) {
+
+    if (Number.isInteger(value)) {
+        return String(value);
+    }
+
+    const sign = value < 0 ? "-" : "";
+    const absoluteValue = Math.abs(value);
+
+    const whole = Math.floor(absoluteValue);
+    const fraction = absoluteValue - whole;
+
+    let bestNumerator = 0;
+    let bestDenominator = 1;
+    let smallestError = Infinity;
+
+    for (let denominator = 2; denominator <= 1000; denominator++) {
+
+        const numerator = Math.round(fraction * denominator);
+        const error = Math.abs(
+            fraction - numerator / denominator
+        );
+
+        if (error < smallestError) {
+            smallestError = error;
+            bestNumerator = numerator;
+            bestDenominator = denominator;
+        }
+
+        if (error < 0.00000001) {
+            break;
+        }
+    }
+
+    const divisor = gcd(
+        bestNumerator,
+        bestDenominator
+    );
+
+    bestNumerator /= divisor;
+    bestDenominator /= divisor;
+
+    if (bestNumerator === 0) {
+        return sign + whole;
+    }
+
+    if (whole === 0) {
+        return (
+            sign +
+            bestNumerator +
+            "/" +
+            bestDenominator
+        );
+    }
+
+    return (
+        sign +
+        whole +
+        " " +
+        bestNumerator +
+        "/" +
+        bestDenominator
+    );
+}
+/* =========================
+   FORMAT DISPLAY
+========================= */
+
+function formatExpression(value) {
+
+    return String(value)
+        .replace(/\^10/g, "¹⁰")
+        .replace(/\^9/g, "⁹")
+        .replace(/\^8/g, "⁸")
+        .replace(/\^7/g, "⁷")
+        .replace(/\^6/g, "⁶")
+        .replace(/\^5/g, "⁵")
+        .replace(/\^4/g, "⁴")
+        .replace(/\^3/g, "³")
+        .replace(/\^2/g, "²")
+        .replace(/-/g, "−");
+
+}
+function solveDefiniteIntegration(functionText, lowerLimit, upperLimit) {
+    const resultBox = document.getElementById("result");
+    const solutionBox = document.getElementById("solution");
+
+    try {
+        // ---------- VALIDATION ----------
+        const a = Number(lowerLimit);
+        const b = Number(upperLimit);
+
+        if (Number.isNaN(a) || Number.isNaN(b)) {
+            resultBox.innerHTML = `
+                <span class="result-label">ERROR</span>
+                <div class="result-value">Enter valid limits.</div>
+            `;
+            solutionBox.innerHTML = "";
+            return;
+        }
+
+        if (!functionText || !functionText.trim()) {
+            resultBox.innerHTML = `
+                <span class="result-label">ERROR</span>
+                <div class="result-value">Enter a function.</div>
+            `;
+            solutionBox.innerHTML = "";
+            return;
+        }
+
+        // ---------- CLEAN FUNCTION ----------
+        let expression = functionText
+            .replace(/\s+/g, "")
+            .replace(/−/g, "-")
+            .replace(/×/g, "*")
+            .replace(/\^/g, "**");
+
+        // x² → x**2 etc.
+        expression = expression
+            .replace(/x²/g, "x**2")
+            .replace(/x³/g, "x**3")
+            .replace(/x⁴/g, "x**4")
+            .replace(/x⁵/g, "x**5")
+            .replace(/x⁶/g, "x**6")
+            .replace(/x⁷/g, "x**7")
+            .replace(/x⁸/g, "x**8")
+            .replace(/x⁹/g, "x**9");
+
+        // ---------- ADD MISSING MULTIPLICATION ----------
+        expression = expression
+            .replace(/(\d)x/g, "$1*x")
+            .replace(/x(\d)/g, "x*$1")
+            .replace(/(\d)\(/g, "$1*(")
+            .replace(/\)(\d)/g, ")*$1")
+            .replace(/x\(/g, "x*(")
+            .replace(/\)x/g, ")*x");
+
+        // ---------- CREATE FUNCTION ----------
+        const f = new Function(
+            "x",
+            `"use strict"; return (${expression});`
+        );
+
+        // Test function
+        const testValue = f(0);
+
+        if (!Number.isFinite(testValue)) {
+            throw new Error("Invalid function");
+        }
+
+        // ---------- NUMERICAL DEFINITE INTEGRATION ----------
+        function integrateSimpson(fn, start, end) {
+            let n = 10000;
+
+            // Simpson rule requires even n
+            if (n % 2 !== 0) n++;
+
+            const h = (end - start) / n;
+
+            let sum = fn(start) + fn(end);
+
+            for (let i = 1; i < n; i++) {
+                const x = start + i * h;
+
+                if (i % 2 === 0) {
+                    sum += 2 * fn(x);
+                } else {
+                    sum += 4 * fn(x);
+                }
+            }
+
+            return (h / 3) * sum;
+        }
+
+        const answer = integrateSimpson(f, a, b);
+
+        if (!Number.isFinite(answer)) {
+            throw new Error("Could not calculate integral");
+        }
+
+        // ---------- FORMAT NUMBER ----------
+        function formatNumber(num) {
+            const rounded = Math.round(num * 100000000) / 100000000;
+
+            if (Math.abs(rounded - Math.round(rounded)) < 0.00000001) {
+                return String(Math.round(rounded));
+            }
+
+            return rounded.toFixed(8).replace(/\.?0+$/, "");
+        }
+
+        // ---------- FRACTION ----------
+        function decimalToFraction(value, maxDenominator = 100000) {
+            if (Number.isInteger(Math.round(value))) {
+                return {
+                    numerator: Math.round(value),
+                    denominator: 1
+                };
+            }
+
+            const sign = value < 0 ? -1 : 1;
+            value = Math.abs(value);
+
+            let bestNumerator = 0;
+            let bestDenominator = 1;
+            let bestError = Infinity;
+
+            for (let denominator = 1; denominator <= maxDenominator; denominator++) {
+                const numerator = Math.round(value * denominator);
+                const error = Math.abs(value - numerator / denominator);
+
+                if (error < bestError) {
+                    bestError = error;
+                    bestNumerator = numerator;
+                    bestDenominator = denominator;
+                }
+
+                if (error < 0.000000001) break;
+            }
+
+            const gcd = (x, y) => {
+                x = Math.abs(x);
+                y = Math.abs(y);
+
+                while (y) {
+                    const temp = y;
+                    y = x % y;
+                    x = temp;
+                }
+
+                return x || 1;
+            };
+
+            const divisor = gcd(bestNumerator, bestDenominator);
+
+            return {
+                numerator: sign * (bestNumerator / divisor),
+                denominator: bestDenominator / divisor
+            };
+        }
+
+        // ---------- MIXED FRACTION ----------
+        function getMixedFraction(value) {
+            const fraction = decimalToFraction(value);
+
+            let numerator = Math.round(fraction.numerator);
+            let denominator = Math.round(fraction.denominator);
+
+            if (denominator === 1) {
+                return String(numerator);
+            }
+
+            const sign = numerator < 0 ? "-" : "";
+            numerator = Math.abs(numerator);
+
+            const whole = Math.floor(numerator / denominator);
+            const remainder = numerator % denominator;
+
+            if (whole === 0) {
+                return `${sign}${remainder}/${denominator}`;
+            }
+
+            if (remainder === 0) {
+                return `${sign}${whole}`;
+            }
+
+            return `${sign}${whole} ${remainder}/${denominator}`;
+        }
+
+        const decimalAnswer = formatNumber(answer);
+        const fractionAnswer = getMixedFraction(answer);
+
+        // ---------- DISPLAY FUNCTION ----------
+        const displayFunction = functionText
+            .replace(/\*\*/g, "^");
+
+        // ---------- RESULT ----------
+        resultBox.innerHTML = `
+            <div class="result-label">INTEGRAL</div>
+            <div class="result-value">
+                ∫<sub>${a}</sub><sup>${b}</sup> (${displayFunction}) dx
+                = ${fractionAnswer}
+            </div>
+        `;
+
+        // ---------- SOLUTION ----------
+        solutionBox.innerHTML = `
+            <h2>Solution</h2>
+
+            <div class="solution-step">
+                <h3>Given Function</h3>
+                <p>
+                    ∫<sub>${a}</sub><sup>${b}</sup>
+                    (${displayFunction}) dx
+                </p>
+            </div>
+
+            <div class="solution-step">
+                <h3>Lower Limit</h3>
+                <p>${a}</p>
+            </div>
+
+            <div class="solution-step">
+                <h3>Upper Limit</h3>
+                <p>${b}</p>
+            </div>
+
+            <div class="solution-step">
+                <h3>Final Answer</h3>
+                <p>${fractionAnswer}</p>
+                ${
+                    fractionAnswer !== decimalAnswer
+                        ? `<small>≈ ${decimalAnswer}</small>`
+                        : ""
+                }
+            </div>
+        `;
+    } catch (error) {
+        console.error(error);
+
+        resultBox.innerHTML = `
+            <div class="result-label">ERROR</div>
+            <div class="result-value">
+                Invalid function. Try: x^2 + 3x + 5
+            </div>
+        `;
+
+        solutionBox.innerHTML = "";
+    }
+}
+</script>
+
+</body>
+</html>

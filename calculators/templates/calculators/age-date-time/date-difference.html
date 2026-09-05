@@ -1,0 +1,388 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Date Difference Calculator — CalcVerse</title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'calculators/css/style.css' %}"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- NAVBAR -->
+
+<header class="navbar">
+
+    <div class="nav-container">
+
+        <a href="/" class="logo">
+            Calc<span>Verse</span>
+        </a>
+
+        <nav>
+            <a href="/">Home</a>
+            <a href="{% url 'age_date_time' %}">
+                Age, Date & Time
+            </a>
+        </nav>
+
+    </div>
+
+</header>
+
+
+
+<main>
+
+
+    <!-- HERO -->
+
+    <section class="hero calculator-hero">
+
+        <div class="badge">
+            DATE DIFFERENCE
+        </div>
+
+        <h1>
+            Date <span>Difference</span>
+        </h1>
+
+        <p>
+            Find the exact difference between two dates.
+        </p>
+
+    </section>
+
+
+
+    <!-- CALCULATOR -->
+
+    <section class="calculator-section">
+
+        <div class="banking-calculator-card">
+
+
+            <div class="academic-heading">
+
+                <h2>
+                    Enter Two Dates
+                </h2>
+
+                <p>
+                    Select a start date and an end date
+                    to calculate the difference.
+                </p>
+
+            </div>
+
+
+            <!-- START DATE -->
+
+            <div class="input-group">
+
+                <label for="startDate">
+                    Start Date
+                </label>
+
+                <input
+                    type="date"
+                    id="startDate"
+                >
+
+            </div>
+
+
+            <!-- END DATE -->
+
+            <div class="input-group">
+
+                <label for="endDate">
+                    End Date
+                </label>
+
+                <input
+                    type="date"
+                    id="endDate"
+                >
+
+            </div>
+
+
+            <!-- CALCULATE BUTTON -->
+
+            <button
+                type="button"
+                class="calculate-btn"
+                onclick="calculateDateDifference()"
+            >
+                Calculate Difference
+            </button>
+
+
+            <!-- RESULT -->
+
+            <div
+                class="result-box"
+                id="dateResultBox"
+                style="display: none;"
+            >
+
+                <span>
+                    DATE DIFFERENCE
+                </span>
+
+                <strong id="dateResult">
+                    0 Years, 0 Months, 0 Days
+                </strong>
+
+            </div>
+
+
+            <!-- DETAILS -->
+
+            <div
+                class="solution-box"
+                id="dateDetails"
+                style="display: none;"
+            >
+
+                <h2>
+                    Difference Details
+                </h2>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Total Months
+                    </strong>
+
+                    <p id="differenceMonths">
+                        0
+                    </p>
+
+                </div>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Total Weeks
+                    </strong>
+
+                    <p id="differenceWeeks">
+                        0
+                    </p>
+
+                </div>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Total Days
+                    </strong>
+
+                    <p id="differenceDays">
+                        0
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <p>
+        © 2026 CalcVerse — Calculate Smarter.
+    </p>
+
+</footer>
+
+
+
+<script>
+
+function calculateDateDifference() {
+
+    const startDateValue =
+        document.getElementById(
+            "startDate"
+        ).value;
+
+
+    const endDateValue =
+        document.getElementById(
+            "endDate"
+        ).value;
+
+
+    if (!startDateValue || !endDateValue) {
+
+        alert(
+            "Please select both dates."
+        );
+
+        return;
+
+    }
+
+
+    const startDate =
+        new Date(
+            startDateValue + "T00:00:00"
+        );
+
+
+    const endDate =
+        new Date(
+            endDateValue + "T00:00:00"
+        );
+
+
+    if (endDate < startDate) {
+
+        alert(
+            "End date must be after the start date."
+        );
+
+        return;
+
+    }
+
+
+    let years =
+        endDate.getFullYear() -
+        startDate.getFullYear();
+
+
+    let months =
+        endDate.getMonth() -
+        startDate.getMonth();
+
+
+    let days =
+        endDate.getDate() -
+        startDate.getDate();
+
+
+    if (days < 0) {
+
+        months--;
+
+
+        const daysInPreviousMonth =
+            new Date(
+                endDate.getFullYear(),
+                endDate.getMonth(),
+                0
+            ).getDate();
+
+
+        days += daysInPreviousMonth;
+
+    }
+
+
+    if (months < 0) {
+
+        years--;
+
+        months += 12;
+
+    }
+
+
+    const millisecondsDifference =
+        endDate - startDate;
+
+
+    const totalDays =
+        Math.floor(
+            millisecondsDifference /
+            (1000 * 60 * 60 * 24)
+        );
+
+
+    const totalWeeks =
+        Math.floor(
+            totalDays / 7
+        );
+
+
+    const totalMonths =
+        (years * 12) + months;
+
+
+    document.getElementById(
+        "dateResult"
+    ).textContent =
+        `${years} Years, ${months} Months, ${days} Days`;
+
+
+    document.getElementById(
+        "differenceMonths"
+    ).textContent =
+        totalMonths;
+
+
+    document.getElementById(
+        "differenceWeeks"
+    ).textContent =
+        totalWeeks;
+
+
+    document.getElementById(
+        "differenceDays"
+    ).textContent =
+        totalDays;
+
+
+    document.getElementById(
+        "dateResultBox"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "dateDetails"
+    ).style.display =
+        "block";
+
+}
+
+</script>
+
+
+</body>
+
+</html>

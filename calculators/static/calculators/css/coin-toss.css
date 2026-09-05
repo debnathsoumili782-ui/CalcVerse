@@ -1,0 +1,853 @@
+/* =========================================
+   COIN TOSS PAGE
+========================================= */
+
+.coin-toss-page {
+    min-height: 100vh;
+    background: #090D1A;
+    color: #f3f1ed;
+    padding: 0 20px 90px;
+}
+
+
+/* =========================================
+   HERO
+========================================= */
+
+.coin-toss-hero {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 0 55px;
+    text-align: center;
+}
+
+.coin-toss-tag {
+    display: inline-block;
+    padding: 9px 18px;
+    margin-bottom: 24px;
+
+    border: 1px solid rgba(126, 87, 194, 0.45);
+    border-radius: 999px;
+
+    background: rgba(107, 70, 160, 0.12);
+    color: #b9a7ff;
+
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.coin-toss-hero h1 {
+    margin: 0;
+
+    color: #f3f1ed;
+
+    font-size: clamp(42px, 5vw, 72px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -2px;
+}
+
+.coin-toss-hero h1 span {
+    background: linear-gradient(
+        90deg,
+        #a86bd7,
+        #e25598,
+        #ffae35
+    );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.coin-toss-hero p {
+    max-width: 600px;
+    margin: 20px auto 0;
+
+    color: #aeb8c9;
+
+    font-size: 17px;
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   MAIN CARD
+========================================= */
+
+.coin-toss-card {
+    width: 100%;
+    max-width: 780px;
+
+    margin: 0 auto;
+    padding: 30px;
+
+    background: #202B3B;
+
+    border: 1px solid #34465d;
+    border-radius: 18px;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================
+   CARD HEADING
+========================================= */
+
+.coin-toss-heading {
+    margin-bottom: 28px;
+    text-align: center;
+}
+
+.coin-toss-heading h2 {
+    margin: 0 0 10px;
+
+    color: #f3f1ed;
+
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.coin-toss-heading p {
+    margin: 0;
+
+    color: #afbacb;
+
+    font-size: 15px;
+}
+
+
+/* =========================================
+   HEADS / TAILS CHOICE
+========================================= */
+
+.coin-choice-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 16px;
+
+    margin-bottom: 8px;
+}
+
+.coin-choice-button {
+    min-height: 110px;
+    padding: 15px;
+
+    border: 1px solid #41536b;
+    border-radius: 16px;
+
+    background: #263345;
+    color: #c4cede;
+
+    font-family: inherit;
+    font-size: 17px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        color 0.2s ease;
+}
+
+.choice-symbol {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 48px;
+    height: 48px;
+
+    margin-bottom: 9px;
+
+    border-radius: 50%;
+
+    background: rgba(128, 85, 186, 0.14);
+    border: 1px solid rgba(128, 85, 186, 0.35);
+
+    color: #cbb9ff;
+
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.coin-choice-button:hover:not(:disabled) {
+    transform: translateY(-3px);
+
+    border-color: #8055ba;
+
+    background: rgba(104, 71, 154, 0.15);
+
+    color: #ffffff;
+
+    box-shadow:
+        0 10px 25px rgba(105, 70, 157, 0.16);
+}
+
+
+/* SELECTED CHOICE */
+
+.coin-choice-button.selected {
+    border-color: #a86bd7;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(104, 71, 154, 0.38),
+            rgba(133, 88, 190, 0.20)
+        );
+
+    color: #ffffff;
+
+    box-shadow:
+        0 0 0 3px rgba(168, 107, 215, 0.12),
+        0 10px 28px rgba(105, 70, 157, 0.20);
+}
+
+.coin-choice-button.selected .choice-symbol {
+    background: linear-gradient(
+        135deg,
+        #68479a,
+        #a86bd7
+    );
+
+    border-color: #b998e6;
+
+    color: #ffffff;
+}
+
+
+.coin-choice-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+
+/* =========================================
+   ERROR
+========================================= */
+
+.coin-error {
+    min-height: 20px;
+
+    margin: 14px 0 0;
+
+    color: #ff8f9a;
+
+    font-size: 14px;
+    text-align: center;
+}
+
+
+/* =========================================
+   COIN AREA
+========================================= */
+
+.coin-container {
+    display: flex;
+    justify-content: center;
+
+    margin: 28px 0 30px;
+
+    perspective: 1000px;
+}
+
+
+/* =========================================
+   COIN
+========================================= */
+
+.coin {
+    position: relative;
+
+    width: 180px;
+    height: 180px;
+
+    transform-style: preserve-3d;
+
+    transition: transform 0.3s ease;
+}
+
+
+/* =========================================
+   COIN SIDES
+========================================= */
+
+.coin-side {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+
+    box-sizing: border-box;
+
+    border: 8px solid #d9b45b;
+
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #ffe6a0,
+            #d5a63d 60%,
+            #9b6d1d
+        );
+
+    box-shadow:
+        inset 0 0 0 5px rgba(255, 241, 185, 0.35),
+        inset 0 -8px 15px rgba(74, 42, 8, 0.25),
+        0 15px 35px rgba(0, 0, 0, 0.35);
+}
+
+.coin-side span {
+    color: #593d0d;
+
+    font-size: 70px;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.coin-side small {
+    margin-top: 8px;
+
+    color: #704c0d;
+
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+
+/* =========================================
+   HEADS / TAILS SIDE
+========================================= */
+
+.coin-heads {
+    transform: rotateY(0deg);
+}
+
+.coin-tails {
+    transform: rotateY(180deg);
+}
+
+
+/* =========================================
+   FINAL COIN POSITION
+========================================= */
+
+.coin.show-heads {
+    transform: rotateY(0deg);
+}
+
+.coin.show-tails {
+    transform: rotateY(180deg);
+}
+
+
+/* =========================================
+   COIN TOSS ANIMATION
+========================================= */
+
+.coin.coin-spin-heads {
+    animation: spinHeads 1.6s ease-out forwards;
+}
+
+.coin.coin-spin-tails {
+    animation: spinTails 1.6s ease-out forwards;
+}
+
+
+@keyframes spinHeads {
+
+    0% {
+        transform: translateY(0) rotateY(0deg);
+    }
+
+    25% {
+        transform: translateY(-80px) rotateY(720deg);
+    }
+
+    55% {
+        transform: translateY(-125px) rotateY(1260deg);
+    }
+
+    80% {
+        transform: translateY(-55px) rotateY(1800deg);
+    }
+
+    100% {
+        transform: translateY(0) rotateY(2160deg);
+    }
+
+}
+
+
+@keyframes spinTails {
+
+    0% {
+        transform: translateY(0) rotateY(0deg);
+    }
+
+    25% {
+        transform: translateY(-80px) rotateY(900deg);
+    }
+
+    55% {
+        transform: translateY(-125px) rotateY(1620deg);
+    }
+
+    80% {
+        transform: translateY(-55px) rotateY(2250deg);
+    }
+
+    100% {
+        transform: translateY(0) rotateY(2340deg);
+    }
+
+}
+
+
+/* =========================================
+   RESULT BOX
+========================================= */
+
+.coin-result {
+    padding: 22px 20px;
+
+    margin-bottom: 20px;
+
+    text-align: center;
+
+    background: #222d3e;
+
+    border: 1px solid #7654ad;
+    border-radius: 14px;
+}
+
+.coin-result-label {
+    margin-bottom: 10px;
+
+    color: #b9a7ff;
+
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.coin-result-value {
+    color: #f5f2ed;
+
+    font-size: 30px;
+    font-weight: 800;
+}
+
+
+/* =========================================
+   TOSS BUTTON
+========================================= */
+
+.toss-button {
+    width: 100%;
+    height: 56px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: linear-gradient(
+        135deg,
+        #68479a,
+        #8558be
+    );
+
+    color: #ffffff;
+
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
+}
+
+.toss-button:hover:not(:disabled) {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 10px 24px rgba(105, 70, 157, 0.28);
+}
+
+.toss-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+
+/* =========================================
+   STATISTICS
+========================================= */
+
+.coin-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 14px;
+
+    margin-top: 24px;
+}
+
+.coin-stat-box {
+    padding: 20px 12px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    background: #263345;
+
+    border: 1px solid #3a4c63;
+    border-radius: 14px;
+}
+
+.coin-stat-number {
+    color: #f3f1ed;
+
+    font-size: 28px;
+    font-weight: 800;
+}
+
+.coin-stat-label {
+    margin-top: 7px;
+
+    color: #9cb0c5;
+
+    font-size: 11px;
+    font-weight: 700;
+    text-align: center;
+}
+
+
+/* =========================================
+   CELEBRATION POPUP
+========================================= */
+
+.celebration-popup {
+    position: fixed;
+    inset: 0;
+
+    z-index: 9999;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+}
+
+.celebration-overlay {
+    position: absolute;
+    inset: 0;
+
+    background: rgba(3, 6, 15, 0.82);
+
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+}
+
+.celebration-box {
+    position: relative;
+    z-index: 2;
+
+    width: 100%;
+    max-width: 440px;
+
+    padding: 45px 30px 35px;
+
+    text-align: center;
+
+    background:
+        linear-gradient(
+            145deg,
+            #28364a,
+            #171f2d
+        );
+
+    border: 1px solid rgba(168, 107, 215, 0.6);
+    border-radius: 24px;
+
+    box-shadow:
+        0 25px 70px rgba(0, 0, 0, 0.55),
+        0 0 40px rgba(128, 85, 186, 0.16);
+
+    animation: popupAppear 0.35s ease-out;
+}
+
+.celebration-emoji {
+    width: 92px;
+    height: 92px;
+
+    margin: 0 auto 22px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: rgba(128, 85, 186, 0.15);
+    border: 1px solid rgba(168, 107, 215, 0.35);
+
+    font-size: 46px;
+
+    animation: celebrationBounce 0.8s ease-out;
+}
+
+.celebration-box h2 {
+    margin: 0;
+
+    color: #f5f2ed;
+
+    font-size: 32px;
+    font-weight: 800;
+}
+
+.celebration-box p {
+    margin: 14px auto 28px;
+
+    max-width: 330px;
+
+    color: #aeb8c9;
+
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.play-again-button {
+    width: 100%;
+    height: 54px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: linear-gradient(
+        135deg,
+        #68479a,
+        #8558be
+    );
+
+    color: #ffffff;
+
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.play-again-button:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 25px rgba(105, 70, 157, 0.30);
+}
+
+
+@keyframes popupAppear {
+
+    from {
+        opacity: 0;
+        transform: scale(0.88) translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+
+}
+
+
+@keyframes celebrationBounce {
+
+    0% {
+        transform: scale(0.3) rotate(-15deg);
+        opacity: 0;
+    }
+
+    60% {
+        transform: scale(1.12) rotate(8deg);
+    }
+
+    100% {
+        transform: scale(1) rotate(0);
+        opacity: 1;
+    }
+
+}
+
+
+/* =========================================
+   HIDDEN
+========================================= */
+
+.hidden {
+    display: none !important;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 768px) {
+
+    .coin-toss-page {
+        padding: 0 16px 70px;
+    }
+
+    .coin-toss-hero {
+        padding: 60px 10px 45px;
+    }
+
+    .coin-toss-hero h1 {
+        font-size: 48px;
+        letter-spacing: -1px;
+    }
+
+    .coin-toss-hero p {
+        font-size: 15px;
+    }
+
+    .coin-toss-card {
+        padding: 24px 18px;
+        border-radius: 16px;
+    }
+
+    .coin {
+        width: 160px;
+        height: 160px;
+    }
+
+    .coin-side span {
+        font-size: 62px;
+    }
+
+}
+
+
+@media (max-width: 520px) {
+
+    .coin-toss-hero {
+        padding-top: 45px;
+    }
+
+    .coin-toss-hero h1 {
+        font-size: 38px;
+    }
+
+    .coin-toss-tag {
+        padding: 8px 15px;
+        font-size: 10px;
+    }
+
+    .coin-toss-card {
+        padding: 20px 14px;
+    }
+
+    .coin-toss-heading h2 {
+        font-size: 22px;
+    }
+
+    .coin-choice-buttons {
+        gap: 10px;
+    }
+
+    .coin-choice-button {
+        min-height: 95px;
+        font-size: 15px;
+    }
+
+    .choice-symbol {
+        width: 42px;
+        height: 42px;
+
+        font-size: 21px;
+    }
+
+    .coin {
+        width: 140px;
+        height: 140px;
+    }
+
+    .coin-side {
+        border-width: 7px;
+    }
+
+    .coin-side span {
+        font-size: 54px;
+    }
+
+    .coin-side small {
+        font-size: 10px;
+    }
+
+    .coin-stats {
+        gap: 8px;
+    }
+
+    .coin-stat-box {
+        padding: 16px 6px;
+    }
+
+    .coin-stat-number {
+        font-size: 24px;
+    }
+
+    .coin-stat-label {
+        font-size: 9px;
+    }
+
+    .celebration-box {
+        padding: 38px 22px 28px;
+        border-radius: 20px;
+    }
+
+    .celebration-box h2 {
+        font-size: 27px;
+    }
+
+    .celebration-emoji {
+        width: 78px;
+        height: 78px;
+
+        font-size: 40px;
+    }
+}

@@ -1,0 +1,604 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Coin Toss | CalcVerse</title>
+
+    <link rel="stylesheet" href="{% static 'calculators/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'calculators/css/coin-toss.css' %}">
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="nav-container">
+
+        <a href="/" class="logo">
+            Calc<span>Verse</span>
+        </a>
+
+        <nav>
+            <a href="/">Home</a>
+            <a href="/category/">Categories</a>
+        </nav>
+
+    </div>
+</header>
+
+
+<main class="coin-toss-page">
+
+    <!-- HERO -->
+
+    <section class="coin-toss-hero">
+
+        <div class="coin-toss-tag">
+            RANDOM TOOL
+        </div>
+
+        <h1>
+            Coin <span>Toss</span>
+        </h1>
+
+        <p>
+            Choose Heads or Tails, toss the coin,
+            and see if luck is on your side.
+        </p>
+
+    </section>
+
+
+    <!-- MAIN CARD -->
+
+    <section class="coin-toss-card">
+
+        <div class="coin-toss-heading">
+
+            <h2>Make Your Choice</h2>
+
+            <p>
+                Pick a side before tossing the coin.
+            </p>
+
+        </div>
+
+
+        <!-- CHOICE BUTTONS -->
+
+        <div class="coin-choice-buttons">
+
+            <button
+                type="button"
+                class="coin-choice-button"
+                id="headsChoice"
+                onclick="selectChoice('heads')"
+            >
+                <span class="choice-symbol">H</span>
+                Heads
+            </button>
+
+
+            <button
+                type="button"
+                class="coin-choice-button"
+                id="tailsChoice"
+                onclick="selectChoice('tails')"
+            >
+                <span class="choice-symbol">T</span>
+                Tails
+            </button>
+
+        </div>
+
+
+        <!-- ERROR -->
+
+        <p
+            id="coinError"
+            class="coin-error"
+        ></p>
+
+
+        <!-- COIN -->
+
+        <div class="coin-container">
+
+            <div id="coin" class="coin">
+
+                <div class="coin-side coin-heads">
+                    <span>H</span>
+                    <small>HEADS</small>
+                </div>
+
+                <div class="coin-side coin-tails">
+                    <span>T</span>
+                    <small>TAILS</small>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RESULT -->
+
+        <div class="coin-result">
+
+            <div class="coin-result-label">
+                COIN RESULT
+            </div>
+
+            <div
+                id="coinResultValue"
+                class="coin-result-value"
+            >
+                Choose your side
+            </div>
+
+        </div>
+
+
+        <!-- TOSS BUTTON -->
+
+        <button
+            type="button"
+            id="tossButton"
+            class="toss-button"
+            onclick="tossCoin()"
+        >
+            Toss Coin
+        </button>
+
+
+        <!-- STATS -->
+
+        <div class="coin-stats">
+
+            <div class="coin-stat-box">
+
+                <span
+                    class="coin-stat-number"
+                    id="totalTosses"
+                >
+                    0
+                </span>
+
+                <span class="coin-stat-label">
+                    Total Tosses
+                </span>
+
+            </div>
+
+
+            <div class="coin-stat-box">
+
+                <span
+                    class="coin-stat-number"
+                    id="winsCount"
+                >
+                    0
+                </span>
+
+                <span class="coin-stat-label">
+                    Wins
+                </span>
+
+            </div>
+
+
+            <div class="coin-stat-box">
+
+                <span
+                    class="coin-stat-number"
+                    id="lossesCount"
+                >
+                    0
+                </span>
+
+                <span class="coin-stat-label">
+                    Losses
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- =================================
+     WIN / LOSE POPUP
+================================= -->
+
+<div
+    id="celebrationPopup"
+    class="celebration-popup hidden"
+>
+
+    <div class="celebration-overlay"></div>
+
+
+    <div class="celebration-box">
+
+        <div
+            id="celebrationEmoji"
+            class="celebration-emoji"
+        >
+            🎉
+        </div>
+
+
+        <h2 id="celebrationTitle">
+            Yeah, You Won!
+        </h2>
+
+
+        <p id="celebrationMessage">
+            Your prediction was correct!
+        </p>
+
+
+        <button
+            type="button"
+            class="play-again-button"
+            onclick="playAgain()"
+        >
+            Play Again
+        </button>
+
+    </div>
+
+</div>
+
+
+<footer>
+    <p>© 2026 CalcVerse — Calculate Smarter.</p>
+</footer>
+
+
+<script>
+
+let selectedChoice = null;
+let totalTosses = 0;
+let winsCount = 0;
+let lossesCount = 0;
+let isTossing = false;
+
+
+const coin =
+    document.getElementById("coin");
+
+const tossButton =
+    document.getElementById("tossButton");
+
+const coinResultValue =
+    document.getElementById("coinResultValue");
+
+const coinError =
+    document.getElementById("coinError");
+
+const headsChoice =
+    document.getElementById("headsChoice");
+
+const tailsChoice =
+    document.getElementById("tailsChoice");
+
+const celebrationPopup =
+    document.getElementById("celebrationPopup");
+
+const celebrationEmoji =
+    document.getElementById("celebrationEmoji");
+
+const celebrationTitle =
+    document.getElementById("celebrationTitle");
+
+const celebrationMessage =
+    document.getElementById("celebrationMessage");
+
+
+/* =========================================
+   SELECT HEADS / TAILS
+========================================= */
+
+function selectChoice(choice) {
+
+    if (isTossing) {
+        return;
+    }
+
+
+    selectedChoice = choice;
+
+    coinError.textContent = "";
+
+
+    headsChoice.classList.remove("selected");
+    tailsChoice.classList.remove("selected");
+
+
+    if (choice === "heads") {
+
+        headsChoice.classList.add("selected");
+
+        coinResultValue.textContent =
+            "You chose Heads";
+
+    }
+
+    else {
+
+        tailsChoice.classList.add("selected");
+
+        coinResultValue.textContent =
+            "You chose Tails";
+
+    }
+
+}
+
+
+/* =========================================
+   TOSS COIN
+========================================= */
+
+function tossCoin() {
+
+    if (isTossing) {
+        return;
+    }
+
+
+    if (selectedChoice === null) {
+
+        coinError.textContent =
+            "Please choose Heads or Tails first.";
+
+        return;
+
+    }
+
+
+    isTossing = true;
+
+    tossButton.disabled = true;
+
+    headsChoice.disabled = true;
+    tailsChoice.disabled = true;
+
+
+    coinResultValue.textContent =
+        "Tossing...";
+
+
+    coin.classList.remove(
+        "show-heads",
+        "show-tails",
+        "coin-spin-heads",
+        "coin-spin-tails"
+    );
+
+
+    const result =
+        Math.random() < 0.5
+            ? "heads"
+            : "tails";
+
+
+    void coin.offsetWidth;
+
+
+    if (result === "heads") {
+
+        coin.classList.add(
+            "coin-spin-heads"
+        );
+
+    }
+
+    else {
+
+        coin.classList.add(
+            "coin-spin-tails"
+        );
+
+    }
+
+
+    setTimeout(
+        function() {
+
+            totalTosses++;
+
+
+            if (result === "heads") {
+
+                coin.classList.remove(
+                    "coin-spin-heads"
+                );
+
+                coin.classList.add(
+                    "show-heads"
+                );
+
+                coinResultValue.textContent =
+                    "Heads!";
+
+            }
+
+            else {
+
+                coin.classList.remove(
+                    "coin-spin-tails"
+                );
+
+                coin.classList.add(
+                    "show-tails"
+                );
+
+                coinResultValue.textContent =
+                    "Tails!";
+
+            }
+
+
+            document.getElementById(
+                "totalTosses"
+            ).textContent = totalTosses;
+
+
+            setTimeout(
+                function() {
+
+                    if (
+                        selectedChoice === result
+                    ) {
+
+                        winsCount++;
+
+                        document.getElementById(
+                            "winsCount"
+                        ).textContent = winsCount;
+
+
+                        showCelebration(
+                            true,
+                            result
+                        );
+
+                    }
+
+                    else {
+
+                        lossesCount++;
+
+                        document.getElementById(
+                            "lossesCount"
+                        ).textContent = lossesCount;
+
+
+                        showCelebration(
+                            false,
+                            result
+                        );
+
+                    }
+
+                },
+                500
+            );
+
+
+            isTossing = false;
+
+        },
+        1600
+    );
+
+}
+
+
+/* =========================================
+   SHOW WIN / LOSE POPUP
+========================================= */
+
+function showCelebration(
+    won,
+    result
+) {
+
+    celebrationPopup.classList.remove(
+        "hidden"
+    );
+
+
+    if (won) {
+
+        celebrationEmoji.textContent =
+            "🎉";
+
+        celebrationTitle.textContent =
+            "Yeah, You Won!";
+
+        celebrationMessage.textContent =
+            "Awesome! The coin landed on " +
+            result.charAt(0).toUpperCase() +
+            result.slice(1) +
+            ".";
+
+    }
+
+    else {
+
+        celebrationEmoji.textContent =
+            "😔";
+
+        celebrationTitle.textContent =
+            "Better Luck Next Time!";
+
+        celebrationMessage.textContent =
+            "You chose " +
+            selectedChoice.charAt(0).toUpperCase() +
+            selectedChoice.slice(1) +
+            ", but the coin landed on " +
+            result.charAt(0).toUpperCase() +
+            result.slice(1) +
+            ".";
+
+    }
+
+}
+
+
+/* =========================================
+   PLAY AGAIN
+========================================= */
+
+function playAgain() {
+
+    celebrationPopup.classList.add(
+        "hidden"
+    );
+
+
+    selectedChoice = null;
+
+
+    headsChoice.classList.remove(
+        "selected"
+    );
+
+    tailsChoice.classList.remove(
+        "selected"
+    );
+
+
+    headsChoice.disabled = false;
+    tailsChoice.disabled = false;
+
+    tossButton.disabled = false;
+
+
+    coinResultValue.textContent =
+        "Choose your side";
+
+
+    coin.classList.remove(
+        "show-heads",
+        "show-tails",
+        "coin-spin-heads",
+        "coin-spin-tails"
+    );
+
+}
+
+</script>
+
+</body>
+</html>

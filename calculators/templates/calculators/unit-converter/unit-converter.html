@@ -1,0 +1,581 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Unit Converter | CalcVerse</title>
+
+    <link rel="stylesheet" href="{% static 'calculators/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'calculators/css/unit-converter.css' %}">
+</head>
+
+<body>
+
+    <!-- ================================
+         NAVBAR
+    ================================= -->
+
+    <header class="navbar">
+        <div class="nav-container">
+
+            <a href="/" class="logo">
+                Calc<span>Verse</span>
+            </a>
+
+            <nav>
+                <a href="/">Home</a>
+                <a href="/category/">Categories</a>
+            </nav>
+
+        </div>
+    </header>
+
+
+    <!-- ================================
+         UNIT CONVERTER PAGE
+    ================================= -->
+    <main class="unit-page">
+
+        <!-- HERO -->
+        <section class="unit-hero">
+
+            <div class="section-tag">
+                UNIT CONVERTER
+            </div>
+
+            <h1>
+                Convert <span>Any Unit</span>
+            </h1>
+
+            <p>
+                Quickly convert length, weight, temperature, area, volume and more.
+            </p>
+
+        </section>
+
+
+        <!-- CALCULATOR -->
+        <section class="unit-calculator-card">
+
+            <div class="calculator-heading">
+                <h2>Convert Units</h2>
+                <p>Select a category, enter a value and choose the units.</p>
+            </div>
+
+
+            <!-- CATEGORY -->
+            <div class="form-group">
+
+                <label for="category">Conversion Category</label>
+
+                <select id="category">
+                    <option value="length">Length</option>
+                    <option value="weight">Weight</option>
+                    <option value="temperature">Temperature</option>
+                    <option value="area">Area</option>
+                    <option value="volume">Volume</option>
+                </select>
+
+            </div>
+
+
+            <!-- VALUE -->
+            <div class="form-group">
+
+                <label for="inputValue">Enter Value</label>
+
+                <div class="input-wrapper">
+                    <input
+                        type="number"
+                        id="inputValue"
+                        placeholder="Enter a value"
+                        step="any"
+                    >
+                </div>
+
+            </div>
+
+
+            <!-- FROM -->
+            <div class="form-group">
+
+                <label for="fromUnit">From</label>
+
+                <select id="fromUnit"></select>
+
+            </div>
+
+
+            <!-- SWAP -->
+            <div class="swap-wrapper">
+
+                <button
+                    type="button"
+                    class="swap-btn"
+                    id="swapBtn"
+                    aria-label="Swap units"
+                >
+                    ⇅
+                </button>
+
+            </div>
+
+
+            <!-- TO -->
+            <div class="form-group">
+
+                <label for="toUnit">To</label>
+
+                <select id="toUnit"></select>
+
+            </div>
+
+
+            <!-- CONVERT BUTTON -->
+            <button
+                type="button"
+                class="calculate-btn"
+                id="convertBtn"
+            >
+                Convert
+            </button>
+
+
+            <!-- ERROR -->
+            <p id="errorMessage" class="error-message"></p>
+
+
+            <!-- RESULT -->
+            <div id="resultBox" class="unit-result hidden">
+
+                <div class="result-label">
+                    CONVERTED VALUE
+                </div>
+
+                <div id="resultValue" class="unit-value">
+                    0
+                </div>
+
+                <div id="resultUnit" class="result-unit">
+                    Unit
+                </div>
+
+            </div>
+
+
+            <!-- DETAILS -->
+            <div id="conversionDetails" class="conversion-details hidden">
+
+                <h3>Conversion Details</h3>
+
+                <div class="detail-box">
+                    <span class="detail-title">Original Value</span>
+                    <strong id="originalValue">—</strong>
+                </div>
+
+                <div class="detail-box">
+                    <span class="detail-title">Converted Value</span>
+                    <strong id="convertedValue">—</strong>
+                </div>
+
+                <div class="detail-box">
+                    <span class="detail-title">Conversion</span>
+                    <strong id="conversionText">—</strong>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ================================
+         FOOTER
+    ================================= -->
+    <footer class="footer">
+        <p>© 2026 CalcVerse — Calculate Smarter.</p>
+    </footer>
+
+
+    <!-- ================================
+         JAVASCRIPT
+    ================================= -->
+    <script>
+
+        const categorySelect = document.getElementById("category");
+        const inputValue = document.getElementById("inputValue");
+        const fromUnit = document.getElementById("fromUnit");
+        const toUnit = document.getElementById("toUnit");
+        const convertBtn = document.getElementById("convertBtn");
+        const swapBtn = document.getElementById("swapBtn");
+
+        const errorMessage = document.getElementById("errorMessage");
+
+        const resultBox = document.getElementById("resultBox");
+        const resultValue = document.getElementById("resultValue");
+        const resultUnit = document.getElementById("resultUnit");
+
+        const conversionDetails = document.getElementById("conversionDetails");
+        const originalValue = document.getElementById("originalValue");
+        const convertedValue = document.getElementById("convertedValue");
+        const conversionText = document.getElementById("conversionText");
+
+
+        /* =========================================
+           UNIT DATA
+        ========================================= */
+
+        const units = {
+
+            length: {
+                Meter: 1,
+                Kilometer: 1000,
+                Centimeter: 0.01,
+                Millimeter: 0.001,
+                Mile: 1609.344,
+                Yard: 0.9144,
+                Foot: 0.3048,
+                Inch: 0.0254
+            },
+
+            weight: {
+                Kilogram: 1,
+                Gram: 0.001,
+                Milligram: 0.000001,
+                Pound: 0.45359237,
+                Ounce: 0.028349523125,
+                Tonne: 1000
+            },
+
+            area: {
+                "Square Meter": 1,
+                "Square Kilometer": 1000000,
+                "Square Centimeter": 0.0001,
+                "Square Mile": 2589988.110336,
+                "Square Yard": 0.83612736,
+                "Square Foot": 0.09290304,
+                "Square Inch": 0.00064516,
+                Hectare: 10000,
+                Acre: 4046.8564224
+            },
+
+            volume: {
+                Liter: 1,
+                Milliliter: 0.001,
+                "Cubic Meter": 1000,
+                "Cubic Centimeter": 0.001,
+                Gallon: 3.785411784,
+                Quart: 0.946352946,
+                Pint: 0.473176473,
+                Cup: 0.2365882365,
+                "Fluid Ounce": 0.0295735295625
+            },
+
+            temperature: {
+                Celsius: "celsius",
+                Fahrenheit: "fahrenheit",
+                Kelvin: "kelvin"
+            }
+
+        };
+
+
+        /* =========================================
+           LOAD UNITS
+        ========================================= */
+
+        function loadUnits() {
+
+            const category = categorySelect.value;
+
+            fromUnit.innerHTML = "";
+            toUnit.innerHTML = "";
+
+            Object.keys(units[category]).forEach(function(unit) {
+
+                const fromOption = document.createElement("option");
+                fromOption.value = unit;
+                fromOption.textContent = unit;
+
+                fromUnit.appendChild(fromOption);
+
+
+                const toOption = document.createElement("option");
+                toOption.value = unit;
+                toOption.textContent = unit;
+
+                toUnit.appendChild(toOption);
+
+            });
+
+
+            /* Default second unit */
+            if (toUnit.options.length > 1) {
+                toUnit.selectedIndex = 1;
+            }
+
+
+            hideResult();
+
+        }
+
+
+        /* =========================================
+           NUMBER FORMAT
+        ========================================= */
+
+        function formatNumber(number) {
+
+            if (!isFinite(number)) {
+                return "0";
+            }
+
+            return Number(number.toFixed(6)).toLocaleString();
+
+        }
+
+
+        /* =========================================
+           TEMPERATURE CONVERSION
+        ========================================= */
+
+        function convertTemperature(value, from, to) {
+
+            let celsiusValue;
+
+            /* Convert TO Celsius */
+            if (from === "Celsius") {
+
+                celsiusValue = value;
+
+            } else if (from === "Fahrenheit") {
+
+                celsiusValue = (value - 32) * 5 / 9;
+
+            } else if (from === "Kelvin") {
+
+                celsiusValue = value - 273.15;
+
+            }
+
+
+            /* Convert FROM Celsius */
+            if (to === "Celsius") {
+
+                return celsiusValue;
+
+            } else if (to === "Fahrenheit") {
+
+                return (celsiusValue * 9 / 5) + 32;
+
+            } else if (to === "Kelvin") {
+
+                return celsiusValue + 273.15;
+
+            }
+
+        }
+
+
+        /* =========================================
+           NORMAL UNIT CONVERSION
+        ========================================= */
+
+        function convertNormal(value, category, from, to) {
+
+            const fromFactor = units[category][from];
+            const toFactor = units[category][to];
+
+            const baseValue = value * fromFactor;
+
+            return baseValue / toFactor;
+
+        }
+
+
+        /* =========================================
+           CONVERT
+        ========================================= */
+
+        function convertUnit() {
+
+            errorMessage.textContent = "";
+
+            const value = parseFloat(inputValue.value);
+            const category = categorySelect.value;
+            const from = fromUnit.value;
+            const to = toUnit.value;
+
+
+            /* Validation */
+            if (inputValue.value.trim() === "" || isNaN(value)) {
+
+                errorMessage.textContent =
+                    "Please enter a valid value.";
+
+                hideResult();
+
+                return;
+            }
+
+
+            let convertedResult;
+
+
+            if (category === "temperature") {
+
+                convertedResult =
+                    convertTemperature(value, from, to);
+
+            } else {
+
+                convertedResult =
+                    convertNormal(value, category, from, to);
+
+            }
+
+
+            /* Show result */
+            resultValue.textContent =
+                formatNumber(convertedResult);
+
+            resultUnit.textContent =
+                to;
+
+            resultBox.classList.remove("hidden");
+
+
+            /* Details */
+            originalValue.textContent =
+                formatNumber(value) + " " + from;
+
+            convertedValue.textContent =
+                formatNumber(convertedResult) + " " + to;
+
+            conversionText.textContent =
+                formatNumber(value) + " " +
+                from + " = " +
+                formatNumber(convertedResult) + " " +
+                to;
+
+            conversionDetails.classList.remove("hidden");
+
+
+            /* Smooth scroll to result on small screens */
+            if (window.innerWidth <= 768) {
+
+                setTimeout(function() {
+
+                    resultBox.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center"
+                    });
+
+                }, 100);
+
+            }
+
+        }
+
+
+        /* =========================================
+           HIDE RESULT
+        ========================================= */
+
+        function hideResult() {
+
+            resultBox.classList.add("hidden");
+            conversionDetails.classList.add("hidden");
+
+            errorMessage.textContent = "";
+
+        }
+
+
+        /* =========================================
+           SWAP UNITS
+        ========================================= */
+
+        function swapUnits() {
+
+            const fromValue = fromUnit.value;
+            const toValue = toUnit.value;
+
+            fromUnit.value = toValue;
+            toUnit.value = fromValue;
+
+            hideResult();
+
+        }
+
+
+        /* =========================================
+           EVENTS
+        ========================================= */
+
+        categorySelect.addEventListener(
+            "change",
+            loadUnits
+        );
+
+
+        convertBtn.addEventListener(
+            "click",
+            convertUnit
+        );
+
+
+        swapBtn.addEventListener(
+            "click",
+            swapUnits
+        );
+
+
+        inputValue.addEventListener(
+            "keydown",
+            function(event) {
+
+                if (event.key === "Enter") {
+                    convertUnit();
+                }
+
+            }
+        );
+
+
+        fromUnit.addEventListener(
+            "change",
+            hideResult
+        );
+
+
+        toUnit.addEventListener(
+            "change",
+            hideResult
+        );
+
+
+        inputValue.addEventListener(
+            "input",
+            function() {
+
+                errorMessage.textContent = "";
+
+            }
+        );
+
+
+        /* =========================================
+           INITIAL LOAD
+        ========================================= */
+
+        loadUnits();
+
+    </script>
+
+</body>
+</html>

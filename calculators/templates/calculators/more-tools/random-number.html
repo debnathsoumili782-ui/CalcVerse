@@ -1,0 +1,351 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Random Number Generator | CalcVerse</title>
+
+    <link rel="stylesheet" href="{% static 'calculators/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'calculators/css/random-number.css' %}">
+</head>
+
+<body>
+
+<!-- ================================
+     NAVBAR
+================================= -->
+<header class="navbar">
+    <div class="nav-container">
+
+        <a href="/" class="logo">
+            Calc<span>Verse</span>
+        </a>
+
+        <nav>
+            <a href="/">Home</a>
+            <a href="/category/">Categories</a>
+        </nav>
+
+    </div>
+</header>
+
+
+<!-- ================================
+     MAIN PAGE
+================================= -->
+<main class="random-number-page">
+
+
+    <!-- HERO -->
+    <section class="random-number-hero">
+
+        <div class="random-number-tag">
+            RANDOM TOOL
+        </div>
+
+        <h1>
+            Random Number <span>Generator</span>
+        </h1>
+
+        <p>
+            Generate one or multiple random numbers
+            within any range you choose.
+        </p>
+
+    </section>
+
+
+    <!-- GENERATOR CARD -->
+    <section class="random-number-card">
+
+        <div class="random-number-heading">
+            <h2>Generate Random Numbers</h2>
+
+            <p>
+                Enter your preferred range and choose
+                how many numbers you want to generate.
+            </p>
+        </div>
+
+
+        <!-- MINIMUM -->
+        <div class="random-form-group">
+
+            <label for="minNumber">
+                Minimum Number
+            </label>
+
+            <input
+                type="number"
+                id="minNumber"
+                class="random-input"
+                placeholder="Enter minimum number"
+                value="1"
+            >
+
+        </div>
+
+
+        <!-- MAXIMUM -->
+        <div class="random-form-group">
+
+            <label for="maxNumber">
+                Maximum Number
+            </label>
+
+            <input
+                type="number"
+                id="maxNumber"
+                class="random-input"
+                placeholder="Enter maximum number"
+                value="100"
+            >
+
+        </div>
+
+
+        <!-- QUANTITY -->
+        <div class="random-form-group">
+
+            <label for="quantity">
+                How Many Numbers?
+            </label>
+
+            <input
+                type="number"
+                id="quantity"
+                class="random-input"
+                placeholder="Enter quantity"
+                value="1"
+                min="1"
+            >
+
+        </div>
+
+
+        <!-- OPTIONS -->
+        <div class="random-options">
+
+            <label class="checkbox-container">
+
+                <input
+                    type="checkbox"
+                    id="allowDuplicates"
+                >
+
+                <span>
+                    Allow duplicate numbers
+                </span>
+
+            </label>
+
+        </div>
+
+
+        <!-- BUTTON -->
+        <button
+            type="button"
+            class="generate-button"
+            onclick="generateRandomNumbers()"
+        >
+            Generate Numbers
+        </button>
+
+
+        <!-- ERROR -->
+        <p
+            id="randomError"
+            class="random-error"
+        ></p>
+
+
+        <!-- RESULT -->
+        <div
+            id="randomResult"
+            class="random-result hidden"
+        >
+
+            <div class="random-result-label">
+                GENERATED NUMBERS
+            </div>
+
+            <div
+                id="generatedNumbers"
+                class="generated-numbers"
+            ></div>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<!-- ================================
+     FOOTER
+================================= -->
+<footer>
+    <p>© 2026 CalcVerse — Calculate Smarter.</p>
+</footer>
+
+
+<!-- ================================
+     JAVASCRIPT
+================================= -->
+<script>
+
+function generateRandomNumbers() {
+
+    const min = Number(
+        document.getElementById("minNumber").value
+    );
+
+    const max = Number(
+        document.getElementById("maxNumber").value
+    );
+
+    const quantity = Number(
+        document.getElementById("quantity").value
+    );
+
+    const allowDuplicates =
+        document.getElementById("allowDuplicates").checked;
+
+    const errorElement =
+        document.getElementById("randomError");
+
+    const resultElement =
+        document.getElementById("randomResult");
+
+    const numbersElement =
+        document.getElementById("generatedNumbers");
+
+
+    // Clear previous error
+    errorElement.textContent = "";
+
+
+    // Validation
+    if (
+        !Number.isFinite(min) ||
+        !Number.isFinite(max) ||
+        !Number.isFinite(quantity)
+    ) {
+        errorElement.textContent =
+            "Please enter valid numbers.";
+
+        resultElement.classList.add("hidden");
+        return;
+    }
+
+
+    if (!Number.isInteger(min) || !Number.isInteger(max)) {
+        errorElement.textContent =
+            "Minimum and maximum must be whole numbers.";
+
+        resultElement.classList.add("hidden");
+        return;
+    }
+
+
+    if (min > max) {
+        errorElement.textContent =
+            "Minimum number cannot be greater than maximum number.";
+
+        resultElement.classList.add("hidden");
+        return;
+    }
+
+
+    if (!Number.isInteger(quantity) || quantity < 1) {
+        errorElement.textContent =
+            "Quantity must be at least 1.";
+
+        resultElement.classList.add("hidden");
+        return;
+    }
+
+
+    const rangeSize = max - min + 1;
+
+
+    if (!allowDuplicates && quantity > rangeSize) {
+        errorElement.textContent =
+            "You cannot generate more unique numbers than the selected range.";
+
+        resultElement.classList.add("hidden");
+        return;
+    }
+
+
+    const generatedNumbers = [];
+
+
+    // Generate with duplicates
+    if (allowDuplicates) {
+
+        for (let i = 0; i < quantity; i++) {
+
+            const randomNumber =
+                Math.floor(
+                    Math.random() * (max - min + 1)
+                ) + min;
+
+            generatedNumbers.push(randomNumber);
+        }
+
+    }
+
+
+    // Generate unique numbers
+    else {
+
+        const availableNumbers = [];
+
+        for (
+            let number = min;
+            number <= max;
+            number++
+        ) {
+            availableNumbers.push(number);
+        }
+
+
+        for (let i = 0; i < quantity; i++) {
+
+            const randomIndex =
+                Math.floor(
+                    Math.random() *
+                    availableNumbers.length
+                );
+
+            generatedNumbers.push(
+                availableNumbers[randomIndex]
+            );
+
+            availableNumbers.splice(
+                randomIndex,
+                1
+            );
+        }
+
+    }
+
+
+    // Show result
+    numbersElement.textContent =
+        generatedNumbers.join(", ");
+
+    resultElement.classList.remove("hidden");
+
+}
+
+</script>
+
+</body>
+</html>

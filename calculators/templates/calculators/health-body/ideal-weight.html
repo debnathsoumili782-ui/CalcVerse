@@ -1,0 +1,825 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Ideal Weight Calculator | CalcVerse</title>
+
+    <link rel="stylesheet"
+          href="{% static 'calculators/css/ideal-weight.css' %}">
+</head>
+
+<body>
+
+<div class="page-wrapper">
+
+    <!-- HEADER -->
+    <header class="navbar">
+        <a href="/" class="logo">
+            Calc<span>Verse</span>
+        </a>
+
+        <nav>
+            <a href="/">Home</a>
+            <a href="{% url 'health_body' %}">Health & Body</a>
+        </nav>
+    </header>
+
+
+    <!-- MAIN -->
+    <main class="calculator-container">
+
+        <!-- CALCULATOR -->
+        <section class="calculator-card">
+
+            <div class="card-heading">
+                <h2>Calculate Your Ideal Weight</h2>
+
+                <p>
+                    Enter your details below to see your estimated
+                    healthy weight range.
+                </p>
+            </div>
+
+
+            <!-- GENDER -->
+            <div class="input-group">
+
+                <label>Gender</label>
+
+                <div class="gender-selector">
+
+                    <button
+                        type="button"
+                        class="gender-btn active"
+                        data-gender="female">
+                        Female
+                    </button>
+
+                    <button
+                        type="button"
+                        class="gender-btn"
+                        data-gender="male">
+                        Male
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- HEIGHT -->
+            <div class="input-group">
+
+                <div class="label-row">
+
+                    <label>Height</label>
+
+                    <div class="unit-toggle">
+
+                        <button
+                            type="button"
+                            class="height-unit active"
+                            data-unit="cm">
+                            CM
+                        </button>
+
+                        <button
+                            type="button"
+                            class="height-unit"
+                            data-unit="ft">
+                            FT/IN
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CM INPUT -->
+                <div class="height-input" id="heightCmInput">
+
+                    <input
+                        type="number"
+                        id="heightCm"
+                        placeholder="Enter your height"
+                        min="50"
+                        max="250"
+                        step="0.1">
+
+                    <span>cm</span>
+
+                </div>
+
+
+                <!-- FT / IN INPUT -->
+                <div
+                    class="feet-inch-input hidden"
+                    id="heightFtInput">
+
+                    <div class="mini-input">
+
+                        <input
+                            type="number"
+                            id="heightFt"
+                            placeholder="Feet"
+                            min="1"
+                            max="8">
+
+                        <span>ft</span>
+
+                    </div>
+
+                    <div class="mini-input">
+
+                        <input
+                            type="number"
+                            id="heightIn"
+                            placeholder="Inches"
+                            min="0"
+                            max="11.9"
+                            step="0.1">
+
+                        <span>in</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- CURRENT WEIGHT -->
+            <div class="input-group">
+
+                <div class="label-row">
+
+                    <label>Current Weight</label>
+
+                    <div class="unit-toggle">
+
+                        <button
+                            type="button"
+                            class="weight-unit active"
+                            data-unit="kg">
+                            KG
+                        </button>
+
+                        <button
+                            type="button"
+                            class="weight-unit"
+                            data-unit="lb">
+                            LB
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="weight-input">
+
+                    <input
+                        type="number"
+                        id="currentWeight"
+                        placeholder="Enter your current weight"
+                        min="20"
+                        max="400"
+                        step="0.1">
+
+                    <span id="weightUnitText">kg</span>
+
+                </div>
+
+            </div>
+
+
+            <!-- BUTTON -->
+            <button
+                type="button"
+                class="calculate-btn"
+                id="calculateIdealWeight">
+
+                Calculate Ideal Weight
+
+            </button>
+
+        </section>
+
+
+        <!-- RESULT -->
+        <section
+            class="result-section hidden"
+            id="resultSection">
+
+
+            <!-- IDEAL RANGE -->
+            <div class="result-card">
+
+                <p class="result-label">
+                    ESTIMATED HEALTHY WEIGHT RANGE
+                </p>
+
+                <div class="ideal-range">
+
+                    <span id="idealMin">--</span>
+
+                    <span class="range-dash">–</span>
+
+                    <span id="idealMax">--</span>
+
+                    <small id="resultWeightUnit">kg</small>
+
+                </div>
+
+                <p class="result-description">
+                    This range is estimated using the standard healthy
+                    adult BMI range of 18.5 to 24.9.
+                </p>
+
+            </div>
+
+
+            <!-- CURRENT WEIGHT COMPARISON -->
+            <div class="comparison-card">
+
+                <div class="comparison-header">
+
+                    <div>
+
+                        <span class="comparison-label">
+                            YOUR CURRENT WEIGHT
+                        </span>
+
+                        <h3>
+                            <span id="currentWeightResult">--</span>
+                            <small id="currentWeightResultUnit">kg</small>
+                        </h3>
+
+                    </div>
+
+                    <span
+                        class="weight-status normal"
+                        id="weightStatusBadge">
+
+                        --
+
+                    </span>
+
+                </div>
+
+
+                <!-- SCALE -->
+                <div class="weight-scale-wrapper">
+
+                    <div class="scale-values">
+
+                        <span id="scaleMin">--</span>
+                        <span id="scaleIdealMin">--</span>
+                        <span id="scaleIdealMax">--</span>
+                        <span id="scaleMax">--</span>
+
+                    </div>
+
+
+                    <div class="weight-scale">
+
+                        <div class="scale-segment below"></div>
+                        <div class="scale-segment ideal"></div>
+                        <div class="scale-segment above"></div>
+
+
+                        <!-- CURRENT WEIGHT MARKER -->
+                        <div
+                            class="weight-marker"
+                            id="weightMarker">
+
+                            <span
+                                class="marker-value"
+                                id="markerWeight">
+
+                                --
+
+                            </span>
+
+                            <span class="marker-line"></span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="scale-labels">
+
+                        <span>Below Ideal</span>
+                        <span>Healthy Range</span>
+                        <span>Above Ideal</span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- MESSAGE -->
+                <p
+                    class="comparison-message"
+                    id="weightComparisonMessage">
+
+                    --
+
+                </p>
+
+            </div>
+
+
+            <!-- REFERENCE -->
+            <div class="reference-card">
+
+                <div class="reference-title">
+
+                    <div class="reference-icon">ℹ️</div>
+
+                    <div>
+                        <h3>Understanding Your Weight Range</h3>
+
+                        <p>
+                            Your estimated range is based on the
+                            healthy adult BMI range.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="reference-grid">
+
+                    <div class="reference-item underweight">
+
+                        <span class="reference-dot"></span>
+
+                        <div>
+                            <strong>Below Range</strong>
+                            <small>
+                                Below the estimated healthy weight range.
+                            </small>
+                        </div>
+
+                    </div>
+
+
+                    <div class="reference-item ideal">
+
+                        <span class="reference-dot"></span>
+
+                        <div>
+                            <strong>Healthy Range</strong>
+                            <small>
+                                BMI between 18.5 and 24.9.
+                            </small>
+                        </div>
+
+                    </div>
+
+
+                    <div class="reference-item overweight">
+
+                        <span class="reference-dot"></span>
+
+                        <div>
+                            <strong>Above Range</strong>
+                            <small>
+                                Above the estimated healthy weight range.
+                            </small>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- DETAILS -->
+            <div class="details-card">
+
+                <div class="details-heading">
+                    <h3>Your Details</h3>
+                    <span>⌄</span>
+                </div>
+
+
+                <div class="details-content">
+
+                    <div class="detail-row">
+                        <span>Height</span>
+                        <strong id="detailHeight">--</strong>
+                    </div>
+
+
+                    <div class="detail-row">
+                        <span>Current Weight</span>
+                        <strong id="detailCurrentWeight">--</strong>
+                    </div>
+
+
+                    <div class="detail-row">
+                        <span>Estimated Healthy Range</span>
+                        <strong id="detailIdealRange">--</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- JAVASCRIPT -->
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const genderButtons = document.querySelectorAll(".gender-btn");
+    const heightUnitButtons = document.querySelectorAll(".height-unit");
+    const weightUnitButtons = document.querySelectorAll(".weight-unit");
+
+    const heightCmInput = document.getElementById("heightCmInput");
+    const heightFtInput = document.getElementById("heightFtInput");
+
+    const heightCm = document.getElementById("heightCm");
+    const heightFt = document.getElementById("heightFt");
+    const heightIn = document.getElementById("heightIn");
+
+    const currentWeight = document.getElementById("currentWeight");
+    const weightUnitText = document.getElementById("weightUnitText");
+
+    const calculateBtn = document.getElementById("calculateIdealWeight");
+    const resultSection = document.getElementById("resultSection");
+
+    const idealMin = document.getElementById("idealMin");
+    const idealMax = document.getElementById("idealMax");
+    const resultWeightUnit = document.getElementById("resultWeightUnit");
+
+    const currentWeightResult =
+        document.getElementById("currentWeightResult");
+
+    const currentWeightResultUnit =
+        document.getElementById("currentWeightResultUnit");
+
+    const weightStatusBadge =
+        document.getElementById("weightStatusBadge");
+
+    const scaleMin = document.getElementById("scaleMin");
+    const scaleIdealMin = document.getElementById("scaleIdealMin");
+    const scaleIdealMax = document.getElementById("scaleIdealMax");
+    const scaleMax = document.getElementById("scaleMax");
+
+    const weightMarker = document.getElementById("weightMarker");
+    const markerWeight = document.getElementById("markerWeight");
+
+    const weightComparisonMessage =
+        document.getElementById("weightComparisonMessage");
+
+    const detailHeight = document.getElementById("detailHeight");
+
+    const detailCurrentWeight =
+        document.getElementById("detailCurrentWeight");
+
+    const detailIdealRange =
+        document.getElementById("detailIdealRange");
+
+
+    let selectedHeightUnit = "cm";
+    let selectedWeightUnit = "kg";
+
+
+    genderButtons.forEach(function (button) {
+
+        button.addEventListener("click", function () {
+
+            genderButtons.forEach(function (btn) {
+                btn.classList.remove("active");
+            });
+
+            this.classList.add("active");
+
+        });
+
+    });
+
+
+    heightUnitButtons.forEach(function (button) {
+
+        button.addEventListener("click", function () {
+
+            heightUnitButtons.forEach(function (btn) {
+                btn.classList.remove("active");
+            });
+
+            this.classList.add("active");
+
+            selectedHeightUnit = this.dataset.unit;
+
+            if (selectedHeightUnit === "cm") {
+
+                heightCmInput.classList.remove("hidden");
+                heightFtInput.classList.add("hidden");
+
+            } else {
+
+                heightCmInput.classList.add("hidden");
+                heightFtInput.classList.remove("hidden");
+
+            }
+
+        });
+
+    });
+
+
+    weightUnitButtons.forEach(function (button) {
+
+        button.addEventListener("click", function () {
+
+            const newUnit = this.dataset.unit;
+            const oldUnit = selectedWeightUnit;
+
+            weightUnitButtons.forEach(function (btn) {
+                btn.classList.remove("active");
+            });
+
+            this.classList.add("active");
+
+            if (currentWeight.value !== "") {
+
+                let value = parseFloat(currentWeight.value);
+
+                if (oldUnit === "kg" && newUnit === "lb") {
+                    value = value * 2.20462;
+                }
+
+                else if (oldUnit === "lb" && newUnit === "kg") {
+                    value = value / 2.20462;
+                }
+
+                currentWeight.value = value.toFixed(1);
+
+            }
+
+            selectedWeightUnit = newUnit;
+            weightUnitText.textContent = newUnit;
+
+        });
+
+    });
+
+
+    function getHeightInCm() {
+
+        if (selectedHeightUnit === "cm") {
+            return parseFloat(heightCm.value);
+        }
+
+        const feet = parseFloat(heightFt.value) || 0;
+        const inches = parseFloat(heightIn.value) || 0;
+
+        return (feet * 30.48) + (inches * 2.54);
+
+    }
+
+
+    function getWeightInKg() {
+
+        let weight = parseFloat(currentWeight.value);
+
+        if (selectedWeightUnit === "lb") {
+            weight = weight / 2.20462;
+        }
+
+        return weight;
+
+    }
+
+
+    function formatWeight(weightKg, unit) {
+
+        if (unit === "lb") {
+            return (weightKg * 2.20462).toFixed(1);
+        }
+
+        return weightKg.toFixed(1);
+
+    }
+
+
+    function calculateIdealWeight() {
+
+        const heightCmValue = getHeightInCm();
+        const weightKg = getWeightInKg();
+
+
+        if (
+            !heightCmValue ||
+            heightCmValue < 50 ||
+            heightCmValue > 250
+        ) {
+            alert("Please enter a valid height.");
+            return;
+        }
+
+
+        if (
+            !weightKg ||
+            weightKg < 20 ||
+            weightKg > 400
+        ) {
+            alert("Please enter a valid current weight.");
+            return;
+        }
+
+
+        const heightM = heightCmValue / 100;
+
+        const idealMinKg = 18.5 * heightM * heightM;
+        const idealMaxKg = 24.9 * heightM * heightM;
+
+
+        const minDisplay =
+            formatWeight(idealMinKg, selectedWeightUnit);
+
+        const maxDisplay =
+            formatWeight(idealMaxKg, selectedWeightUnit);
+
+        const currentDisplay =
+            formatWeight(weightKg, selectedWeightUnit);
+
+
+        idealMin.textContent = minDisplay;
+        idealMax.textContent = maxDisplay;
+
+        resultWeightUnit.textContent = selectedWeightUnit;
+
+        currentWeightResult.textContent = currentDisplay;
+        currentWeightResultUnit.textContent = selectedWeightUnit;
+
+
+        let status;
+        let statusClass;
+        let message;
+
+
+        if (weightKg < idealMinKg) {
+
+            const difference = idealMinKg - weightKg;
+
+            status = "Below Ideal";
+            statusClass = "low";
+
+            message =
+                "You are " +
+                formatWeight(difference, selectedWeightUnit) +
+                " " + selectedWeightUnit +
+                " below the estimated healthy weight range.";
+
+        }
+
+        else if (weightKg > idealMaxKg) {
+
+            const difference = weightKg - idealMaxKg;
+
+            status = "Above Ideal";
+            statusClass = "high";
+
+            message =
+                "You are " +
+                formatWeight(difference, selectedWeightUnit) +
+                " " + selectedWeightUnit +
+                " above the estimated healthy weight range.";
+
+        }
+
+        else {
+
+            status = "Ideal Range";
+            statusClass = "normal";
+
+            message =
+                "Your current weight is within your estimated healthy weight range.";
+
+        }
+
+
+        weightStatusBadge.textContent = status;
+
+        weightStatusBadge.classList.remove(
+            "normal",
+            "low",
+            "high"
+        );
+
+        weightStatusBadge.classList.add(statusClass);
+
+        weightComparisonMessage.textContent = message;
+
+
+        const idealRange = idealMaxKg - idealMinKg;
+
+        let visualMin =
+            Math.max(0, idealMinKg - idealRange * 0.75);
+
+        let visualMax =
+            idealMaxKg + idealRange * 0.75;
+
+
+        scaleMin.textContent =
+            formatWeight(visualMin, selectedWeightUnit);
+
+        scaleIdealMin.textContent =
+            formatWeight(idealMinKg, selectedWeightUnit);
+
+        scaleIdealMax.textContent =
+            formatWeight(idealMaxKg, selectedWeightUnit);
+
+        scaleMax.textContent =
+            formatWeight(visualMax, selectedWeightUnit);
+
+
+        let markerPosition =
+            ((weightKg - visualMin) /
+            (visualMax - visualMin)) * 100;
+
+        markerPosition =
+            Math.max(0, Math.min(100, markerPosition));
+
+
+        weightMarker.style.left =
+            markerPosition + "%";
+
+        markerWeight.textContent =
+            currentDisplay + " " + selectedWeightUnit;
+
+
+        if (selectedHeightUnit === "cm") {
+
+            detailHeight.textContent =
+                heightCmValue.toFixed(1) + " cm";
+
+        } else {
+
+            detailHeight.textContent =
+                (heightFt.value || 0) + " ft " +
+                (heightIn.value || 0) + " in";
+
+        }
+
+
+        detailCurrentWeight.textContent =
+            currentDisplay + " " + selectedWeightUnit;
+
+        detailIdealRange.textContent =
+            minDisplay + " – " +
+            maxDisplay + " " +
+            selectedWeightUnit;
+
+
+        resultSection.classList.remove("hidden");
+
+    }
+
+
+    calculateBtn.addEventListener(
+        "click",
+        calculateIdealWeight
+    );
+
+
+    [
+        heightCm,
+        heightFt,
+        heightIn,
+        currentWeight
+    ].forEach(function (input) {
+
+        input.addEventListener("keydown", function (event) {
+
+            if (event.key === "Enter") {
+                calculateIdealWeight();
+            }
+
+        });
+
+    });
+
+});
+
+</script>
+
+</body>
+</html>

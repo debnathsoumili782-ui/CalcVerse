@@ -1,0 +1,449 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Text Case Converter | CalcVerse</title>
+
+    <link rel="stylesheet" href="{% static 'calculators/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'calculators/css/text-case-converter.css' %}">
+</head>
+
+<body>
+
+
+<!-- ================================
+     NAVBAR
+================================= -->
+
+<header class="navbar">
+    <div class="nav-container">
+
+        <a href="/" class="logo">
+            Calc<span>Verse</span>
+        </a>
+
+        <nav>
+            <a href="/">Home</a>
+            <a href="/category/">Categories</a>
+        </nav>
+
+    </div>
+</header>
+
+
+<!-- ================================
+     MAIN PAGE
+================================= -->
+
+<main class="text-case-page">
+
+
+    <!-- HERO -->
+
+    <section class="text-case-hero">
+
+        <div class="text-case-tag">
+            TEXT TOOL
+        </div>
+
+        <h1>
+            Text Case <span>Converter</span>
+        </h1>
+
+        <p>
+            Instantly convert your text to uppercase, lowercase,
+            title case, sentence case and more.
+        </p>
+
+    </section>
+
+
+    <!-- CONVERTER CARD -->
+
+    <section class="text-case-card">
+
+        <div class="text-case-heading">
+
+            <h2>Convert Your Text</h2>
+
+            <p>
+                Paste or type your text below, then choose
+                how you want it to be formatted.
+            </p>
+
+        </div>
+
+
+        <!-- TEXT INPUT -->
+
+        <div class="text-case-form-group">
+
+            <label for="textCaseInput">
+                Enter Your Text
+            </label>
+
+            <textarea
+                id="textCaseInput"
+                class="text-case-textarea"
+                placeholder="Type or paste your text here..."
+            ></textarea>
+
+        </div>
+
+
+        <!-- CASE BUTTONS -->
+
+        <div class="case-buttons">
+
+            <button
+                type="button"
+                class="case-button"
+                onclick="convertCase('upper')"
+            >
+                UPPERCASE
+            </button>
+
+            <button
+                type="button"
+                class="case-button"
+                onclick="convertCase('lower')"
+            >
+                lowercase
+            </button>
+
+            <button
+                type="button"
+                class="case-button"
+                onclick="convertCase('title')"
+            >
+                Title Case
+            </button>
+
+            <button
+                type="button"
+                class="case-button"
+                onclick="convertCase('sentence')"
+            >
+                Sentence case
+            </button>
+
+            <button
+                type="button"
+                class="case-button"
+                onclick="convertCase('capitalized')"
+            >
+                Capitalized Case
+            </button>
+
+            <button
+                type="button"
+                class="case-button"
+                onclick="convertCase('toggle')"
+            >
+                tOGGLE cASE
+            </button>
+
+        </div>
+
+
+        <!-- ERROR -->
+
+        <p
+            id="textCaseError"
+            class="text-case-error"
+        ></p>
+
+
+        <!-- RESULT -->
+
+        <div
+            id="textCaseResult"
+            class="text-case-result hidden"
+        >
+
+            <div class="text-case-result-label">
+                CONVERTED TEXT
+            </div>
+
+            <div
+                id="textCaseResultValue"
+                class="text-case-result-value"
+            ></div>
+
+
+            <button
+                type="button"
+                class="copy-text-button"
+                onclick="copyConvertedText()"
+            >
+                Copy Text
+            </button>
+
+        </div>
+
+
+        <!-- CLEAR -->
+
+        <button
+            type="button"
+            class="clear-case-button"
+            onclick="clearTextCase()"
+        >
+            Clear Text
+        </button>
+
+    </section>
+
+
+</main>
+
+
+<!-- ================================
+     FOOTER
+================================= -->
+
+<footer>
+    <p>© 2026 CalcVerse — Calculate Smarter.</p>
+</footer>
+
+
+<!-- ================================
+     JAVASCRIPT
+================================= -->
+
+<script>
+
+const textCaseInput =
+    document.getElementById("textCaseInput");
+
+const textCaseError =
+    document.getElementById("textCaseError");
+
+const textCaseResult =
+    document.getElementById("textCaseResult");
+
+const textCaseResultValue =
+    document.getElementById("textCaseResultValue");
+
+
+/* =========================================
+   MAIN CASE CONVERTER
+========================================= */
+
+function convertCase(type) {
+
+    const text =
+        textCaseInput.value;
+
+
+    textCaseError.textContent = "";
+
+    textCaseResult.classList.add("hidden");
+
+
+    if (text.trim() === "") {
+
+        textCaseError.textContent =
+            "Please enter some text first.";
+
+        return;
+
+    }
+
+
+    let result = "";
+
+
+    /* UPPERCASE */
+
+    if (type === "upper") {
+
+        result =
+            text.toUpperCase();
+
+    }
+
+
+    /* LOWERCASE */
+
+    else if (type === "lower") {
+
+        result =
+            text.toLowerCase();
+
+    }
+
+
+    /* TITLE CASE */
+
+    else if (type === "title") {
+
+        result = text
+            .toLowerCase()
+            .replace(
+                /\b\w/g,
+                function(character) {
+                    return character.toUpperCase();
+                }
+            );
+
+    }
+
+
+    /* SENTENCE CASE */
+
+    else if (type === "sentence") {
+
+        result =
+            text.toLowerCase()
+                .replace(
+                    /(^\s*\w|[.!?]\s*\w)/g,
+                    function(character) {
+                        return character.toUpperCase();
+                    }
+                );
+
+    }
+
+
+    /* CAPITALIZED CASE */
+
+    else if (type === "capitalized") {
+
+        result = text
+            .split(" ")
+            .map(
+                function(word) {
+
+                    if (word.length === 0) {
+                        return word;
+                    }
+
+                    return (
+                        word.charAt(0).toUpperCase() +
+                        word.slice(1).toLowerCase()
+                    );
+
+                }
+            )
+            .join(" ");
+
+    }
+
+
+    /* TOGGLE CASE */
+
+    else if (type === "toggle") {
+
+        result = "";
+
+        for (
+            let i = 0;
+            i < text.length;
+            i++
+        ) {
+
+            const character =
+                text[i];
+
+
+            if (
+                character ===
+                character.toUpperCase()
+            ) {
+
+                result +=
+                    character.toLowerCase();
+
+            }
+
+            else {
+
+                result +=
+                    character.toUpperCase();
+
+            }
+
+        }
+
+    }
+
+
+    textCaseResultValue.textContent =
+        result;
+
+    textCaseResult.classList.remove("hidden");
+
+}
+
+
+/* =========================================
+   COPY TEXT
+========================================= */
+
+function copyConvertedText() {
+
+    const text =
+        textCaseResultValue.textContent;
+
+
+    navigator.clipboard
+        .writeText(text)
+        .then(
+            function() {
+
+                const button =
+                    document.querySelector(
+                        ".copy-text-button"
+                    );
+
+
+                const originalText =
+                    button.textContent;
+
+
+                button.textContent =
+                    "Copied!";
+
+
+                setTimeout(
+                    function() {
+
+                        button.textContent =
+                            originalText;
+
+                    },
+                    1500
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================================
+   CLEAR TEXT
+========================================= */
+
+function clearTextCase() {
+
+    textCaseInput.value = "";
+
+    textCaseError.textContent = "";
+
+    textCaseResultValue.textContent = "";
+
+    textCaseResult.classList.add("hidden");
+
+}
+
+</script>
+
+</body>
+</html>

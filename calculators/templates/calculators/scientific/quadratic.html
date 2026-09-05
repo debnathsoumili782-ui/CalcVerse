@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Quadratic Equation Calculator | CalcVerse</title>
+
+    <link rel="stylesheet"
+          href="{% static 'calculators/css/calculator.css' %}">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <a href="/" class="logo">Calc<span>Verse</span></a>
+
+        <nav>
+            <a href="/">Home</a>
+            <a href="/category/scientific/">Scientific</a>
+        </nav>
+    </header>
+
+
+    <main class="quadratic-page">
+
+        <!-- HERO -->
+        <section class="quadratic-hero">
+
+            <span class="hero-badge">SCIENTIFIC CALCULATOR</span>
+
+            <h1>
+                Quadratic <span>Equation</span>
+            </h1>
+
+            <p>
+                Solve equations of the form
+                <strong>ax² + bx + c = 0</strong>
+            </p>
+
+        </section>
+
+
+        <!-- CALCULATOR -->
+        <section class="quadratic-calculator">
+
+            <div class="equation-preview">
+                <span id="aPreview">a</span>x²
+                <span>+</span>
+                <span id="bPreview">b</span>x
+                <span>+</span>
+                <span id="cPreview">c</span>
+                <span>= 0</span>
+            </div>
+
+
+            <!-- INPUTS -->
+            <div class="quadratic-inputs">
+
+                <div class="input-group">
+                    <label for="a">Coefficient a</label>
+                    <input
+                        type="number"
+                        id="a"
+                        placeholder="Enter a"
+                        step="any"
+                    >
+                </div>
+
+
+                <div class="input-group">
+                    <label for="b">Coefficient b</label>
+                    <input
+                        type="number"
+                        id="b"
+                        placeholder="Enter b"
+                        step="any"
+                    >
+                </div>
+
+
+                <div class="input-group">
+                    <label for="c">Coefficient c</label>
+                    <input
+                        type="number"
+                        id="c"
+                        placeholder="Enter c"
+                        step="any"
+                    >
+                </div>
+
+            </div>
+
+
+            <!-- BUTTONS -->
+            <div class="quadratic-actions">
+
+                <button
+                    class="quadratic-clear-btn"
+                    onclick="clearQuadratic()"
+                >
+                    Clear
+                </button>
+
+                <button
+                    class="quadratic-solve-btn"
+                    onclick="solveQuadratic()"
+                >
+                    Solve Equation
+                </button>
+
+            </div>
+
+
+            <!-- RESULT -->
+            <div
+                id="quadraticResult"
+                class="quadratic-result hidden"
+            >
+            </div>
+
+
+            <!-- STEPS -->
+            <div
+                id="quadraticSteps"
+                class="quadratic-steps hidden"
+            >
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+        © 2026 CalcVerse — Calculate Smarter.
+    </footer>
+
+
+<script>
+    const aInput = document.getElementById("a");
+    const bInput = document.getElementById("b");
+    const cInput = document.getElementById("c");
+
+    const aPreview = document.getElementById("aPreview");
+    const bPreview = document.getElementById("bPreview");
+    const cPreview = document.getElementById("cPreview");
+
+    const resultBox = document.getElementById("quadraticResult");
+    const stepsBox = document.getElementById("quadraticSteps");
+
+
+    /* =========================
+       LIVE EQUATION PREVIEW
+    ========================= */
+
+    function updatePreview() {
+        const a = aInput.value;
+        const b = bInput.value;
+        const c = cInput.value;
+
+        aPreview.textContent = a === "" ? "a" : a;
+
+        // b coefficient
+        if (b === "") {
+            bPreview.textContent = "b";
+        } else {
+            bPreview.textContent = Math.abs(Number(b));
+        }
+
+        // c coefficient
+        if (c === "") {
+            cPreview.textContent = "c";
+        } else {
+            cPreview.textContent = Math.abs(Number(c));
+        }
+
+        // Signs
+        const preview = document.querySelector(".equation-preview");
+
+        if (preview) {
+            const spans = preview.querySelectorAll("span");
+
+            if (spans.length >= 5) {
+                spans[1].textContent =
+                    b !== "" && Number(b) < 0 ? "−" : "+";
+
+                spans[3].textContent =
+                    c !== "" && Number(c) < 0 ? "−" : "+";
+            }
+        }
+    }
+
+
+    aInput.addEventListener("input", updatePreview);
+    bInput.addEventListener("input", updatePreview);
+    cInput.addEventListener("input", updatePreview);
+
+
+    /* =========================
+       FORMAT NUMBER
+    ========================= */
+
+    function formatNumber(number) {
+        const rounded = Number(number.toFixed(8));
+
+        // Avoid -0
+        return Object.is(rounded, -0) ? 0 : rounded;
+    }
+
+
+    /* =========================
+       FORMAT EQUATION
+    ========================= */
+
+    function formatEquation(a, b, c) {
+        let equation = `${a}x²`;
+
+        if (b >= 0) {
+            equation += ` + ${b}x`;
+        } else {
+            equation += ` − ${Math.abs(b)}x`;
+        }
+
+        if (c >= 0) {
+            equation += ` + ${c}`;
+        } else {
+            equation += ` − ${Math.abs(c)}`;
+        }
+
+        equation += " = 0";
+
+        return equation;
+    }
+
+
+    /* =========================
+       SOLVE QUADRATIC
+    ========================= */
+
+    function solveQuadratic() {
+
+        const a = parseFloat(aInput.value);
+        const b = parseFloat(bInput.value);
+        const c = parseFloat(cInput.value);
+
+
+        // Validate input
+        if (
+            Number.isNaN(a) ||
+            Number.isNaN(b) ||
+            Number.isNaN(c)
+        ) {
+            showError(
+                "Please enter values for a, b and c."
+            );
+            return;
+        }
+
+
+        // Must actually be quadratic
+        if (a === 0) {
+            showError(
+                "a cannot be 0. This is not a quadratic equation."
+            );
+            return;
+        }
+
+
+        const discriminant =
+            (b * b) - (4 * a * c);
+
+
+        resultBox.classList.remove("hidden");
+        stepsBox.classList.remove("hidden");
+
+
+        let resultHTML = "";
+        let rootsHTML = "";
+
+
+        /* =========================
+           TWO DISTINCT REAL ROOTS
+        ========================= */
+
+        if (discriminant > 0) {
+
+            const x1 =
+                (-b + Math.sqrt(discriminant)) / (2 * a);
+
+            const x2 =
+                (-b - Math.sqrt(discriminant)) / (2 * a);
+
+
+            resultHTML = `
+                <h2>Solution</h2>
+
+                <div class="root-grid">
+
+                    <div class="root-card">
+                        <span>x₁</span>
+                        <strong>${formatNumber(x1)}</strong>
+                    </div>
+
+                    <div class="root-card">
+                        <span>x₂</span>
+                        <strong>${formatNumber(x2)}</strong>
+                    </div>
+
+                </div>
+
+                <p class="root-type">
+                    Two distinct real roots
+                </p>
+            `;
+
+
+            rootsHTML = `
+                <p>
+                    Since Δ > 0, the equation has
+                    <strong>two distinct real roots.</strong>
+                </p>
+
+                <p>
+                    x₁ = (-b + √Δ) / 2a
+                </p>
+
+                <p>
+                    x₂ = (-b − √Δ) / 2a
+                </p>
+            `;
+        }
+
+
+        /* =========================
+           ONE REPEATED REAL ROOT
+        ========================= */
+
+        else if (discriminant === 0) {
+
+            const x =
+                -b / (2 * a);
+
+
+            resultHTML = `
+                <h2>Solution</h2>
+
+                <div class="root-grid single-root">
+
+                    <div class="root-card">
+                        <span>x₁ = x₂</span>
+                        <strong>${formatNumber(x)}</strong>
+                    </div>
+
+                </div>
+
+                <p class="root-type">
+                    One repeated real root
+                </p>
+            `;
+
+
+            rootsHTML = `
+                <p>
+                    Since Δ = 0, the equation has
+                    <strong>one repeated real root.</strong>
+                </p>
+
+                <p>
+                    x = -b / 2a
+                </p>
+            `;
+        }
+
+
+        /* =========================
+           TWO COMPLEX ROOTS
+        ========================= */
+
+        else {
+
+            const realPart =
+                -b / (2 * a);
+
+            // Math.abs is important here.
+            // This prevents output like: + -0.5i
+            const imaginaryPart =
+                Math.abs(
+                    Math.sqrt(-discriminant) / (2 * a)
+                );
+
+
+            resultHTML = `
+                <h2>Solution</h2>
+
+                <div class="root-grid">
+
+                    <div class="root-card">
+                        <span>x₁</span>
+                        <strong>
+                            ${formatNumber(realPart)}
+                            + ${formatNumber(imaginaryPart)}i
+                        </strong>
+                    </div>
+
+                    <div class="root-card">
+                        <span>x₂</span>
+                        <strong>
+                            ${formatNumber(realPart)}
+                            − ${formatNumber(imaginaryPart)}i
+                        </strong>
+                    </div>
+
+                </div>
+
+                <p class="root-type">
+                    Two complex roots
+                </p>
+            `;
+
+
+            rootsHTML = `
+                <p>
+                    Since Δ < 0, the equation has
+                    <strong>two complex roots.</strong>
+                </p>
+
+                <p>
+                    x₁ = (-b + i√(-Δ)) / 2a
+                </p>
+
+                <p>
+                    x₂ = (-b − i√(-Δ)) / 2a
+                </p>
+            `;
+        }
+
+
+        /* =========================
+           SHOW RESULT
+        ========================= */
+
+        resultBox.innerHTML = resultHTML;
+
+
+        stepsBox.innerHTML = `
+            <h3>Step-by-Step Solution</h3>
+
+            <div class="step">
+
+                <span>1</span>
+
+                <div>
+                    <strong>Given equation</strong>
+
+                    <p>
+                        ${formatEquation(a, b, c)}
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="step">
+
+                <span>2</span>
+
+                <div>
+                    <strong>Calculate discriminant</strong>
+
+                    <p>
+                        Δ = b² − 4ac
+                    </p>
+
+                    <p>
+                        Δ = (${b})² − 4(${a})(${c})
+                    </p>
+
+                    <p>
+                        Δ = <strong>${formatNumber(discriminant)}</strong>
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="step">
+
+                <span>3</span>
+
+                <div>
+                    <strong>Find the roots</strong>
+
+                    ${rootsHTML}
+                </div>
+
+            </div>
+        `;
+    }
+
+
+    /* =========================
+       ERROR
+    ========================= */
+
+    function showError(message) {
+
+        resultBox.classList.remove("hidden");
+        stepsBox.classList.add("hidden");
+
+        resultBox.innerHTML = `
+            <div class="quadratic-error">
+                ${message}
+            </div>
+        `;
+    }
+
+
+    /* =========================
+       CLEAR
+    ========================= */
+
+    function clearQuadratic() {
+
+        aInput.value = "";
+        bInput.value = "";
+        cInput.value = "";
+
+        updatePreview();
+
+        resultBox.innerHTML = "";
+        stepsBox.innerHTML = "";
+
+        resultBox.classList.add("hidden");
+        stepsBox.classList.add("hidden");
+    }
+
+
+    // Initial preview
+    updatePreview();
+</script>
+
+</body>
+</html>

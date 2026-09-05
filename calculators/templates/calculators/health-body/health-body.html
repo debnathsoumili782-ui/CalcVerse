@@ -1,0 +1,198 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Health & Body Calculators — CalcVerse</title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'calculators/css/style.css' %}"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- NAVBAR -->
+
+<header class="navbar">
+
+    <div class="nav-container">
+
+        <a href="/" class="logo">
+            Calc<span>Verse</span>
+        </a>
+
+        <nav>
+
+            <a href="/">
+                Home
+            </a>
+
+            <a href="{% url 'health_body' %}">
+                Health & Body
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+
+<main>
+
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+        <div class="badge">
+            HEALTH & BODY
+        </div>
+
+        <h1>
+            Calculate Your <span>Health</span>
+        </h1>
+
+        <p>
+            Useful calculators for BMI, BMR, ideal weight,
+            body fat, calories and more.
+        </p>
+
+    </section>
+
+
+
+    <!-- CALCULATORS -->
+
+    <section class="categories">
+
+        <div class="section-heading">
+
+            <p>
+                HEALTH TOOLS
+            </p>
+
+            <h2>
+                Choose a Calculator
+            </h2>
+
+        </div>
+
+
+        <div class="category-grid">
+
+
+            <!-- BMI -->
+
+            <a
+                href="{% url 'bmi_calculator' %}"
+                class="category-card"
+            >
+
+                <div class="icon">
+                    ⚖️
+                </div>
+
+                <h3>
+                    BMI Calculator
+                </h3>
+
+                <p>
+                    Calculate your Body Mass Index and check your weight category.
+                </p>
+
+            </a>
+
+
+
+            <!-- BMR -->
+
+            <a href="{% url 'bmr_calculator' %}" class="category-card">
+                <div class="category-icon">🔥</div>
+                <h3>BMR Calculator</h3>
+                <p>Calculate how many calories your body burns at complete rest.</p>
+            </a>
+
+            <!-- IDEAL WEIGHT -->
+
+            <a href="{% url 'ideal_weight_calculator' %}" class="category-card">
+                <div class="icon">🎯</div>
+
+                <h3>Ideal Weight Calculator</h3>
+
+                <p>
+                    Find an estimated healthy weight range for your height.
+                </p>
+            </a>
+
+            <!-- BODY FAT -->
+
+            <a
+                href="{% url 'body_fat_calculator' %}"
+                class="category-card"
+            >
+
+                <div class="icon">
+                    💪
+                </div>
+
+                <h3>
+                    Body Fat Calculator
+                </h3>
+
+                <p>
+                    Estimate your body fat percentage using body measurements.
+                </p>
+
+            </a>
+
+            <!-- CALORIE -->
+
+            <a href="{% url 'calorie_calculator' %}" class="category-card">
+                <div class="calculator-icon">🍑</div>
+
+                <h2>Calorie Calculator</h2>
+
+                <p>
+                    Estimate your daily calorie needs
+                    based on your lifestyle.
+                </p>
+            </a>
+
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+
+<footer>
+
+    <p>
+        © 2026 CalcVerse — Calculate Smarter.
+    </p>
+
+</footer>
+
+
+</body>
+
+</html>

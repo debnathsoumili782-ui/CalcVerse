@@ -1,0 +1,263 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>RD Calculator — CalcVerse</title>
+
+    <link rel="stylesheet" href="{% static 'calculators/css/style.css' %}">
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="nav-container">
+        <a href="/" class="logo">
+            Calc<span>Verse</span>
+        </a>
+
+        <nav>
+            <a href="/">Home</a>
+            <a href="{% url 'banking_finance' %}">Calculators</a>
+        </nav>
+    </div>
+</header>
+
+
+<main>
+
+    <section class="hero calculator-hero">
+
+        <div class="badge">BANKING & FINANCE</div>
+
+        <h1>
+            RD <span>Calculator</span>
+        </h1>
+
+        <p>
+            Calculate your Recurring Deposit maturity amount and interest earned.
+        </p>
+
+    </section>
+
+
+    <section class="calculator-section">
+
+        <div class="banking-calculator-card">
+
+            <!-- Monthly Deposit -->
+            <div class="input-group">
+                <label for="monthlyDeposit">
+                    Monthly Deposit Amount (₹)
+                </label>
+
+                <input
+                    type="number"
+                    id="monthlyDeposit"
+                    placeholder="Enter monthly deposit amount"
+                >
+            </div>
+
+
+            <!-- Interest Rate -->
+            <div class="input-group">
+                <label for="interestRate">
+                    Annual Interest Rate (%)
+                </label>
+
+                <input
+                    type="number"
+                    id="interestRate"
+                    placeholder="Enter annual interest rate"
+                    step="0.01"
+                >
+            </div>
+
+
+            <!-- Investment Period -->
+            <div class="input-group">
+                <label for="years">
+                    Investment Period (Years)
+                </label>
+
+                <input
+                    type="number"
+                    id="years"
+                    placeholder="Enter investment period"
+                    step="0.5"
+                >
+            </div>
+
+
+            <!-- Calculate Button -->
+            <button
+                type="button"
+                class="calculate-btn"
+                onclick="calculateRD()"
+            >
+                Calculate RD
+            </button>
+
+
+            <!-- Result -->
+            <div id="rdResultSection" style="display: none;">
+
+                <!-- Result -->
+                <div class="result-box">
+
+                    <span>MATURITY AMOUNT</span>
+
+                    <strong id="maturityAmount">
+                        ₹0.00
+                    </strong>
+
+                </div>
+
+
+                <!-- Calculation Details -->
+                <div class="solution-box">
+
+                    <h2>RD Calculation</h2>
+
+                    <div class="step-item">
+                        <strong>Total Deposit</strong>
+                        <p id="totalDeposit">₹0.00</p>
+                    </div>
+
+                    <div class="step-item">
+                        <strong>Interest Earned</strong>
+                        <p id="interestEarned">₹0.00</p>
+                    </div>
+
+                    <div class="step-item">
+                        <strong>Maturity Amount</strong>
+                        <p id="finalMaturity">₹0.00</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer>
+    <p>© 2026 CalcVerse — Calculate Smarter.</p>
+</footer>
+
+
+<script>
+
+function calculateRD() {
+
+    const monthlyDeposit = parseFloat(
+        document.getElementById("monthlyDeposit").value
+    );
+
+    const annualRate = parseFloat(
+        document.getElementById("interestRate").value
+    );
+
+    const years = parseFloat(
+        document.getElementById("years").value
+    );
+
+
+    if (
+        isNaN(monthlyDeposit) ||
+        isNaN(annualRate) ||
+        isNaN(years) ||
+        monthlyDeposit <= 0 ||
+        annualRate < 0 ||
+        years <= 0
+    ) {
+        alert("Please enter valid values.");
+        return;
+    }
+
+
+    /*
+        RD maturity calculation
+
+        Monthly contribution model:
+        FV = P × [((1 + r)^n - 1) / r]
+
+        P = Monthly deposit
+        r = Monthly interest rate
+        n = Total months
+    */
+
+    const monthlyRate = annualRate / 100 / 12;
+    const totalMonths = years * 12;
+
+    let maturityAmount;
+
+    if (monthlyRate === 0) {
+
+        maturityAmount =
+            monthlyDeposit * totalMonths;
+
+    } else {
+
+        maturityAmount =
+            monthlyDeposit *
+            (
+                (
+                    Math.pow(
+                        1 + monthlyRate,
+                        totalMonths
+                    ) - 1
+                ) / monthlyRate
+            );
+
+    }
+
+
+    const totalDeposit =
+        monthlyDeposit * totalMonths;
+
+    const interestEarned =
+        maturityAmount - totalDeposit;
+
+
+    function formatCurrency(amount) {
+
+        return "₹" +
+            amount.toLocaleString(
+                "en-IN",
+                {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }
+            );
+
+    }
+
+
+    document.getElementById("maturityAmount").textContent =
+        formatCurrency(maturityAmount);
+
+    document.getElementById("totalDeposit").textContent =
+        formatCurrency(totalDeposit);
+
+    document.getElementById("interestEarned").textContent =
+        formatCurrency(interestEarned);
+
+    document.getElementById("finalMaturity").textContent =
+        formatCurrency(maturityAmount);
+
+    document.getElementById("rdResultSection").style.display = "block";
+
+}
+
+</script>
+
+</body>
+</html>

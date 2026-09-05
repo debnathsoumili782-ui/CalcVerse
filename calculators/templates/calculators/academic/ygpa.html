@@ -1,0 +1,746 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>YGPA Calculator — CalcVerse</title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'calculators/css/style.css' %}"
+    >
+
+</head>
+
+
+<body>
+
+
+<header class="navbar">
+
+    <div class="nav-container">
+
+        <a href="/" class="logo">
+            Calc<span>Verse</span>
+        </a>
+
+        <nav>
+            <a href="/">Home</a>
+
+            <a href="{% url 'academic' %}">
+                Academic
+            </a>
+        </nav>
+
+    </div>
+
+</header>
+
+
+
+<main>
+
+
+    <!-- HERO -->
+
+    <section class="hero calculator-hero">
+
+        <div class="badge">
+            ACADEMIC
+        </div>
+
+        <h1>
+            YGPA <span>Calculator</span>
+        </h1>
+
+        <p>
+            Calculate your Year Grade Point Average using
+            the SGPA and credits of both semesters.
+        </p>
+
+    </section>
+
+
+
+    <!-- CALCULATOR -->
+
+    <section class="calculator-section">
+
+        <div class="banking-calculator-card">
+
+
+            <!-- SELECTED UNIVERSITY -->
+
+            <div class="input-group">
+
+                <label>
+                    Selected University
+                </label>
+
+                <input
+                    type="text"
+                    id="selectedUniversity"
+                    readonly
+                >
+
+            </div>
+
+
+
+            <!-- DEGREE -->
+
+            <div class="input-group">
+
+                <label for="degree">
+                    Select Degree / Course
+                </label>
+
+                <select id="degree">
+
+                    <option value="">
+                        Select your degree
+                    </option>
+
+                    <option value="btech">B.Tech</option>
+                    <option value="be">B.E.</option>
+                    <option value="bsc">B.Sc</option>
+                    <option value="ba">B.A.</option>
+                    <option value="bcom">B.Com</option>
+                    <option value="bba">BBA</option>
+                    <option value="bca">BCA</option>
+                    <option value="mtech">M.Tech</option>
+                    <option value="msc">M.Sc</option>
+                    <option value="ma">M.A.</option>
+                    <option value="mcom">M.Com</option>
+                    <option value="mba">MBA</option>
+                    <option value="mca">MCA</option>
+                    <option value="diploma">Diploma</option>
+                    <option value="other">Other</option>
+
+                </select>
+
+            </div>
+
+
+
+            <!-- YEAR COUNT -->
+
+            <div class="input-group">
+
+                <label for="yearCount">
+                    Number of Years Completed
+                </label>
+
+                <input
+                    type="number"
+                    id="yearCount"
+                    placeholder="Enter completed years"
+                    min="1"
+                    max="10"
+                >
+
+            </div>
+
+
+
+            <!-- CONTINUE -->
+
+            <button
+                type="button"
+                class="calculate-btn"
+                onclick="generateYearInputs()"
+            >
+                Continue
+            </button>
+
+
+
+            <!-- YEAR INPUTS -->
+
+            <div id="yearContainer"></div>
+
+
+
+            <!-- CALCULATE -->
+
+            <button
+                type="button"
+                class="calculate-btn"
+                id="calculateButton"
+                onclick="calculateYGPA()"
+                style="display: none;"
+            >
+                Calculate YGPA
+            </button>
+
+
+
+            <!-- RESULT -->
+
+            <div
+                class="result-box"
+                id="resultBox"
+                style="display: none;"
+            >
+
+                <span>
+                    OVERALL YGPA
+                </span>
+
+                <strong id="ygpaResult">
+                    0.00
+                </strong>
+
+            </div>
+
+
+
+            <!-- DETAILS -->
+
+            <div
+                class="solution-box"
+                id="solutionBox"
+                style="display: none;"
+            >
+
+                <h2>
+                    YGPA Calculation Details
+                </h2>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Years Completed
+                    </strong>
+
+                    <p id="completedYears">
+                        0
+                    </p>
+
+                </div>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Total Semesters
+                    </strong>
+
+                    <p id="totalSemesters">
+                        0
+                    </p>
+
+                </div>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Total Credits
+                    </strong>
+
+                    <p id="totalCredits">
+                        0
+                    </p>
+
+                </div>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Overall YGPA
+                    </strong>
+
+                    <p id="finalYGPA">
+                        0.00
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+
+<footer>
+    <p>© 2026 CalcVerse — Calculate Smarter.</p>
+</footer>
+
+
+
+<script>
+
+
+/* ================================
+   UNIVERSITY
+================================ */
+
+const universityNames = {
+
+    makaut: "MAKAUT",
+    calcutta: "University of Calcutta",
+    wbsu: "West Bengal State University",
+    other: "Other University"
+
+};
+
+
+const savedUniversity =
+    localStorage.getItem(
+        "selectedUniversity"
+    );
+
+
+document.getElementById(
+    "selectedUniversity"
+).value =
+    universityNames[savedUniversity]
+    || "Not selected";
+
+
+
+/* ================================
+   GENERATE YEAR INPUTS
+================================ */
+
+function generateYearInputs() {
+
+
+    const degree =
+        document.getElementById(
+            "degree"
+        ).value;
+
+
+    const yearCount =
+        parseInt(
+            document.getElementById(
+                "yearCount"
+            ).value
+        );
+
+
+    if (degree === "") {
+
+        alert(
+            "Please select your degree or course."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        isNaN(yearCount) ||
+        yearCount < 1 ||
+        yearCount > 10
+    ) {
+
+        alert(
+            "Please enter a valid number of completed years."
+        );
+
+        return;
+
+    }
+
+
+    const container =
+        document.getElementById(
+            "yearContainer"
+        );
+
+
+    container.innerHTML = "";
+
+
+    for (
+        let year = 1;
+        year <= yearCount;
+        year++
+    ) {
+
+
+        const semester1 =
+            (year * 2) - 1;
+
+
+        const semester2 =
+            year * 2;
+
+
+        container.innerHTML += `
+
+            <div class="semester-card">
+
+                <h3>
+                    Year ${year}
+                </h3>
+
+
+                <!-- SEMESTER 1 -->
+
+                <h4>
+                    Semester ${semester1}
+                </h4>
+
+
+                <div class="input-group">
+
+                    <label>
+                        SGPA
+                    </label>
+
+                    <input
+                        type="number"
+                        class="semesterSGPA"
+                        placeholder="Enter Semester ${semester1} SGPA"
+                        min="0"
+                        max="10"
+                        step="0.01"
+                    >
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <label>
+                        Total Credits
+                    </label>
+
+                    <input
+                        type="number"
+                        class="semesterCredits"
+                        placeholder="Enter Semester ${semester1} credits"
+                        min="0"
+                        step="0.01"
+                    >
+
+                </div>
+
+
+
+                <!-- SEMESTER 2 -->
+
+                <h4>
+                    Semester ${semester2}
+                </h4>
+
+
+                <div class="input-group">
+
+                    <label>
+                        SGPA
+                    </label>
+
+                    <input
+                        type="number"
+                        class="semesterSGPA"
+                        placeholder="Enter Semester ${semester2} SGPA"
+                        min="0"
+                        max="10"
+                        step="0.01"
+                    >
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <label>
+                        Total Credits
+                    </label>
+
+                    <input
+                        type="number"
+                        class="semesterCredits"
+                        placeholder="Enter Semester ${semester2} credits"
+                        min="0"
+                        step="0.01"
+                    >
+
+                </div>
+
+
+                <!-- YEAR RESULT -->
+
+                <div
+                    class="year-result"
+                    id="yearResult${year}"
+                >
+
+                    <span>
+                        Year ${year} YGPA
+                    </span>
+
+                    <strong>
+                        —
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+        `;
+
+    }
+
+
+    document.getElementById(
+        "calculateButton"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "resultBox"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "solutionBox"
+    ).style.display =
+        "none";
+
+
+    container.scrollIntoView({
+
+        behavior: "smooth",
+
+        block: "start"
+
+    });
+
+}
+
+
+
+/* ================================
+   CALCULATE YGPA
+================================ */
+
+function calculateYGPA() {
+
+
+    const sgpaInputs =
+        document.querySelectorAll(
+            ".semesterSGPA"
+        );
+
+
+    const creditInputs =
+        document.querySelectorAll(
+            ".semesterCredits"
+        );
+
+
+    const yearCount =
+        parseInt(
+            document.getElementById(
+                "yearCount"
+            ).value
+        );
+
+
+    let totalCredits = 0;
+
+    let totalWeightedPoints = 0;
+
+
+    for (
+        let i = 0;
+        i < sgpaInputs.length;
+        i += 2
+    ) {
+
+
+        const sgpa1 =
+            parseFloat(
+                sgpaInputs[i].value
+            );
+
+
+        const credits1 =
+            parseFloat(
+                creditInputs[i].value
+            );
+
+
+        const sgpa2 =
+            parseFloat(
+                sgpaInputs[i + 1].value
+            );
+
+
+        const credits2 =
+            parseFloat(
+                creditInputs[i + 1].value
+            );
+
+
+        const currentYear =
+            (i / 2) + 1;
+
+
+        if (
+            isNaN(sgpa1) ||
+            isNaN(sgpa2) ||
+            isNaN(credits1) ||
+            isNaN(credits2) ||
+            sgpa1 < 0 ||
+            sgpa1 > 10 ||
+            sgpa2 < 0 ||
+            sgpa2 > 10 ||
+            credits1 <= 0 ||
+            credits2 <= 0
+        ) {
+
+            alert(
+                `Please enter valid values for Year ${currentYear}.`
+            );
+
+            return;
+
+        }
+
+
+        /*
+            Year YGPA Formula:
+
+            (Sem 1 SGPA × Sem 1 Credits
+            +
+            Sem 2 SGPA × Sem 2 Credits)
+
+            ÷
+
+            (Sem 1 Credits + Sem 2 Credits)
+        */
+
+        const yearCredits =
+            credits1 + credits2;
+
+
+        const yearWeightedPoints =
+            (sgpa1 * credits1) +
+            (sgpa2 * credits2);
+
+
+        const yearYGPA =
+            yearWeightedPoints /
+            yearCredits;
+
+
+        document.querySelector(
+            `#yearResult${currentYear} strong`
+        ).textContent =
+            yearYGPA.toFixed(2);
+
+
+        totalCredits +=
+            yearCredits;
+
+
+        totalWeightedPoints +=
+            yearWeightedPoints;
+
+    }
+
+
+
+    /* OVERALL YGPA */
+
+    const overallYGPA =
+        totalWeightedPoints /
+        totalCredits;
+
+
+
+    /* SHOW RESULT */
+
+    document.getElementById(
+        "ygpaResult"
+    ).textContent =
+        overallYGPA.toFixed(2);
+
+
+
+    /* DETAILS */
+
+    document.getElementById(
+        "completedYears"
+    ).textContent =
+        yearCount;
+
+
+    document.getElementById(
+        "totalSemesters"
+    ).textContent =
+        yearCount * 2;
+
+
+    document.getElementById(
+        "totalCredits"
+    ).textContent =
+        totalCredits.toFixed(2);
+
+
+    document.getElementById(
+        "finalYGPA"
+    ).textContent =
+        overallYGPA.toFixed(2);
+
+
+
+    document.getElementById(
+        "resultBox"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "solutionBox"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "resultBox"
+    ).scrollIntoView({
+
+        behavior: "smooth",
+
+        block: "center"
+
+    });
+
+}
+
+
+</script>
+
+
+</body>
+</html>

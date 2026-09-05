@@ -1,0 +1,992 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BMI Calculator — CalcVerse</title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'calculators/css/style.css' %}"
+    >
+</head>
+
+
+<body>
+
+<header class="navbar">
+
+    <div class="nav-container">
+
+        <a href="/" class="logo">
+            Calc<span>Verse</span>
+        </a>
+
+        <nav>
+            <a href="/">Home</a>
+
+            <a href="{% url 'health_body' %}">
+                Health & Body
+            </a>
+        </nav>
+
+    </div>
+
+</header>
+
+
+<main>
+
+
+    <!-- HERO -->
+
+    <section class="hero calculator-hero">
+
+        <div class="badge">
+            HEALTH CALCULATOR
+        </div>
+
+        <h1>
+            Calculate Your <span>BMI</span>
+        </h1>
+
+        <p>
+            Enter your weight and height to calculate your Body Mass Index.
+        </p>
+
+    </section>
+
+
+
+    <!-- BMI CALCULATOR -->
+
+    <section class="calculator-section">
+
+        <div class="banking-calculator-card">
+
+
+            <div class="academic-heading">
+
+                <h2>
+                    Enter Your Details
+                </h2>
+
+                <p>
+                    Choose your preferred units and enter your measurements.
+                </p>
+
+            </div>
+
+
+
+            <!-- WEIGHT UNIT -->
+
+            <div class="input-group">
+
+                <label>
+                    Weight Unit
+                </label>
+
+                <div class="format-toggle">
+
+                    <button
+                        type="button"
+                        class="format-option active"
+                        id="kgBtn"
+                        onclick="setWeightUnit('kg')"
+                    >
+                        Kilograms (kg)
+                    </button>
+
+                    <button
+                        type="button"
+                        class="format-option"
+                        id="lbBtn"
+                        onclick="setWeightUnit('lb')"
+                    >
+                        Pounds (lb)
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- WEIGHT INPUT -->
+
+            <div class="input-group">
+
+                <label id="weightLabel" for="weight">
+                    Weight (kg)
+                </label>
+
+                <input
+                    type="number"
+                    id="weight"
+                    min="1"
+                    step="0.1"
+                    placeholder="Enter your weight in kg"
+                >
+
+            </div>
+
+
+
+            <!-- HEIGHT UNIT -->
+
+            <div class="input-group">
+
+                <label>
+                    Height Unit
+                </label>
+
+                <div class="format-toggle">
+
+                    <button
+                        type="button"
+                        class="format-option active"
+                        id="cmBtn"
+                        onclick="setHeightUnit('cm')"
+                    >
+                        Centimeters (cm)
+                    </button>
+
+                    <button
+                        type="button"
+                        class="format-option"
+                        id="ftBtn"
+                        onclick="setHeightUnit('ft')"
+                    >
+                        Feet & Inches
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- HEIGHT IN CM -->
+
+            <div
+                class="input-group"
+                id="cmHeightGroup"
+            >
+
+                <label for="heightCm">
+                    Height (cm)
+                </label>
+
+                <input
+                    type="number"
+                    id="heightCm"
+                    min="1"
+                    step="0.1"
+                    placeholder="Enter your height in cm"
+                >
+
+            </div>
+
+
+
+            <!-- HEIGHT IN FEET & INCHES -->
+
+            <div
+                class="input-group"
+                id="ftHeightGroup"
+                style="display: none;"
+            >
+
+                <label>
+                    Height
+                </label>
+
+                <div class="height-input-wrapper">
+
+                    <div class="height-input-box">
+
+                        <input
+                            type="number"
+                            id="heightFt"
+                            min="0"
+                            placeholder="Feet"
+                        >
+
+                        <span>ft</span>
+
+                    </div>
+
+
+                    <div class="height-input-box">
+
+                        <input
+                            type="number"
+                            id="heightIn"
+                            min="0"
+                            max="11"
+                            step="0.1"
+                            placeholder="Inches"
+                        >
+
+                        <span>in</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- CALCULATE BUTTON -->
+
+            <button
+                type="button"
+                class="calculate-btn"
+                onclick="calculateBMI()"
+            >
+                Calculate BMI
+            </button>
+
+
+
+            <!-- MAIN RESULT -->
+
+            <div
+                class="result-box"
+                id="bmiResultBox"
+                style="display: none;"
+            >
+
+                <span>
+                    YOUR BMI
+                </span>
+
+                <strong id="bmiResult">
+                    --
+                </strong>
+
+                <p id="bmiCategory">
+                    --
+                </p>
+
+            </div>
+
+
+
+            <!-- ADULT BMI COMPARISON -->
+
+            <div
+                class="bmi-scale-box"
+                id="bmiScaleBox"
+                style="display: none;"
+            >
+
+                <div class="bmi-scale-heading">
+
+                    <div>
+
+                        <span>
+                            ADULT BMI SCALE
+                        </span>
+
+                        <h2>
+                            Where Do You Stand?
+                        </h2>
+
+                    </div>
+
+
+                    <div class="your-bmi-mini">
+
+                        <span>
+                            Your BMI
+                        </span>
+
+                        <strong id="scaleBMI">
+                            --
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- HEALTHY RANGE INFO -->
+
+                <div class="healthy-bmi-info">
+
+                    <strong>
+                        Healthy adult BMI range:
+                    </strong>
+
+                    <span>
+                        18.5 – 24.9
+                    </span>
+
+                </div>
+
+
+
+                <!-- BMI SCALE -->
+
+                <div class="bmi-scale">
+
+                    <div class="scale-line">
+
+                        <div
+                            class="bmi-marker"
+                            id="bmiMarker"
+                        >
+
+                            <span id="markerBMI">
+                                --
+                            </span>
+
+                            <i></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- BMI RANGES -->
+
+                <div class="bmi-range-grid">
+
+                    <div class="bmi-range-item underweight-range">
+
+                        <strong>
+                            Below 18.5
+                        </strong>
+
+                        <span>
+                            Underweight
+                        </span>
+
+                    </div>
+
+
+                    <div class="bmi-range-item healthy-range">
+
+                        <strong>
+                            18.5 – 24.9
+                        </strong>
+
+                        <span>
+                            Healthy Weight
+                        </span>
+
+                    </div>
+
+
+                    <div class="bmi-range-item overweight-range">
+
+                        <strong>
+                            25 – 29.9
+                        </strong>
+
+                        <span>
+                            Overweight
+                        </span>
+
+                    </div>
+
+
+                    <div class="bmi-range-item obesity-range">
+
+                        <strong>
+                            30+
+                        </strong>
+
+                        <span>
+                            Obesity
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- COMPARISON MESSAGE -->
+
+                <div class="bmi-status-text">
+
+                    <p id="bmiStatusText">
+                        --
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- BMI DETAILS -->
+
+            <div
+                class="solution-box"
+                id="bmiDetails"
+                style="display: none;"
+            >
+
+                <h2>
+                    BMI Details
+                </h2>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Formula
+                    </strong>
+
+                    <p>
+                        Weight (kg) ÷ Height² (m)
+                    </p>
+
+                </div>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Your BMI
+                    </strong>
+
+                    <p id="displayBMI">
+                        -
+                    </p>
+
+                </div>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Weight Category
+                    </strong>
+
+                    <p id="displayBMICategory">
+                        -
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+
+<footer>
+
+    <p>
+        © 2026 CalcVerse — Calculate Smarter.
+    </p>
+
+</footer>
+
+
+
+<script>
+
+
+let weightUnit = "kg";
+let heightUnit = "cm";
+
+
+
+/* =========================
+   WEIGHT UNIT
+========================= */
+
+function setWeightUnit(unit) {
+
+    weightUnit = unit;
+
+
+    const kgBtn =
+        document.getElementById("kgBtn");
+
+    const lbBtn =
+        document.getElementById("lbBtn");
+
+    const weightLabel =
+        document.getElementById("weightLabel");
+
+    const weightInput =
+        document.getElementById("weight");
+
+
+    if (unit === "kg") {
+
+        kgBtn.classList.add("active");
+        lbBtn.classList.remove("active");
+
+        weightLabel.textContent =
+            "Weight (kg)";
+
+        weightInput.placeholder =
+            "Enter your weight in kg";
+
+    }
+
+    else {
+
+        lbBtn.classList.add("active");
+        kgBtn.classList.remove("active");
+
+        weightLabel.textContent =
+            "Weight (lb)";
+
+        weightInput.placeholder =
+            "Enter your weight in pounds";
+
+    }
+
+
+    hideBMIResult();
+
+}
+
+
+
+/* =========================
+   HEIGHT UNIT
+========================= */
+
+function setHeightUnit(unit) {
+
+    heightUnit = unit;
+
+
+    const cmBtn =
+        document.getElementById("cmBtn");
+
+    const ftBtn =
+        document.getElementById("ftBtn");
+
+    const cmHeightGroup =
+        document.getElementById("cmHeightGroup");
+
+    const ftHeightGroup =
+        document.getElementById("ftHeightGroup");
+
+
+    if (unit === "cm") {
+
+        cmBtn.classList.add("active");
+        ftBtn.classList.remove("active");
+
+        cmHeightGroup.style.display =
+            "block";
+
+        ftHeightGroup.style.display =
+            "none";
+
+    }
+
+    else {
+
+        ftBtn.classList.add("active");
+        cmBtn.classList.remove("active");
+
+        ftHeightGroup.style.display =
+            "block";
+
+        cmHeightGroup.style.display =
+            "none";
+
+    }
+
+
+    hideBMIResult();
+
+}
+
+
+
+/* =========================
+   HIDE RESULT
+========================= */
+
+function hideBMIResult() {
+
+    document.getElementById(
+        "bmiResultBox"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "bmiScaleBox"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "bmiDetails"
+    ).style.display = "none";
+
+}
+
+
+
+/* =========================
+   CALCULATE BMI
+========================= */
+
+function calculateBMI() {
+
+
+    const weight =
+        parseFloat(
+            document.getElementById("weight").value
+        );
+
+
+    if (
+        !Number.isFinite(weight) ||
+        weight <= 0
+    ) {
+
+        alert(
+            "Please enter a valid weight."
+        );
+
+        return;
+
+    }
+
+
+
+    /* =========================
+       WEIGHT CONVERSION
+    ========================= */
+
+    let weightKg;
+
+
+    if (weightUnit === "kg") {
+
+        weightKg = weight;
+
+    }
+
+    else {
+
+        weightKg =
+            weight * 0.45359237;
+
+    }
+
+
+
+    /* =========================
+       HEIGHT CONVERSION
+    ========================= */
+
+    let heightM;
+
+
+    if (heightUnit === "cm") {
+
+        const heightCm =
+            parseFloat(
+                document.getElementById(
+                    "heightCm"
+                ).value
+            );
+
+
+        if (
+            !Number.isFinite(heightCm) ||
+            heightCm <= 0
+        ) {
+
+            alert(
+                "Please enter a valid height."
+            );
+
+            return;
+
+        }
+
+
+        heightM =
+            heightCm / 100;
+
+    }
+
+
+    else {
+
+        const feet =
+            parseFloat(
+                document.getElementById(
+                    "heightFt"
+                ).value
+            ) || 0;
+
+
+        const inches =
+            parseFloat(
+                document.getElementById(
+                    "heightIn"
+                ).value
+            ) || 0;
+
+
+        if (
+            feet < 0 ||
+            inches < 0 ||
+            inches >= 12 ||
+            (feet === 0 && inches === 0)
+        ) {
+
+            alert(
+                "Please enter a valid height."
+            );
+
+            return;
+
+        }
+
+
+        const totalInches =
+            (feet * 12) + inches;
+
+
+        heightM =
+            totalInches * 0.0254;
+
+    }
+
+
+
+    /* =========================
+       BMI FORMULA
+    ========================= */
+
+    const bmiValue =
+        weightKg /
+        (heightM * heightM);
+
+
+    const bmi =
+        bmiValue.toFixed(1);
+
+
+
+    /* =========================
+       BMI CATEGORY
+    ========================= */
+
+    let category;
+    let statusText;
+    let statusColor;
+
+
+    if (bmiValue < 18.5) {
+
+        category =
+            "Underweight";
+
+        statusText =
+            "Your BMI is below the healthy adult range of 18.5 – 24.9. Your current result falls in the Underweight range.";
+
+        statusColor =
+            "#f6c453";
+
+    }
+
+
+    else if (bmiValue < 25) {
+
+        category =
+            "Normal Weight";
+
+        statusText =
+            "Your BMI is within the healthy adult range of 18.5 – 24.9. Your current result falls in the Normal Weight range.";
+
+        statusColor =
+            "#42c977";
+
+    }
+
+
+    else if (bmiValue < 30) {
+
+        category =
+            "Overweight";
+
+        statusText =
+            "Your BMI is above the healthy adult range of 18.5 – 24.9. Your current result falls in the Overweight range.";
+
+        statusColor =
+            "#f6a94f";
+
+    }
+
+
+    else {
+
+        category =
+            "Obesity";
+
+        statusText =
+            "Your BMI is above the healthy adult range of 18.5 – 24.9. Your current result falls in the Obesity range.";
+
+        statusColor =
+            "#f15b5b";
+
+    }
+
+
+
+    /* =========================
+       MAIN RESULT
+    ========================= */
+
+    document.getElementById(
+        "bmiResult"
+    ).textContent = bmi;
+
+
+    document.getElementById(
+        "bmiCategory"
+    ).textContent = category;
+
+
+    document.getElementById(
+        "bmiCategory"
+    ).style.color = statusColor;
+
+
+
+    /* =========================
+       BMI DETAILS
+    ========================= */
+
+    document.getElementById(
+        "displayBMI"
+    ).textContent = bmi;
+
+
+    document.getElementById(
+        "displayBMICategory"
+    ).textContent = category;
+
+
+
+    /* =========================
+       SCALE VALUES
+    ========================= */
+
+    document.getElementById(
+        "scaleBMI"
+    ).textContent = bmi;
+
+
+    document.getElementById(
+        "markerBMI"
+    ).textContent = bmi;
+
+
+
+    /* =========================
+       SCALE MARKER POSITION
+
+       Scale shown from BMI 10 to 40.
+    ========================= */
+
+    let bmiPosition;
+
+
+    if (bmiValue <= 10) {
+
+        bmiPosition = 2;
+
+    }
+
+    else if (bmiValue >= 40) {
+
+        bmiPosition = 98;
+
+    }
+
+    else {
+
+        bmiPosition =
+            ((bmiValue - 10) / 30) * 96 + 2;
+
+    }
+
+
+    document.getElementById(
+        "bmiMarker"
+    ).style.left =
+        bmiPosition + "%";
+
+
+
+    /* =========================
+       STATUS MESSAGE
+    ========================= */
+
+    const bmiStatusText =
+        document.getElementById(
+            "bmiStatusText"
+        );
+
+
+    bmiStatusText.textContent =
+        statusText;
+
+
+    bmiStatusText.style.color =
+        statusColor;
+
+
+
+    /* =========================
+       SHOW RESULTS
+    ========================= */
+
+    document.getElementById(
+        "bmiResultBox"
+    ).style.display = "block";
+
+
+    document.getElementById(
+        "bmiScaleBox"
+    ).style.display = "block";
+
+
+    document.getElementById(
+        "bmiDetails"
+    ).style.display = "block";
+
+}
+
+
+</script>
+
+</body>
+</html>

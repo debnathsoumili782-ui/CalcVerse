@@ -1,0 +1,128 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CalcVerse — All-in-One Calculator</title>
+
+    <link rel="stylesheet" href="{% static 'calculators/css/style.css' %}">
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="nav-container">
+        <a href="/" class="logo">
+            Calc<span>Verse</span>
+        </a>
+
+        <nav>
+            <a href="#categories">Calculators</a>
+            <a href="#about">About</a>
+        </nav>
+    </div>
+</header>
+
+
+<main>
+
+    <section class="hero">
+        <div class="badge">ALL-IN-ONE CALCULATOR PLATFORM</div>
+
+        <h1>
+            Calculate <span>Anything.</span>
+        </h1>
+
+        <p>
+            From everyday maths to banking, SIP, FD, EMI, CGPA,
+            age, date, time, BMI and much more — all in one place.
+        </p>
+
+        <a href="#categories" class="explore-btn">
+            Explore Calculators ↓
+        </a>
+    </section>
+
+
+    <section class="categories" id="categories">
+
+        <div class="section-heading">
+            <p>EXPLORE TOOLS</p>
+            <h2>Everything You Need to Calculate</h2>
+        </div>
+
+        <div class="category-grid">
+
+            <a href="/category/basic/" class="category-card">
+                <div class="category-icon">🔢</div>
+                <h3>Basic & Everyday</h3>
+                <p>Addition, percentage, ratio, average, discount, profit and loss.</p>
+            </a>
+
+            <a href="/category/scientific/" class="category-card">
+                <div class="category-icon">🔬</div>
+                <h3>Scientific</h3>
+                <p>Advanced mathematics, equations, geometry and scientific calculations.</p>
+            </a>
+
+            <a href="/category/banking-finance/" class="category-card">
+                <div class="category-icon">💰</div>
+                <h3>Banking & Finance</h3>
+                <p>SIP, FD, RD, EMI, interest, CAGR, ROI and investment calculations.</p>
+            </a>
+
+            <a href="{% url 'academic' %}" class="category-card">
+                <div class="icon">🎓</div>
+                <h3>Academic</h3>
+                <p>CGPA, SGPA, DGPA, YGPA and university-specific grade calculations.</p>
+            </a>
+
+            <a href="{% url 'age_date_time' %}" class="category-card">
+                <div class="icon">📅</div>
+                <h3>Age, Date & Time</h3>
+                <p>Age calculator, date difference, day calculator and time calculations.</p>
+            </a>
+
+            <a href="{% url 'health_body' %}" class="category-card">
+                <div class="icon">❤️</div>
+                <h3>Health & Body</h3>
+                <p>BMI, BMR, ideal weight and other useful health calculations.</p>
+            </a>
+
+            <a href="{% url 'unit_converter' %}" class="category-card">
+                <div class="icon">📏</div>
+                <h3>Unit Converter</h3>
+                <p>Length, weight, temperature, area, volume and many more conversions.</p>
+            </a>
+
+            <a href="{% url 'more_tools' %}" class="category-card">
+                <div class="icon">🧮</div>
+                <h3>More Tools</h3>
+                <p>Explore additional useful calculators for work, study and daily life.</p>
+            </a>
+
+        </div>
+    </section>
+
+    <section class="about" id="about">
+        <h2>One Platform. Every Calculation.</h2>
+
+        <p>
+            CalcVerse is designed to bring useful calculators together
+            so students, professionals and everyday users don't need
+            to search different websites for different calculations.
+        </p>
+    </section>
+
+</main>
+
+
+<footer>
+    <p>© 2026 CalcVerse — Calculate Smarter.</p>
+</footer>
+
+</body>
+</html>

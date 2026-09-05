@@ -1,0 +1,115 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Average Calculator | CalcVerse</title>
+
+    <link rel="stylesheet" href="{% static 'calculators/css/calculator.css' %}">
+</head>
+
+<body>
+
+<header class="navbar">
+    <a href="/" class="logo">Calc<span>Verse</span></a>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/category/basic/">Basic Calculators</a>
+    </nav>
+</header>
+
+<main class="calculator-page">
+
+    <div class="calculator-header">
+        <div class="badge">AVERAGE CALCULATOR</div>
+
+        <h1>Calculate the <span>Average.</span></h1>
+
+        <p>Enter numbers separated by commas to find their average instantly.</p>
+    </div>
+
+    <div class="average-box">
+
+        <label for="numbers">Enter Numbers</label>
+
+        <input
+            type="text"
+            id="numbers"
+            placeholder="Example: 10, 20, 30, 40"
+        >
+
+        <button onclick="calculateAverage()" class="average-btn">
+            Calculate Average
+        </button>
+
+        <div id="average-result" class="average-result">
+            Enter numbers to calculate the average.
+        </div>
+
+        <div class="average-details">
+            <div>
+                <span>Total</span>
+                <strong id="total-result">—</strong>
+            </div>
+
+            <div>
+                <span>Numbers</span>
+                <strong id="count-result">—</strong>
+            </div>
+        </div>
+
+    </div>
+
+</main>
+
+<footer>
+    © 2026 CalcVerse — Calculate Smarter.
+</footer>
+
+<script>
+    function calculateAverage() {
+        const input = document.getElementById("numbers").value.trim();
+
+        const resultBox = document.getElementById("average-result");
+        const totalBox = document.getElementById("total-result");
+        const countBox = document.getElementById("count-result");
+
+        if (!input) {
+            resultBox.innerHTML = "Please enter some numbers.";
+            totalBox.textContent = "—";
+            countBox.textContent = "—";
+            return;
+        }
+
+        const values = input
+            .split(",")
+            .map(value => Number(value.trim()));
+
+        if (values.some(value => isNaN(value))) {
+            resultBox.innerHTML =
+                "Please enter valid numbers separated by commas.";
+            return;
+        }
+
+        const total = values.reduce(
+            (sum, value) => sum + value,
+            0
+        );
+
+        const average = total / values.length;
+
+        resultBox.innerHTML = `
+            <strong>Average = ${average}</strong>
+        `;
+
+        totalBox.textContent = total;
+        countBox.textContent = values.length;
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,335 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SIP Calculator | CalcVerse</title>
+
+    <link rel="stylesheet"
+          href="{% static 'calculators/css/calculator.css' %}">
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <a href="/" class="logo">
+        Calc<span>Verse</span>
+    </a>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/category/banking-finance/">Banking & Finance</a>
+    </nav>
+
+</header>
+
+
+<main class="tool-container">
+
+    <!-- HERO -->
+    <div class="tool-hero">
+
+        <span class="hero-badge">
+            BANKING & FINANCE
+        </span>
+
+        <h1>
+            SIP <span>Calculator</span>
+        </h1>
+
+        <p>
+            Calculate the potential growth of your monthly investments.
+        </p>
+
+    </div>
+
+
+    <!-- CALCULATOR -->
+    <div class="tool-card sip-card">
+
+        <!-- MONTHLY INVESTMENT -->
+        <div class="input-group">
+
+            <label for="monthly-investment">
+                Monthly Investment
+            </label>
+
+            <div class="input-prefix">
+                <span>₹</span>
+
+                <input
+                    type="number"
+                    id="monthly-investment"
+                    placeholder="Example: 5000"
+                    min="0"
+                >
+
+            </div>
+
+        </div>
+
+
+        <!-- EXPECTED RETURN -->
+        <div class="input-group">
+
+            <label for="annual-return">
+                Expected Annual Return
+            </label>
+
+            <div class="input-suffix">
+
+                <input
+                    type="number"
+                    id="annual-return"
+                    placeholder="Example: 12"
+                    min="0"
+                    step="0.1"
+                >
+
+                <span>%</span>
+
+            </div>
+
+        </div>
+
+
+        <!-- INVESTMENT PERIOD -->
+        <div class="input-group">
+
+            <label for="investment-years">
+                Investment Duration
+            </label>
+
+            <div class="input-suffix">
+
+                <input
+                    type="number"
+                    id="investment-years"
+                    placeholder="Example: 10"
+                    min="1"
+                    step="1"
+                >
+
+                <span>Years</span>
+
+            </div>
+
+        </div>
+
+
+        <!-- CALCULATE -->
+        <button
+            class="calculate-btn"
+            onclick="calculateSIP()"
+        >
+            Calculate SIP
+        </button>
+
+
+        <!-- RESULTS -->
+        <div class="sip-results">
+
+            <div class="result-item">
+
+                <span class="result-label">
+                    Total Invested
+                </span>
+
+                <strong id="invested-amount">
+                    ₹0
+                </strong>
+
+            </div>
+
+
+            <div class="result-item">
+
+                <span class="result-label">
+                    Estimated Returns
+                </span>
+
+                <strong id="estimated-returns">
+                    ₹0
+                </strong>
+
+            </div>
+
+
+            <div class="result-item total-result">
+
+                <span class="result-label">
+                    Total Value
+                </span>
+
+                <strong id="total-value">
+                    ₹0
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- CALCULATION DETAILS -->
+        <div class="solution-box">
+
+            <h2>Calculation Details</h2>
+
+            <div id="solution-content">
+
+                <p class="empty-solution">
+                    Enter your investment details to calculate your SIP returns.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script>
+
+function formatCurrency(amount) {
+    return new Intl.NumberFormat("en-IN", {
+        style: "currency",
+        currency: "INR",
+        maximumFractionDigits: 0
+    }).format(amount);
+}
+
+
+function calculateSIP() {
+
+    const monthlyInvestment = parseFloat(
+        document.getElementById("monthly-investment").value
+    );
+
+    const annualReturn = parseFloat(
+        document.getElementById("annual-return").value
+    );
+
+    const years = parseFloat(
+        document.getElementById("investment-years").value
+    );
+
+
+    /* VALIDATION */
+
+    if (
+        isNaN(monthlyInvestment) ||
+        isNaN(annualReturn) ||
+        isNaN(years) ||
+        monthlyInvestment <= 0 ||
+        annualReturn < 0 ||
+        years <= 0
+    ) {
+
+        document.getElementById("solution-content").innerHTML = `
+            <p class="empty-solution">
+                Please enter valid investment details.
+            </p>
+        `;
+
+        return;
+    }
+
+
+    /* SIP CALCULATION */
+
+    const monthlyRate = annualReturn / 12 / 100;
+
+    const totalMonths = years * 12;
+
+    let maturityValue;
+
+    if (monthlyRate === 0) {
+
+        maturityValue = monthlyInvestment * totalMonths;
+
+    } else {
+
+        maturityValue =
+            monthlyInvestment *
+            (
+                (
+                    Math.pow(1 + monthlyRate, totalMonths) - 1
+                ) /
+                monthlyRate
+            ) *
+            (1 + monthlyRate);
+    }
+
+
+    /* TOTAL INVESTMENT */
+
+    const investedAmount =
+        monthlyInvestment * totalMonths;
+
+
+    /* ESTIMATED RETURNS */
+
+    const estimatedReturns =
+        maturityValue - investedAmount;
+
+
+    /* UPDATE RESULTS */
+
+    document.getElementById("invested-amount").textContent =
+        formatCurrency(investedAmount);
+
+    document.getElementById("estimated-returns").textContent =
+        formatCurrency(estimatedReturns);
+
+    document.getElementById("total-value").textContent =
+        formatCurrency(maturityValue);
+
+
+    /* CALCULATION DETAILS */
+
+    document.getElementById("solution-content").innerHTML = `
+
+        <div class="step-item">
+            <strong>Monthly Investment</strong>
+            <p>${formatCurrency(monthlyInvestment)} per month</p>
+        </div>
+
+        <div class="step-item">
+            <strong>Investment Period</strong>
+            <p>${years} years (${totalMonths} months)</p>
+        </div>
+
+        <div class="step-item">
+            <strong>Expected Annual Return</strong>
+            <p>${annualReturn}% per year</p>
+        </div>
+
+        <div class="step-item">
+            <strong>Total Invested Amount</strong>
+            <p>${formatCurrency(investedAmount)}</p>
+        </div>
+
+        <div class="step-item">
+            <strong>Estimated Returns</strong>
+            <p>${formatCurrency(estimatedReturns)}</p>
+        </div>
+
+        <div class="step-item">
+            <strong>Final SIP Value</strong>
+            <p>${formatCurrency(maturityValue)}</p>
+        </div>
+
+    `;
+}
+
+</script>
+
+</body>
+</html>

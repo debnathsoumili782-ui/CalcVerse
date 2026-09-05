@@ -1,0 +1,379 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Day Calculator — CalcVerse</title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'calculators/css/style.css' %}"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- NAVBAR -->
+
+<header class="navbar">
+
+    <div class="nav-container">
+
+        <a href="/" class="logo">
+            Calc<span>Verse</span>
+        </a>
+
+        <nav>
+
+            <a href="/">
+                Home
+            </a>
+
+            <a href="{% url 'age_date_time' %}">
+                Age, Date & Time
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+
+<main>
+
+
+    <!-- HERO -->
+
+    <section class="hero calculator-hero">
+
+        <div class="badge">
+            DAY CALCULATOR
+        </div>
+
+        <h1>
+            Find the <span>Day</span>
+        </h1>
+
+        <p>
+            Enter any date to find the exact day
+            of the week.
+        </p>
+
+    </section>
+
+
+
+    <!-- CALCULATOR -->
+
+    <section class="calculator-section">
+
+        <div class="banking-calculator-card">
+
+
+            <div class="academic-heading">
+
+                <h2>
+                    Enter a Date
+                </h2>
+
+                <p>
+                    Select any date and find which day
+                    of the week it falls on.
+                </p>
+
+            </div>
+
+
+            <!-- DATE INPUT -->
+
+            <div class="input-group">
+
+                <label for="selectedDate">
+                    Select Date
+                </label>
+
+                <input
+                    type="date"
+                    id="selectedDate"
+                >
+
+            </div>
+
+
+            <!-- CALCULATE BUTTON -->
+
+            <button
+                type="button"
+                class="calculate-btn"
+                onclick="calculateDay()"
+            >
+                Find Day
+            </button>
+
+
+            <!-- RESULT -->
+
+            <div
+                class="result-box"
+                id="dayResultBox"
+                style="display: none;"
+            >
+
+                <span>
+                    DAY OF THE WEEK
+                </span>
+
+                <strong id="dayResult">
+                    Monday
+                </strong>
+
+            </div>
+
+
+            <!-- DETAILS -->
+
+            <div
+                class="solution-box"
+                id="dayDetails"
+                style="display: none;"
+            >
+
+                <h2>
+                    Date Details
+                </h2>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Selected Date
+                    </strong>
+
+                    <p id="formattedDate">
+                        -
+                    </p>
+
+                </div>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Day
+                    </strong>
+
+                    <p id="dayName">
+                        -
+                    </p>
+
+                </div>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Month
+                    </strong>
+
+                    <p id="monthName">
+                        -
+                    </p>
+
+                </div>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Year
+                    </strong>
+
+                    <p id="yearValue">
+                        -
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <p>
+        © 2026 CalcVerse — Calculate Smarter.
+    </p>
+
+</footer>
+
+
+
+<script>
+
+function calculateDay() {
+
+    const dateValue =
+        document.getElementById(
+            "selectedDate"
+        ).value;
+
+
+    if (!dateValue) {
+
+        alert(
+            "Please select a date."
+        );
+
+        return;
+
+    }
+
+
+    /*
+        T00:00:00 ব্যবহার করছি যাতে timezone-এর
+        কারণে date একদিন এদিক-ওদিক না হয়।
+    */
+
+    const selectedDate =
+        new Date(
+            dateValue + "T00:00:00"
+        );
+
+
+    const days = [
+
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday"
+
+    ];
+
+
+    const months = [
+
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+
+    ];
+
+
+    const day =
+        days[
+            selectedDate.getDay()
+        ];
+
+
+    const month =
+        months[
+            selectedDate.getMonth()
+        ];
+
+
+    const date =
+        selectedDate.getDate();
+
+
+    const year =
+        selectedDate.getFullYear();
+
+
+    /*
+        Result
+    */
+
+    document.getElementById(
+        "dayResult"
+    ).textContent =
+        day;
+
+
+    /*
+        Date details
+    */
+
+    document.getElementById(
+        "formattedDate"
+    ).textContent =
+        `${date} ${month} ${year}`;
+
+
+    document.getElementById(
+        "dayName"
+    ).textContent =
+        day;
+
+
+    document.getElementById(
+        "monthName"
+    ).textContent =
+        month;
+
+
+    document.getElementById(
+        "yearValue"
+    ).textContent =
+        year;
+
+
+    /*
+        Show result sections
+    */
+
+    document.getElementById(
+        "dayResultBox"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "dayDetails"
+    ).style.display =
+        "block";
+
+}
+
+</script>
+
+
+</body>
+
+</html>

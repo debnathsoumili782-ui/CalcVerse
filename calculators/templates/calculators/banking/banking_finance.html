@@ -1,0 +1,129 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Banking & Finance Calculators | CalcVerse</title>
+
+    <link rel="stylesheet"
+          href="{% static 'calculators/css/style.css' %}">
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="nav-container">
+
+        <a href="/" class="logo">
+            Calc<span>Verse</span>
+        </a>
+
+        <nav>
+            <a href="/">Home</a>
+            <a href="#calculators">Calculators</a>
+        </nav>
+
+    </div>
+</header>
+
+
+<main>
+
+    <section class="hero">
+
+        <div class="badge">
+            BANKING & FINANCE
+        </div>
+
+        <h1>
+            Money <span>Made Clear.</span>
+        </h1>
+
+        <p>
+            Calculate investments, loans, interest and financial growth
+            with simple and easy-to-use calculators.
+        </p>
+
+    </section>
+
+
+    <section class="categories" id="calculators">
+
+        <div class="section-heading">
+            <p>FINANCIAL TOOLS</p>
+            <h2>Choose a Calculator</h2>
+        </div>
+
+
+        <div class="category-grid">
+
+            <a href="{% url 'sip_calculator' %}" class="category-card">
+                <div class="category-icon">📈</div>
+                <h3>SIP Calculator</h3>
+                <p>Calculate the future value of your monthly investments.</p>
+            </a>
+
+
+            <a href="{% url 'fd_calculator' %}" class="category-card">
+                <div class="category-icon">🏦</div>
+                <h3>FD Calculator</h3>
+                <p>Calculate your fixed deposit maturity amount and returns.</p>
+            </a>
+
+
+            <a href="{% url 'rd_calculator' %}" class="category-card">
+                <div class="category-icon">📅</div>
+                <h3>RD Calculator</h3>
+                <p>Calculate your recurring deposit maturity amount and interest earned.</p>
+            </a>
+
+
+            <a href="{% url 'emi_calculator' %}" class="category-card">
+                <div class="category-icon">🏠</div>
+                <h3>EMI Calculator</h3>
+                <p>Calculate monthly EMI, total interest and total loan payment.</p>
+            </a>
+
+            <a href="{% url 'simple_interest_calculator' %}" class="category-card">
+                <div class="category-icon">%</div>
+                <h3>Simple Interest</h3>
+                <p>Calculate simple interest and the total amount on your investment or loan.</p>
+            </a>
+
+
+            <a href="{% url 'compound_interest_calculator' %}" class="category-card">
+                <div class="category-icon">📊</div>
+                <h3>Compound Interest</h3>
+                <p>Calculate compound interest and maturity amount.</p>
+            </a>
+
+
+            <a href="{% url 'cagr_calculator' %}" class="category-card">
+                <div class="category-icon">📉</div>
+                <h3>CAGR Calculator</h3>
+                <p>Calculate the Compound Annual Growth Rate of your investment.</p>
+            </a>
+
+
+            <a href="{% url 'roi_calculator' %}" class="category-card">
+                <div class="calculator-icon">💰</div>
+                <h3>ROI Calculator</h3>
+                <p>Calculate your Return on Investment and measure your investment performance.</p>
+            </a>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer>
+    <p>© 2026 CalcVerse — Calculate Smarter.</p>
+</footer>
+
+</body>
+</html>

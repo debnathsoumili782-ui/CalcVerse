@@ -1,0 +1,880 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Calorie Calculator | CalcVerse</title>
+
+    <link rel="stylesheet" href="{% static 'calculators/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'calculators/css/calorie.css' %}">
+
+</head>
+
+<body>
+
+    <!-- =========================
+         NAVBAR
+    ========================== -->
+
+    <nav class="navbar">
+        <div class="navbar-container">
+
+            <a href="/" class="logo">
+                Calc<span>Verse</span>
+            </a>
+
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/health/">Health & Body</a>
+            </div>
+
+        </div>
+    </nav>
+
+
+    <!-- =========================
+         MAIN PAGE
+    ========================== -->
+
+    <main class="calorie-page">
+
+
+        <!-- =========================
+             HERO
+        ========================== -->
+
+        <section class="calculator-hero">
+
+            <div class="section-tag">
+                CALORIE CALCULATOR
+            </div>
+
+            <h1>
+                Calculate Your <span>Calories</span>
+            </h1>
+
+            <p>
+                Estimate how many calories your body needs each day.
+            </p>
+
+        </section>
+
+
+        <!-- =========================
+             CALCULATOR CARD
+        ========================== -->
+
+        <section class="calorie-calculator-card">
+
+            <div class="calculator-heading">
+                <h2>Enter Your Details</h2>
+                <p>
+                    Provide your information to estimate your daily calorie needs.
+                </p>
+            </div>
+
+
+            <!-- =========================
+                 GENDER
+            ========================== -->
+
+            <div class="form-group">
+
+                <label>Gender</label>
+
+                <div class="gender-toggle">
+                    <button
+                        type="button"
+                        class="gender-btn active"
+                        data-gender="male"
+                    >
+                        Male
+                    </button>
+
+                    <button
+                        type="button"
+                        class="gender-btn"
+                        data-gender="female"
+                    >
+                        Female
+                    </button>
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 AGE
+            ========================== -->
+
+            <div class="form-group">
+
+                <label for="age">Age</label>
+
+                <div class="input-wrapper">
+                    <input
+                        type="number"
+                        id="age"
+                        placeholder="Enter your age"
+                        min="1"
+                        max="120"
+                    >
+
+                    <span>years</span>
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 HEIGHT UNIT
+            ========================== -->
+
+            <div class="form-group">
+
+                <label>Height Unit</label>
+
+                <div class="unit-toggle">
+                    <button
+                        type="button"
+                        class="unit-btn active"
+                        data-height-unit="cm"
+                    >
+                        Centimeters
+                    </button>
+
+                    <button
+                        type="button"
+                        class="unit-btn"
+                        data-height-unit="ft"
+                    >
+                        Feet & Inches
+                    </button>
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 HEIGHT CM
+            ========================== -->
+
+            <div
+                class="form-group"
+                id="heightCmGroup"
+            >
+
+                <label for="heightCm">
+                    Height
+                </label>
+
+                <div class="input-wrapper">
+                    <input
+                        type="number"
+                        id="heightCm"
+                        placeholder="Enter your height"
+                        min="1"
+                        step="0.1"
+                    >
+
+                    <span>cm</span>
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 HEIGHT FEET + INCHES
+            ========================== -->
+
+            <div
+                class="form-group hidden"
+                id="heightFtGroup"
+            >
+
+                <label>
+                    Height
+                </label>
+
+                <div class="double-input">
+
+                    <div class="input-wrapper">
+                        <input
+                            type="number"
+                            id="heightFeet"
+                            placeholder="Feet"
+                            min="1"
+                            max="8"
+                        >
+
+                        <span>ft</span>
+                    </div>
+
+
+                    <div class="input-wrapper">
+                        <input
+                            type="number"
+                            id="heightInches"
+                            placeholder="Inches"
+                            min="0"
+                            max="11.9"
+                            step="0.1"
+                        >
+
+                        <span>in</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 WEIGHT UNIT
+            ========================== -->
+
+            <div class="form-group">
+
+                <label>Weight Unit</label>
+
+                <div class="unit-toggle">
+                    <button
+                        type="button"
+                        class="weight-unit-btn active"
+                        data-weight-unit="kg"
+                    >
+                        Kilograms
+                    </button>
+
+                    <button
+                        type="button"
+                        class="weight-unit-btn"
+                        data-weight-unit="lb"
+                    >
+                        Pounds
+                    </button>
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 WEIGHT
+            ========================== -->
+
+            <div class="form-group">
+
+                <label for="weight">
+                    Weight
+                </label>
+
+                <div class="input-wrapper">
+
+                    <input
+                        type="number"
+                        id="weight"
+                        placeholder="Enter your weight"
+                        min="1"
+                        step="0.1"
+                    >
+
+                    <span id="weightUnitText">kg</span>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 ACTIVITY LEVEL
+            ========================== -->
+
+            <div class="form-group">
+
+                <label for="activity">
+                    Activity Level
+                </label>
+
+                <div class="select-wrapper">
+
+                    <select id="activity">
+
+                        <option value="">
+                            Select your activity level
+                        </option>
+
+                        <option value="1.2">
+                            Sedentary — Little or no exercise
+                        </option>
+
+                        <option value="1.375">
+                            Lightly Active — Exercise 1–3 days/week
+                        </option>
+
+                        <option value="1.55">
+                            Moderately Active — Exercise 3–5 days/week
+                        </option>
+
+                        <option value="1.725">
+                            Very Active — Exercise 6–7 days/week
+                        </option>
+
+                        <option value="1.9">
+                            Extra Active — Very intense exercise
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 CALCULATE BUTTON
+            ========================== -->
+
+            <button
+                type="button"
+                class="calculate-btn"
+                id="calculateBtn"
+            >
+                Calculate Calories
+            </button>
+
+
+            <!-- =========================
+                 ERROR
+            ========================== -->
+
+            <p
+                class="error-message"
+                id="errorMessage"
+            ></p>
+
+
+            <!-- =========================
+                 RESULT
+            ========================== -->
+
+            <div
+                class="calorie-result hidden"
+                id="calorieResult"
+            >
+
+                <div class="result-label">
+                    YOUR DAILY CALORIE NEED
+                </div>
+
+                <div
+                    class="calorie-value"
+                    id="calorieValue"
+                >
+                    0 kcal
+                </div>
+
+                <div class="calorie-category">
+                    Calories needed to maintain your current weight
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 CALORIE DETAILS
+            ========================== -->
+
+            <div
+                class="calorie-details hidden"
+                id="calorieDetails"
+            >
+
+                <h3>Your Daily Calorie Goals</h3>
+
+
+                <div class="detail-box">
+
+                    <span class="detail-title">
+                        Weight Loss
+                    </span>
+
+                    <strong id="weightLossCalories">
+                        0 kcal/day
+                    </strong>
+
+                    <small>
+                        Approximately 500 fewer calories per day
+                    </small>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <span class="detail-title">
+                        Maintain Weight
+                    </span>
+
+                    <strong id="maintainCalories">
+                        0 kcal/day
+                    </strong>
+
+                    <small>
+                        Estimated calories to maintain your current weight
+                    </small>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <span class="detail-title">
+                        Weight Gain
+                    </span>
+
+                    <strong id="weightGainCalories">
+                        0 kcal/day
+                    </strong>
+
+                    <small>
+                        Approximately 500 additional calories per day
+                    </small>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================== -->
+
+    <script>
+
+        /* =========================================
+           VARIABLES
+        ========================================= */
+
+        let selectedGender = "male";
+        let selectedHeightUnit = "cm";
+        let selectedWeightUnit = "kg";
+
+
+        const genderButtons =
+            document.querySelectorAll(".gender-btn");
+
+        const heightUnitButtons =
+            document.querySelectorAll(".unit-btn");
+
+        const weightUnitButtons =
+            document.querySelectorAll(".weight-unit-btn");
+
+
+        const heightCmGroup =
+            document.getElementById("heightCmGroup");
+
+        const heightFtGroup =
+            document.getElementById("heightFtGroup");
+
+        const weightUnitText =
+            document.getElementById("weightUnitText");
+
+
+        const calculateBtn =
+            document.getElementById("calculateBtn");
+
+        const errorMessage =
+            document.getElementById("errorMessage");
+
+
+        const calorieResult =
+            document.getElementById("calorieResult");
+
+        const calorieDetails =
+            document.getElementById("calorieDetails");
+
+
+        /* =========================================
+           GENDER SELECTION
+        ========================================= */
+
+        genderButtons.forEach(button => {
+
+            button.addEventListener("click", () => {
+
+                genderButtons.forEach(btn => {
+                    btn.classList.remove("active");
+                });
+
+                button.classList.add("active");
+
+                selectedGender =
+                    button.dataset.gender;
+
+            });
+
+        });
+
+
+        /* =========================================
+           HEIGHT UNIT SELECTION
+        ========================================= */
+
+        heightUnitButtons.forEach(button => {
+
+            button.addEventListener("click", () => {
+
+                heightUnitButtons.forEach(btn => {
+                    btn.classList.remove("active");
+                });
+
+                button.classList.add("active");
+
+                selectedHeightUnit =
+                    button.dataset.heightUnit;
+
+
+                if (selectedHeightUnit === "cm") {
+
+                    heightCmGroup.classList.remove("hidden");
+
+                    heightFtGroup.classList.add("hidden");
+
+                }
+
+                else {
+
+                    heightCmGroup.classList.add("hidden");
+
+                    heightFtGroup.classList.remove("hidden");
+
+                }
+
+            });
+
+        });
+
+
+        /* =========================================
+           WEIGHT UNIT SELECTION
+        ========================================= */
+
+        weightUnitButtons.forEach(button => {
+
+            button.addEventListener("click", () => {
+
+                weightUnitButtons.forEach(btn => {
+                    btn.classList.remove("active");
+                });
+
+                button.classList.add("active");
+
+                selectedWeightUnit =
+                    button.dataset.weightUnit;
+
+
+                if (selectedWeightUnit === "kg") {
+
+                    weightUnitText.textContent = "kg";
+
+                }
+
+                else {
+
+                    weightUnitText.textContent = "lb";
+
+                }
+
+            });
+
+        });
+
+
+        /* =========================================
+           CALCULATE CALORIES
+        ========================================= */
+
+        calculateBtn.addEventListener("click", () => {
+
+
+            errorMessage.textContent = "";
+
+            calorieResult.classList.add("hidden");
+
+            calorieDetails.classList.add("hidden");
+
+
+            /* -------------------------
+               GET AGE
+            ------------------------- */
+
+            const age =
+                parseFloat(
+                    document.getElementById("age").value
+                );
+
+
+            /* -------------------------
+               GET WEIGHT
+            ------------------------- */
+
+            let weight =
+                parseFloat(
+                    document.getElementById("weight").value
+                );
+
+
+            /* -------------------------
+               GET ACTIVITY
+            ------------------------- */
+
+            const activity =
+                parseFloat(
+                    document.getElementById("activity").value
+                );
+
+
+            /* -------------------------
+               VALIDATE BASIC INPUTS
+            ------------------------- */
+
+            if (
+                !age ||
+                age < 1 ||
+                age > 120
+            ) {
+
+                errorMessage.textContent =
+                    "Please enter a valid age.";
+
+                return;
+
+            }
+
+
+            if (
+                !weight ||
+                weight <= 0
+            ) {
+
+                errorMessage.textContent =
+                    "Please enter a valid weight.";
+
+                return;
+
+            }
+
+
+            if (!activity) {
+
+                errorMessage.textContent =
+                    "Please select your activity level.";
+
+                return;
+
+            }
+
+
+            /* -------------------------
+               GET HEIGHT
+            ------------------------- */
+
+            let heightCm;
+
+
+            if (
+                selectedHeightUnit === "cm"
+            ) {
+
+                heightCm =
+                    parseFloat(
+                        document.getElementById("heightCm").value
+                    );
+
+
+                if (
+                    !heightCm ||
+                    heightCm <= 0
+                ) {
+
+                    errorMessage.textContent =
+                        "Please enter a valid height.";
+
+                    return;
+
+                }
+
+            }
+
+
+            else {
+
+                const feet =
+                    parseFloat(
+                        document.getElementById("heightFeet").value
+                    );
+
+                const inches =
+                    parseFloat(
+                        document.getElementById("heightInches").value
+                    ) || 0;
+
+
+                if (
+                    !feet ||
+                    feet <= 0 ||
+                    inches < 0 ||
+                    inches >= 12
+                ) {
+
+                    errorMessage.textContent =
+                        "Please enter a valid height.";
+
+                    return;
+
+                }
+
+
+                const totalInches =
+                    (feet * 12) + inches;
+
+
+                heightCm =
+                    totalInches * 2.54;
+
+            }
+
+
+            /* -------------------------
+               CONVERT WEIGHT TO KG
+            ------------------------- */
+
+            if (
+                selectedWeightUnit === "lb"
+            ) {
+
+                weight =
+                    weight * 0.45359237;
+
+            }
+
+
+            /* -------------------------
+               Mifflin-St Jeor BMR
+            ------------------------- */
+
+            let bmr;
+
+
+            if (
+                selectedGender === "male"
+            ) {
+
+                bmr =
+                    (10 * weight) +
+                    (6.25 * heightCm) -
+                    (5 * age) +
+                    5;
+
+            }
+
+
+            else {
+
+                bmr =
+                    (10 * weight) +
+                    (6.25 * heightCm) -
+                    (5 * age) -
+                    161;
+
+            }
+
+
+            /* -------------------------
+               DAILY CALORIES
+            ------------------------- */
+
+            const maintenanceCalories =
+                Math.round(
+                    bmr * activity
+                );
+
+
+            const weightLossCalories =
+                Math.max(
+                    0,
+                    maintenanceCalories - 500
+                );
+
+
+            const weightGainCalories =
+                maintenanceCalories + 500;
+
+
+            /* -------------------------
+               DISPLAY RESULT
+            ------------------------- */
+
+            document.getElementById(
+                "calorieValue"
+            ).textContent =
+                maintenanceCalories.toLocaleString() +
+                " kcal";
+
+
+            document.getElementById(
+                "weightLossCalories"
+            ).textContent =
+                weightLossCalories.toLocaleString() +
+                " kcal/day";
+
+
+            document.getElementById(
+                "maintainCalories"
+            ).textContent =
+                maintenanceCalories.toLocaleString() +
+                " kcal/day";
+
+
+            document.getElementById(
+                "weightGainCalories"
+            ).textContent =
+                weightGainCalories.toLocaleString() +
+                " kcal/day";
+
+
+            /* -------------------------
+               SHOW RESULTS
+            ------------------------- */
+
+            calorieResult.classList.remove("hidden");
+
+            calorieDetails.classList.remove("hidden");
+
+
+            /* -------------------------
+               SCROLL TO RESULT
+            ------------------------- */
+
+            setTimeout(() => {
+
+                calorieResult.scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest"
+                });
+
+            }, 100);
+
+        });
+
+    </script>
+
+</body>
+</html>

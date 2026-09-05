@@ -1,0 +1,429 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Compound Interest Calculator — CalcVerse</title>
+
+    <link rel="stylesheet"
+          href="{% static 'calculators/css/style.css' %}">
+</head>
+
+
+<body>
+
+
+<header class="navbar">
+
+    <div class="nav-container">
+
+        <a href="/" class="logo">
+            Calc<span>Verse</span>
+        </a>
+
+
+        <nav>
+
+            <a href="/">Home</a>
+
+            <a href="{% url 'banking_finance' %}">
+                Calculators
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+
+<main>
+
+
+    <!-- HERO -->
+
+    <section class="hero calculator-hero">
+
+        <div class="badge">
+            BANKING & FINANCE
+        </div>
+
+
+        <h1>
+            Compound Interest
+            <span>Calculator</span>
+        </h1>
+
+
+        <p>
+            Calculate compound interest and the total maturity amount
+            on your investment.
+        </p>
+
+    </section>
+
+
+
+    <!-- CALCULATOR -->
+
+    <section class="calculator-section">
+
+
+        <div class="banking-calculator-card">
+
+
+            <!-- Principal Amount -->
+
+            <div class="input-group">
+
+                <label for="principal">
+                    Principal Amount (₹)
+                </label>
+
+                <input
+                    type="number"
+                    id="principal"
+                    placeholder="Enter principal amount"
+                >
+
+            </div>
+
+
+
+            <!-- Interest Rate -->
+
+            <div class="input-group">
+
+                <label for="interestRate">
+                    Annual Interest Rate (%)
+                </label>
+
+                <input
+                    type="number"
+                    id="interestRate"
+                    placeholder="Enter annual interest rate"
+                    step="0.01"
+                >
+
+            </div>
+
+
+
+            <!-- Investment Period -->
+
+            <div class="input-group">
+
+                <label for="years">
+                    Investment Period (Years)
+                </label>
+
+                <input
+                    type="number"
+                    id="years"
+                    placeholder="Enter investment period"
+                    step="0.5"
+                >
+
+            </div>
+
+
+
+            <!-- Compounding Frequency -->
+
+            <div class="input-group">
+
+                <label for="frequency">
+                    Compounding Frequency
+                </label>
+
+                <select id="frequency">
+
+                    <option value="">
+                        Select compounding frequency
+                    </option>
+
+                    <option value="1">
+                        Annually
+                    </option>
+
+                    <option value="2">
+                        Half-Yearly
+                    </option>
+
+                    <option value="4">
+                        Quarterly
+                    </option>
+
+                    <option value="12">
+                        Monthly
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <!-- BUTTON -->
+
+            <button
+                type="button"
+                class="calculate-btn"
+                onclick="calculateCompoundInterest()"
+            >
+                Calculate Interest
+            </button>
+
+
+
+            <!-- RESULT -->
+
+            <div
+                class="result-box"
+                id="resultBox"
+                style="display: none;"
+            >
+
+                <span>
+                    MATURITY AMOUNT
+                </span>
+
+
+                <strong id="maturityAmount">
+                    ₹0.00
+                </strong>
+
+            </div>
+
+
+
+            <!-- CALCULATION DETAILS -->
+
+            <div
+                class="solution-box"
+                id="solutionBox"
+                style="display: none;"
+            >
+
+                <h2>
+                    Compound Interest Calculation
+                </h2>
+
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Principal Amount
+                    </strong>
+
+                    <p id="principalResult">
+                        ₹0.00
+                    </p>
+
+                </div>
+
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Compound Interest Earned
+                    </strong>
+
+                    <p id="interestEarned">
+                        ₹0.00
+                    </p>
+
+                </div>
+
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Maturity Amount
+                    </strong>
+
+                    <p id="finalMaturity">
+                        ₹0.00
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
+
+
+<footer>
+
+    <p>
+        © 2026 CalcVerse — Calculate Smarter.
+    </p>
+
+</footer>
+
+
+
+<script>
+
+
+function calculateCompoundInterest() {
+
+
+    const principal = parseFloat(
+        document.getElementById("principal").value
+    );
+
+
+    const annualRate = parseFloat(
+        document.getElementById("interestRate").value
+    );
+
+
+    const years = parseFloat(
+        document.getElementById("years").value
+    );
+
+
+    const frequency = parseFloat(
+        document.getElementById("frequency").value
+    );
+
+
+
+    // Validation
+
+    if (
+        isNaN(principal) ||
+        isNaN(annualRate) ||
+        isNaN(years) ||
+        isNaN(frequency) ||
+        principal <= 0 ||
+        annualRate < 0 ||
+        years <= 0
+    ) {
+
+        alert(
+            "Please enter all valid values."
+        );
+
+        return;
+
+    }
+
+
+
+    /*
+        Compound Interest Formula:
+
+        A = P(1 + r/n)^(nt)
+
+        P = Principal
+        r = Annual interest rate
+        n = Compounding frequency
+        t = Time in years
+    */
+
+
+    const rate = annualRate / 100;
+
+
+    const maturityAmount =
+        principal *
+        Math.pow(
+            1 + (rate / frequency),
+            frequency * years
+        );
+
+
+    const compoundInterest =
+        maturityAmount - principal;
+
+
+
+    // Currency Format
+
+    function formatCurrency(amount) {
+
+        return "₹" +
+            amount.toLocaleString(
+                "en-IN",
+                {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }
+            );
+
+    }
+
+
+
+    // Show Result
+
+    document.getElementById(
+        "maturityAmount"
+    ).textContent =
+        formatCurrency(maturityAmount);
+
+
+
+    document.getElementById(
+        "principalResult"
+    ).textContent =
+        formatCurrency(principal);
+
+
+
+    document.getElementById(
+        "interestEarned"
+    ).textContent =
+        formatCurrency(compoundInterest);
+
+
+
+    document.getElementById(
+        "finalMaturity"
+    ).textContent =
+        formatCurrency(maturityAmount);
+
+
+
+    // Show hidden sections only after calculation
+
+    document.getElementById(
+        "resultBox"
+    ).style.display = "block";
+
+
+    document.getElementById(
+        "solutionBox"
+    ).style.display = "block";
+
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>

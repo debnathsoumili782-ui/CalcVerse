@@ -1,0 +1,664 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>CGPA Calculator — CalcVerse</title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'calculators/css/style.css' %}"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- NAVBAR -->
+
+<header class="navbar">
+
+    <div class="nav-container">
+
+        <a href="/" class="logo">
+            Calc<span>Verse</span>
+        </a>
+
+        <nav>
+            <a href="/">Home</a>
+
+            <a href="{% url 'academic' %}">
+                Academic
+            </a>
+        </nav>
+
+    </div>
+
+</header>
+
+
+
+<main>
+
+
+    <!-- HERO -->
+
+    <section class="hero calculator-hero">
+
+        <div class="badge">
+            ACADEMIC
+        </div>
+
+        <h1>
+            CGPA <span>Calculator</span>
+        </h1>
+
+        <p>
+            Enter your semester-wise SGPA and total credits
+            to calculate your overall CGPA.
+        </p>
+
+    </section>
+
+
+
+    <!-- CALCULATOR -->
+
+    <section class="calculator-section">
+
+        <div class="banking-calculator-card">
+
+
+            <!-- SELECTED UNIVERSITY -->
+
+            <div class="input-group">
+
+                <label>
+                    Selected University
+                </label>
+
+                <input
+                    type="text"
+                    id="selectedUniversity"
+                    readonly
+                >
+
+            </div>
+
+
+            <!-- DEGREE -->
+
+            <div class="input-group">
+
+                <label for="degree">
+                    Select Degree / Course
+                </label>
+
+                <select id="degree">
+
+                    <option value="">
+                        Select your degree
+                    </option>
+
+                    <option value="btech">
+                        B.Tech
+                    </option>
+
+                    <option value="be">
+                        B.E.
+                    </option>
+
+                    <option value="bsc">
+                        B.Sc
+                    </option>
+
+                    <option value="ba">
+                        B.A.
+                    </option>
+
+                    <option value="bcom">
+                        B.Com
+                    </option>
+
+                    <option value="bba">
+                        BBA
+                    </option>
+
+                    <option value="bca">
+                        BCA
+                    </option>
+
+                    <option value="mtech">
+                        M.Tech
+                    </option>
+
+                    <option value="msc">
+                        M.Sc
+                    </option>
+
+                    <option value="ma">
+                        M.A.
+                    </option>
+
+                    <option value="mcom">
+                        M.Com
+                    </option>
+
+                    <option value="mba">
+                        MBA
+                    </option>
+
+                    <option value="mca">
+                        MCA
+                    </option>
+
+                    <option value="diploma">
+                        Diploma
+                    </option>
+
+                    <option value="other">
+                        Other
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- SEMESTER COUNT -->
+
+            <div class="input-group">
+
+                <label for="semesterCount">
+                    Number of Semesters Completed
+                </label>
+
+                <input
+                    type="number"
+                    id="semesterCount"
+                    placeholder="Enter completed semesters"
+                    min="1"
+                    max="20"
+                >
+
+            </div>
+
+
+            <!-- CONTINUE -->
+
+            <button
+                type="button"
+                class="calculate-btn"
+                onclick="generateSemesterInputs()"
+            >
+                Continue
+            </button>
+
+
+
+            <!-- SEMESTER INPUTS -->
+
+            <div id="semesterContainer"></div>
+
+
+
+            <!-- CALCULATE -->
+
+            <button
+                type="button"
+                class="calculate-btn"
+                id="calculateButton"
+                onclick="calculateCGPA()"
+                style="display: none;"
+            >
+                Calculate CGPA
+            </button>
+
+
+
+            <!-- RESULT -->
+
+            <div
+                class="result-box"
+                id="resultBox"
+                style="display: none;"
+            >
+
+                <span>
+                    YOUR CGPA
+                </span>
+
+                <strong id="cgpaResult">
+                    0.00
+                </strong>
+
+            </div>
+
+
+
+            <!-- DETAILS -->
+
+            <div
+                class="solution-box"
+                id="solutionBox"
+                style="display: none;"
+            >
+
+                <h2>
+                    CGPA Calculation Details
+                </h2>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Total Completed Semesters
+                    </strong>
+
+                    <p id="completedSemesters">
+                        0
+                    </p>
+
+                </div>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Total Credits
+                    </strong>
+
+                    <p id="totalCredits">
+                        0
+                    </p>
+
+                </div>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Total Weighted Grade Points
+                    </strong>
+
+                    <p id="totalWeightedPoints">
+                        0
+                    </p>
+
+                </div>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Final CGPA
+                    </strong>
+
+                    <p id="finalCGPA">
+                        0.00
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+
+<footer>
+
+    <p>
+        © 2026 CalcVerse — Calculate Smarter.
+    </p>
+
+</footer>
+
+
+
+<script>
+
+
+/* ================================
+   SHOW SELECTED UNIVERSITY
+================================ */
+
+const universityNames = {
+
+    makaut: "MAKAUT",
+
+    calcutta: "University of Calcutta",
+
+    wbsu: "West Bengal State University",
+
+    other: "Other University"
+
+};
+
+
+const savedUniversity =
+    localStorage.getItem(
+        "selectedUniversity"
+    );
+
+
+if (savedUniversity) {
+
+    document.getElementById(
+        "selectedUniversity"
+    ).value =
+        universityNames[savedUniversity]
+        || savedUniversity;
+
+} else {
+
+    document.getElementById(
+        "selectedUniversity"
+    ).value =
+        "Not selected";
+
+}
+
+
+
+/* ================================
+   GENERATE SEMESTERS
+================================ */
+
+function generateSemesterInputs() {
+
+
+    const degree =
+        document.getElementById(
+            "degree"
+        ).value;
+
+
+    const semesterCount =
+        parseInt(
+            document.getElementById(
+                "semesterCount"
+            ).value
+        );
+
+
+    if (degree === "") {
+
+        alert(
+            "Please select your degree or course."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        isNaN(semesterCount) ||
+        semesterCount < 1 ||
+        semesterCount > 20
+    ) {
+
+        alert(
+            "Please enter a valid number of completed semesters."
+        );
+
+        return;
+
+    }
+
+
+    const container =
+        document.getElementById(
+            "semesterContainer"
+        );
+
+
+    container.innerHTML = "";
+
+
+    for (
+        let i = 1;
+        i <= semesterCount;
+        i++
+    ) {
+
+        container.innerHTML += `
+
+            <div class="semester-card">
+
+                <h3>
+                    Semester ${i}
+                </h3>
+
+
+                <div class="input-group">
+
+                    <label>
+                        SGPA
+                    </label>
+
+                    <input
+                        type="number"
+                        class="semesterSGPA"
+                        placeholder="Enter SGPA"
+                        min="0"
+                        max="10"
+                        step="0.01"
+                    >
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <label>
+                        Total Semester Credits
+                    </label>
+
+                    <input
+                        type="number"
+                        class="semesterCredits"
+                        placeholder="Enter total credits"
+                        min="0"
+                        step="0.01"
+                    >
+
+                </div>
+
+
+            </div>
+
+        `;
+
+    }
+
+
+    document.getElementById(
+        "calculateButton"
+    ).style.display = "block";
+
+
+    document.getElementById(
+        "resultBox"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "solutionBox"
+    ).style.display = "none";
+
+}
+
+
+
+/* ================================
+   CALCULATE CGPA
+================================ */
+
+function calculateCGPA() {
+
+
+    const sgpaInputs =
+        document.querySelectorAll(
+            ".semesterSGPA"
+        );
+
+
+    const creditInputs =
+        document.querySelectorAll(
+            ".semesterCredits"
+        );
+
+
+    let totalCredits = 0;
+
+    let totalWeightedPoints = 0;
+
+
+    for (
+        let i = 0;
+        i < sgpaInputs.length;
+        i++
+    ) {
+
+
+        const sgpa =
+            parseFloat(
+                sgpaInputs[i].value
+            );
+
+
+        const credits =
+            parseFloat(
+                creditInputs[i].value
+            );
+
+
+        if (
+            isNaN(sgpa) ||
+            isNaN(credits) ||
+            sgpa < 0 ||
+            sgpa > 10 ||
+            credits <= 0
+        ) {
+
+            alert(
+                `Please enter valid SGPA and credits for Semester ${i + 1}.`
+            );
+
+            return;
+
+        }
+
+
+        totalCredits += credits;
+
+
+        totalWeightedPoints +=
+            sgpa * credits;
+
+    }
+
+
+
+    if (totalCredits === 0) {
+
+        alert(
+            "Total credits cannot be zero."
+        );
+
+        return;
+
+    }
+
+
+    const cgpa =
+        totalWeightedPoints /
+        totalCredits;
+
+
+
+    /* SHOW RESULT */
+
+    document.getElementById(
+        "cgpaResult"
+    ).textContent =
+        cgpa.toFixed(2);
+
+
+
+    /* SHOW DETAILS */
+
+    document.getElementById(
+        "completedSemesters"
+    ).textContent =
+        sgpaInputs.length;
+
+
+    document.getElementById(
+        "totalCredits"
+    ).textContent =
+        totalCredits.toFixed(2);
+
+
+    document.getElementById(
+        "totalWeightedPoints"
+    ).textContent =
+        totalWeightedPoints.toFixed(2);
+
+
+    document.getElementById(
+        "finalCGPA"
+    ).textContent =
+        cgpa.toFixed(2);
+
+
+
+    document.getElementById(
+        "resultBox"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "solutionBox"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "resultBox"
+    ).scrollIntoView({
+
+        behavior: "smooth",
+
+        block: "center"
+
+    });
+
+}
+
+
+</script>
+
+
+</body>
+</html>

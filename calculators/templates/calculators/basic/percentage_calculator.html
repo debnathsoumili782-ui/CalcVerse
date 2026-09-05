@@ -1,0 +1,157 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Percentage Calculator | CalcVerse</title>
+
+    <link rel="stylesheet" href="{% static 'calculators/css/calculator.css' %}">
+</head>
+
+<body>
+
+<header class="navbar">
+    <a href="/" class="logo">Calc<span>Verse</span></a>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/category/basic/">Basic Calculators</a>
+    </nav>
+</header>
+
+
+<main class="calculator-page">
+
+    <div class="calculator-header">
+        <div class="badge">PERCENTAGE CALCULATOR</div>
+
+        <h1>Calculate <span>Percentages.</span></h1>
+
+        <p>Find percentages quickly and easily.</p>
+    </div>
+
+
+    <div class="percentage-box">
+
+        <div class="percentage-form">
+            <label>What is</label>
+
+            <input
+                type="number"
+                id="percentage"
+                placeholder="e.g. 20"
+            >
+
+            <label>% of</label>
+
+            <input
+                type="number"
+                id="number"
+                placeholder="e.g. 500"
+            >
+
+            <button onclick="calculatePercentage()" class="percentage-btn">
+                Calculate
+            </button>
+        </div>
+
+
+        <div id="percentage-result" class="percentage-result">
+            Enter values to calculate.
+        </div>
+
+    </div>
+
+
+    <div class="percentage-box second-form">
+
+        <h2>What percentage is one number of another?</h2>
+
+        <div class="percentage-form">
+            <input
+                type="number"
+                id="part"
+                placeholder="e.g. 123"
+            >
+
+            <label>is what % of</label>
+
+            <input
+                type="number"
+                id="whole"
+                placeholder="e.g. 150"
+            >
+
+            <button onclick="calculateWhatPercent()" class="percentage-btn">
+                Calculate
+            </button>
+        </div>
+
+        <div id="what-percent-result" class="percentage-result">
+            Enter values to calculate.
+        </div>
+
+    </div>
+
+</main>
+
+
+<footer>
+    © 2026 CalcVerse — Calculate Smarter.
+</footer>
+
+
+<script>
+    function calculatePercentage() {
+        const percentage = parseFloat(
+            document.getElementById("percentage").value
+        );
+
+        const number = parseFloat(
+            document.getElementById("number").value
+        );
+
+        const resultBox = document.getElementById("percentage-result");
+
+        if (isNaN(percentage) || isNaN(number)) {
+            resultBox.innerHTML = "Please enter valid numbers.";
+            return;
+        }
+
+        const result = (percentage / 100) * number;
+
+        resultBox.innerHTML = `
+            <strong>${percentage}% of ${number} = ${result}</strong>
+        `;
+    }
+
+
+    function calculateWhatPercent() {
+        const part = parseFloat(
+            document.getElementById("part").value
+        );
+
+        const whole = parseFloat(
+            document.getElementById("whole").value
+        );
+
+        const resultBox = document.getElementById("what-percent-result");
+
+        if (isNaN(part) || isNaN(whole) || whole === 0) {
+            resultBox.innerHTML = "Please enter valid numbers.";
+            return;
+        }
+
+        const result = (part / whole) * 100;
+
+        resultBox.innerHTML = `
+            <strong>${part} is ${result.toFixed(2)}% of ${whole}</strong>
+        `;
+    }
+</script>
+
+</body>
+</html>

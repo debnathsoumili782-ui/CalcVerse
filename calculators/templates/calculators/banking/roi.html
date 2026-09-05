@@ -1,0 +1,336 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>ROI Calculator — CalcVerse</title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'calculators/css/style.css' %}"
+    >
+</head>
+
+
+<body>
+
+<header class="navbar">
+
+    <div class="nav-container">
+
+        <a href="/" class="logo">
+            Calc<span>Verse</span>
+        </a>
+
+        <nav>
+            <a href="/">Home</a>
+
+            <a href="{% url 'banking_finance' %}">
+                Calculators
+            </a>
+        </nav>
+
+    </div>
+
+</header>
+
+
+<main>
+
+    <!-- Hero Section -->
+
+    <section class="hero calculator-hero">
+
+        <div class="badge">
+            BANKING & FINANCE
+        </div>
+
+        <h1>
+            ROI <span>Calculator</span>
+        </h1>
+
+        <p>
+            Calculate the Return on Investment and measure your investment performance.
+        </p>
+
+    </section>
+
+
+    <!-- Calculator -->
+
+    <section class="calculator-section">
+
+        <div class="banking-calculator-card">
+
+
+            <!-- Initial Investment -->
+
+            <div class="input-group">
+
+                <label for="initialInvestment">
+                    Initial Investment Amount (₹)
+                </label>
+
+                <input
+                    type="number"
+                    id="initialInvestment"
+                    placeholder="Enter initial investment amount"
+                >
+
+            </div>
+
+
+            <!-- Final Value -->
+
+            <div class="input-group">
+
+                <label for="finalValue">
+                    Final Investment Value (₹)
+                </label>
+
+                <input
+                    type="number"
+                    id="finalValue"
+                    placeholder="Enter final investment value"
+                >
+
+            </div>
+
+
+            <!-- Calculate Button -->
+
+            <button
+                type="button"
+                class="calculate-btn"
+                onclick="calculateROI()"
+            >
+                Calculate ROI
+            </button>
+
+
+            <!-- Main Result -->
+
+            <div
+                class="result-box"
+                id="resultBox"
+                style="display: none;"
+            >
+
+                <span>
+                    RETURN ON INVESTMENT
+                </span>
+
+                <strong id="roiResult">
+                    0.00%
+                </strong>
+
+            </div>
+
+
+            <!-- Calculation Details -->
+
+            <div
+                class="solution-box"
+                id="solutionBox"
+                style="display: none;"
+            >
+
+                <h2>
+                    ROI Calculation
+                </h2>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Initial Investment
+                    </strong>
+
+                    <p id="initialAmountResult">
+                        ₹0.00
+                    </p>
+
+                </div>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Final Value
+                    </strong>
+
+                    <p id="finalValueResult">
+                        ₹0.00
+                    </p>
+
+                </div>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Profit / Loss
+                    </strong>
+
+                    <p id="profitResult">
+                        ₹0.00
+                    </p>
+
+                </div>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        ROI
+                    </strong>
+
+                    <p id="finalROI">
+                        0.00%
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer>
+
+    <p>
+        © 2026 CalcVerse — Calculate Smarter.
+    </p>
+
+</footer>
+
+
+<script>
+
+function calculateROI() {
+
+    const initialInvestment = parseFloat(
+        document.getElementById(
+            "initialInvestment"
+        ).value
+    );
+
+
+    const finalValue = parseFloat(
+        document.getElementById(
+            "finalValue"
+        ).value
+    );
+
+
+    if (
+        isNaN(initialInvestment) ||
+        isNaN(finalValue) ||
+        initialInvestment <= 0 ||
+        finalValue < 0
+    ) {
+
+        alert(
+            "Please enter valid values."
+        );
+
+        return;
+
+    }
+
+
+    /*
+        ROI Formula:
+
+        ROI = ((Final Value - Initial Investment)
+              / Initial Investment) × 100
+    */
+
+
+    const profit =
+        finalValue - initialInvestment;
+
+
+    const roi =
+        (profit / initialInvestment) * 100;
+
+
+    function formatCurrency(amount) {
+
+        return "₹" +
+            amount.toLocaleString(
+                "en-IN",
+                {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }
+            );
+
+    }
+
+
+    // Show main result
+
+    document.getElementById(
+        "roiResult"
+    ).textContent =
+        roi.toFixed(2) + "%";
+
+
+    // Show calculation details
+
+    document.getElementById(
+        "initialAmountResult"
+    ).textContent =
+        formatCurrency(initialInvestment);
+
+
+    document.getElementById(
+        "finalValueResult"
+    ).textContent =
+        formatCurrency(finalValue);
+
+
+    document.getElementById(
+        "profitResult"
+    ).textContent =
+        formatCurrency(profit);
+
+
+    document.getElementById(
+        "finalROI"
+    ).textContent =
+        roi.toFixed(2) + "%";
+
+
+    // Show results only after calculation
+
+    document.getElementById(
+        "resultBox"
+    ).style.display = "block";
+
+
+    document.getElementById(
+        "solutionBox"
+    ).style.display = "block";
+
+}
+
+</script>
+
+</body>
+
+</html>

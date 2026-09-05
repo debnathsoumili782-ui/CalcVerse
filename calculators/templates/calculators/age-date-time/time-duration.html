@@ -1,0 +1,694 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Time Duration Calculator — CalcVerse</title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'calculators/css/style.css' %}"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- NAVBAR -->
+
+<header class="navbar">
+
+    <div class="nav-container">
+
+        <a href="/" class="logo">
+            Calc<span>Verse</span>
+        </a>
+
+        <nav>
+
+            <a href="/">
+                Home
+            </a>
+
+            <a href="{% url 'age_date_time' %}">
+                Age, Date & Time
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+
+<main>
+
+
+    <!-- HERO -->
+
+    <section class="hero calculator-hero">
+
+        <div class="badge">
+            TIME DURATION
+        </div>
+
+        <h1>
+            Time <span>Duration</span>
+        </h1>
+
+        <p>
+            Calculate the exact duration between two different times.
+        </p>
+
+    </section>
+
+
+
+    <!-- CALCULATOR -->
+
+    <section class="calculator-section">
+
+        <div class="banking-calculator-card">
+
+
+            <div class="academic-heading">
+
+                <h2>
+                    Enter Start and End Time
+                </h2>
+
+                <p>
+                    Select two times to find the exact duration between them.
+                </p>
+
+            </div>
+
+
+
+            <!-- TIME FORMAT TOGGLE -->
+
+            <div class="input-group">
+
+                <label>
+                    Time Format
+                </label>
+
+
+                <div class="format-toggle">
+
+                    <button
+                        type="button"
+                        class="format-option active"
+                        id="format12"
+                        onclick="setTimeFormat(12)"
+                    >
+                        12 Hour
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="format-option"
+                        id="format24"
+                        onclick="setTimeFormat(24)"
+                    >
+                        24 Hour
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- START TIME -->
+
+            <div class="input-group">
+
+                <label for="startTime">
+                    Start Time
+                </label>
+
+
+                <div class="time-field-wrapper">
+
+                    <input
+                        type="time"
+                        id="startTime"
+                    >
+
+
+                    <select
+                        id="startPeriod"
+                        class="ampm-select"
+                    >
+
+                        <option value="AM">
+                            AM
+                        </option>
+
+                        <option value="PM">
+                            PM
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- END TIME -->
+
+            <div class="input-group">
+
+                <label for="endTime">
+                    End Time
+                </label>
+
+
+                <div class="time-field-wrapper">
+
+                    <input
+                        type="time"
+                        id="endTime"
+                    >
+
+
+                    <select
+                        id="endPeriod"
+                        class="ampm-select"
+                    >
+
+                        <option value="AM">
+                            AM
+                        </option>
+
+                        <option value="PM">
+                            PM
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- CALCULATE BUTTON -->
+
+            <button
+                type="button"
+                class="calculate-btn"
+                onclick="calculateTimeDuration()"
+            >
+                Calculate Duration
+            </button>
+
+
+
+            <!-- RESULT -->
+
+            <div
+                class="result-box"
+                id="timeResultBox"
+                style="display: none;"
+            >
+
+                <span>
+                    TOTAL DURATION
+                </span>
+
+                <strong id="timeResult">
+                    0 Hours, 0 Minutes
+                </strong>
+
+            </div>
+
+
+
+            <!-- DETAILS -->
+
+            <div
+                class="solution-box"
+                id="timeDetails"
+                style="display: none;"
+            >
+
+                <h2>
+                    Duration Details
+                </h2>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Total Hours
+                    </strong>
+
+                    <p id="totalHours">
+                        0
+                    </p>
+
+                </div>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Total Minutes
+                    </strong>
+
+                    <p id="totalMinutes">
+                        0
+                    </p>
+
+                </div>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Start Time
+                    </strong>
+
+                    <p id="displayStartTime">
+                        -
+                    </p>
+
+                </div>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        End Time
+                    </strong>
+
+                    <p id="displayEndTime">
+                        -
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <p>
+        © 2026 CalcVerse — Calculate Smarter.
+    </p>
+
+</footer>
+
+
+
+<script>
+
+
+let selectedTimeFormat = 12;
+
+
+
+/* =========================
+   TIME FORMAT TOGGLE
+========================= */
+
+function setTimeFormat(format) {
+
+
+    selectedTimeFormat = format;
+
+
+    const format12 =
+        document.getElementById("format12");
+
+
+    const format24 =
+        document.getElementById("format24");
+
+
+    const periodSelects =
+        document.querySelectorAll(".ampm-select");
+
+
+    if (format === 12) {
+
+
+        format12.classList.add("active");
+
+        format24.classList.remove("active");
+
+
+        periodSelects.forEach(function(select) {
+
+            select.style.display = "block";
+
+        });
+
+
+    } else {
+
+
+        format24.classList.add("active");
+
+        format12.classList.remove("active");
+
+
+        periodSelects.forEach(function(select) {
+
+            select.style.display = "none";
+
+        });
+
+    }
+
+
+    /* পুরনো result hide */
+
+    document.getElementById(
+        "timeResultBox"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "timeDetails"
+    ).style.display = "none";
+
+}
+
+
+
+/* =========================
+   GET TIME IN MINUTES
+========================= */
+
+function getTimeInMinutes(time, period) {
+
+
+    if (!time) {
+
+        return null;
+
+    }
+
+
+    const parts =
+        time.split(":");
+
+
+    let hour =
+        Number(parts[0]);
+
+
+    const minute =
+        Number(parts[1]);
+
+
+    if (
+        hour < 0 ||
+        hour > 23 ||
+        minute < 0 ||
+        minute > 59
+    ) {
+
+        return null;
+
+    }
+
+
+    /*
+        12 Hour mode
+        Browser input থেকে time আসবে 24-hour value-তে,
+        কিন্তু AM/PM আমরা manually apply করব।
+    */
+
+    if (selectedTimeFormat === 12) {
+
+
+        /*
+            Input-এর hour-কে
+            1–12 হিসেবে treat করা হচ্ছে।
+        */
+
+        hour =
+            hour % 12;
+
+
+        if (period === "PM") {
+
+            hour += 12;
+
+        }
+
+    }
+
+
+    return (
+        hour * 60
+    ) + minute;
+
+}
+
+
+
+/* =========================
+   FORMAT TIME FOR DISPLAY
+========================= */
+
+function formatTimeForDisplay(
+    time,
+    period
+) {
+
+
+    const parts =
+        time.split(":");
+
+
+    let hour =
+        Number(parts[0]);
+
+
+    const minute =
+        parts[1];
+
+
+    if (selectedTimeFormat === 24) {
+
+
+        return (
+            `${String(hour).padStart(2, "0")}:${minute}`
+        );
+
+    }
+
+
+    /*
+        Convert to 12-hour display
+    */
+
+    hour =
+        hour % 12;
+
+
+    if (hour === 0) {
+
+        hour = 12;
+
+    }
+
+
+    return (
+        `${hour}:${minute} ${period}`
+    );
+
+}
+
+
+
+/* =========================
+   CALCULATE DURATION
+========================= */
+
+function calculateTimeDuration() {
+
+
+    const startTime =
+        document.getElementById(
+            "startTime"
+        ).value;
+
+
+    const endTime =
+        document.getElementById(
+            "endTime"
+        ).value;
+
+
+    const startPeriod =
+        document.getElementById(
+            "startPeriod"
+        ).value;
+
+
+    const endPeriod =
+        document.getElementById(
+            "endPeriod"
+        ).value;
+
+
+    if (!startTime || !endTime) {
+
+        alert(
+            "Please select both start and end time."
+        );
+
+        return;
+
+    }
+
+
+    const startMinutes =
+        getTimeInMinutes(
+            startTime,
+            startPeriod
+        );
+
+
+    const endMinutes =
+        getTimeInMinutes(
+            endTime,
+            endPeriod
+        );
+
+
+    if (
+        startMinutes === null ||
+        endMinutes === null
+    ) {
+
+        alert(
+            "Please enter valid times."
+        );
+
+        return;
+
+    }
+
+
+    let difference =
+        endMinutes - startMinutes;
+
+
+    /*
+        End time earlier হলে
+        next day ধরে হিসাব হবে।
+    */
+
+    if (difference < 0) {
+
+        difference += 24 * 60;
+
+    }
+
+
+    const hours =
+        Math.floor(
+            difference / 60
+        );
+
+
+    const minutes =
+        difference % 60;
+
+
+    /* MAIN RESULT */
+
+    document.getElementById(
+        "timeResult"
+    ).textContent =
+        `${hours} Hours, ${minutes} Minutes`;
+
+
+    /* DETAILS */
+
+    document.getElementById(
+        "totalHours"
+    ).textContent =
+        hours;
+
+
+    document.getElementById(
+        "totalMinutes"
+    ).textContent =
+        difference;
+
+
+    document.getElementById(
+        "displayStartTime"
+    ).textContent =
+        formatTimeForDisplay(
+            startTime,
+            startPeriod
+        );
+
+
+    document.getElementById(
+        "displayEndTime"
+    ).textContent =
+        formatTimeForDisplay(
+            endTime,
+            endPeriod
+        );
+
+
+    /* SHOW RESULT */
+
+    document.getElementById(
+        "timeResultBox"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "timeDetails"
+    ).style.display =
+        "block";
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>

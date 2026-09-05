@@ -1,0 +1,1106 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Body Fat Calculator | CalcVerse</title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'calculators/css/style.css' %}"
+    >
+    <link
+        rel="stylesheet"
+        href="{% static 'calculators/css/bodyfat.css' %}"
+    >
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+
+    <header class="navbar">
+
+        <div class="nav-container">
+
+            <a href="/" class="logo">
+                Calc<span>Verse</span>
+            </a>
+
+            <nav>
+                <a href="/">Home</a>
+
+                <a href="{% url 'health_body' %}">
+                    Health & Body
+                </a>
+            </nav>
+
+        </div>
+
+    </header>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="bodyfat-page">
+
+
+        <!-- ================= HERO ================= -->
+
+        <section class="calculator-hero">
+
+            <div class="section-tag">
+                HEALTH CALCULATOR
+            </div>
+
+            <h1>
+                Calculate Your
+                <span>Body Fat</span>
+            </h1>
+
+            <p>
+                Estimate your body fat percentage using body measurements.
+            </p>
+
+        </section>
+
+
+        <!-- ================= CALCULATOR ================= -->
+
+        <section class="bodyfat-calculator-card">
+
+
+            <div class="calculator-heading">
+
+                <h2>Enter Your Details</h2>
+
+                <p>
+                    Enter your measurements to estimate your body fat percentage.
+                </p>
+
+            </div>
+
+
+            <!-- ================= GENDER ================= -->
+
+            <div class="form-group">
+
+                <label>Gender</label>
+
+                <div class="gender-toggle">
+
+                    <button
+                        type="button"
+                        class="gender-btn active"
+                        data-gender="female"
+                    >
+                        Female
+                    </button>
+
+                    <button
+                        type="button"
+                        class="gender-btn"
+                        data-gender="male"
+                    >
+                        Male
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= HEIGHT ================= -->
+
+            <div class="form-group">
+
+                <label>Height</label>
+
+                <div class="unit-toggle">
+
+                    <button
+                        type="button"
+                        class="unit-btn active"
+                        data-height-unit="cm"
+                    >
+                        CM
+                    </button>
+
+                    <button
+                        type="button"
+                        class="unit-btn"
+                        data-height-unit="ft"
+                    >
+                        FT/IN
+                    </button>
+
+                </div>
+
+
+                <!-- CM -->
+
+                <div
+                    id="heightCmContainer"
+                    class="input-wrapper measurement-space"
+                >
+
+                    <input
+                        type="number"
+                        id="heightCm"
+                        placeholder="Enter your height"
+                        min="1"
+                        step="0.1"
+                    >
+
+                    <span>cm</span>
+
+                </div>
+
+
+                <!-- FEET / INCH -->
+
+                <div
+                    id="heightFtContainer"
+                    class="double-input hidden measurement-space"
+                >
+
+                    <div class="input-wrapper">
+
+                        <input
+                            type="number"
+                            id="heightFt"
+                            placeholder="Feet"
+                            min="1"
+                            step="1"
+                        >
+
+                        <span>ft</span>
+
+                    </div>
+
+
+                    <div class="input-wrapper">
+
+                        <input
+                            type="number"
+                            id="heightIn"
+                            placeholder="Inches"
+                            min="0"
+                            max="11.9"
+                            step="0.1"
+                        >
+
+                        <span>in</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= WEIGHT ================= -->
+
+            <div class="form-group">
+
+                <label>Weight</label>
+
+                <div class="unit-toggle">
+
+                    <button
+                        type="button"
+                        class="weight-unit-btn active"
+                        data-weight-unit="kg"
+                    >
+                        KG
+                    </button>
+
+                    <button
+                        type="button"
+                        class="weight-unit-btn"
+                        data-weight-unit="lb"
+                    >
+                        LB
+                    </button>
+
+                </div>
+
+
+                <div class="input-wrapper measurement-space">
+
+                    <input
+                        type="number"
+                        id="weight"
+                        placeholder="Enter your weight"
+                        min="1"
+                        step="0.1"
+                    >
+
+                    <span id="weightUnitText">
+                        kg
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= NECK ================= -->
+
+            <div class="form-group">
+
+                <label>Neck Circumference</label>
+
+                <div class="measurement-row">
+
+                    <div class="input-wrapper">
+
+                        <input
+                            type="number"
+                            id="neck"
+                            placeholder="Enter neck measurement"
+                            min="1"
+                            step="0.1"
+                        >
+
+                    </div>
+
+
+                    <select
+                        id="neckUnit"
+                        class="measurement-unit"
+                    >
+                        <option value="cm">
+                            CM
+                        </option>
+
+                        <option value="inch">
+                            IN
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= WAIST ================= -->
+
+            <div class="form-group">
+
+                <label>Waist Circumference</label>
+
+                <div class="measurement-row">
+
+                    <div class="input-wrapper">
+
+                        <input
+                            type="number"
+                            id="waist"
+                            placeholder="Enter waist measurement"
+                            min="1"
+                            step="0.1"
+                        >
+
+                    </div>
+
+
+                    <select
+                        id="waistUnit"
+                        class="measurement-unit"
+                    >
+                        <option value="cm">
+                            CM
+                        </option>
+
+                        <option value="inch">
+                            IN
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= HIP ================= -->
+
+            <div
+                class="form-group"
+                id="hipGroup"
+            >
+
+                <label>Hip Circumference</label>
+
+                <div class="measurement-row">
+
+                    <div class="input-wrapper">
+
+                        <input
+                            type="number"
+                            id="hip"
+                            placeholder="Enter hip measurement"
+                            min="1"
+                            step="0.1"
+                        >
+
+                    </div>
+
+
+                    <select
+                        id="hipUnit"
+                        class="measurement-unit"
+                    >
+                        <option value="cm">
+                            CM
+                        </option>
+
+                        <option value="inch">
+                            IN
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= CALCULATE ================= -->
+
+            <button
+                type="button"
+                class="calculate-btn"
+                id="calculateBodyFat"
+            >
+                Calculate Body Fat
+            </button>
+
+
+            <!-- ERROR -->
+
+            <p
+                id="errorMessage"
+                class="error-message"
+            ></p>
+
+
+            <!-- ================= RESULT ================= -->
+
+            <div
+                class="bodyfat-result hidden"
+                id="bodyFatResult"
+            >
+
+                <div class="result-label">
+                    YOUR BODY FAT
+                </div>
+
+                <div class="bodyfat-value">
+
+                    <span id="bodyFatValue">
+                        0
+                    </span>%
+
+                </div>
+
+                <div
+                    class="bodyfat-category"
+                    id="bodyFatCategory"
+                >
+                    --
+                </div>
+
+            </div>
+
+
+            <!-- ================= DETAILS ================= -->
+
+            <div
+                class="bodyfat-details hidden"
+                id="bodyFatDetails"
+            >
+
+                <h3>Body Fat Details</h3>
+
+
+                <div class="detail-box">
+
+                    <span class="detail-title">
+                        Your Body Fat Percentage
+                    </span>
+
+                    <strong id="detailBodyFat">
+                        0%
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <span class="detail-title">
+                        Body Fat Category
+                    </span>
+
+                    <strong id="detailCategory">
+                        --
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <span class="detail-title">
+                        Estimated Fat Mass
+                    </span>
+
+                    <strong id="fatMass">
+                        --
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <span class="detail-title">
+                        Estimated Lean Body Mass
+                    </span>
+
+                    <strong id="leanMass">
+                        --
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+    </main>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer class="footer">
+
+        <p>
+            © 2026 CalcVerse — Calculate Smarter.
+        </p>
+
+    </footer>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script>
+
+        let selectedGender = "female";
+        let selectedHeightUnit = "cm";
+        let selectedWeightUnit = "kg";
+
+
+        /* =========================
+           GENDER
+        ========================== */
+
+        const genderButtons =
+            document.querySelectorAll(".gender-btn");
+
+        const hipGroup =
+            document.getElementById("hipGroup");
+
+
+        genderButtons.forEach(function (button) {
+
+            button.addEventListener("click", function () {
+
+                genderButtons.forEach(function (btn) {
+                    btn.classList.remove("active");
+                });
+
+                button.classList.add("active");
+
+                selectedGender =
+                    button.dataset.gender;
+
+
+                /* Male হলে Hip লাগবে না */
+
+                if (selectedGender === "male") {
+
+                    hipGroup.classList.add("hidden");
+
+                } else {
+
+                    hipGroup.classList.remove("hidden");
+
+                }
+
+            });
+
+        });
+
+
+        /* =========================
+           HEIGHT UNIT
+        ========================== */
+
+        const heightUnitButtons =
+            document.querySelectorAll(".unit-btn");
+
+        const heightCmContainer =
+            document.getElementById("heightCmContainer");
+
+        const heightFtContainer =
+            document.getElementById("heightFtContainer");
+
+
+        heightUnitButtons.forEach(function (button) {
+
+            button.addEventListener("click", function () {
+
+                heightUnitButtons.forEach(function (btn) {
+                    btn.classList.remove("active");
+                });
+
+                button.classList.add("active");
+
+                selectedHeightUnit =
+                    button.dataset.heightUnit;
+
+
+                if (selectedHeightUnit === "cm") {
+
+                    heightCmContainer.classList.remove("hidden");
+
+                    heightFtContainer.classList.add("hidden");
+
+                } else {
+
+                    heightCmContainer.classList.add("hidden");
+
+                    heightFtContainer.classList.remove("hidden");
+
+                }
+
+            });
+
+        });
+
+
+        /* =========================
+           WEIGHT UNIT
+        ========================== */
+
+        const weightUnitButtons =
+            document.querySelectorAll(".weight-unit-btn");
+
+        const weightUnitText =
+            document.getElementById("weightUnitText");
+
+
+        weightUnitButtons.forEach(function (button) {
+
+            button.addEventListener("click", function () {
+
+                weightUnitButtons.forEach(function (btn) {
+                    btn.classList.remove("active");
+                });
+
+                button.classList.add("active");
+
+                selectedWeightUnit =
+                    button.dataset.weightUnit;
+
+
+                if (selectedWeightUnit === "kg") {
+
+                    weightUnitText.textContent = "kg";
+
+                } else {
+
+                    weightUnitText.textContent = "lb";
+
+                }
+
+            });
+
+        });
+
+
+        /* =========================
+           CONVERT MEASUREMENT
+           CM / IN → CM
+        ========================== */
+
+        function convertToCm(value, unit) {
+
+            if (unit === "inch") {
+
+                return value * 2.54;
+
+            }
+
+            return value;
+
+        }
+
+
+        /* =========================
+           CALCULATE BUTTON
+        ========================== */
+
+        document
+            .getElementById("calculateBodyFat")
+            .addEventListener(
+                "click",
+                calculateBodyFat
+            );
+
+
+        function calculateBodyFat() {
+
+
+            const errorMessage =
+                document.getElementById("errorMessage");
+
+            errorMessage.textContent = "";
+
+
+            /* ================= HEIGHT ================= */
+
+            let heightCmValue;
+
+
+            if (selectedHeightUnit === "cm") {
+
+                heightCmValue =
+                    parseFloat(
+                        document.getElementById("heightCm").value
+                    );
+
+            } else {
+
+                const feet =
+                    parseFloat(
+                        document.getElementById("heightFt").value
+                    );
+
+                const inches =
+                    parseFloat(
+                        document.getElementById("heightIn").value
+                    );
+
+
+                if (
+                    isNaN(feet) ||
+                    feet <= 0
+                ) {
+
+                    errorMessage.textContent =
+                        "Please enter a valid height.";
+
+                    return;
+
+                }
+
+
+                heightCmValue =
+                    (
+                        (feet * 12) +
+                        (isNaN(inches) ? 0 : inches)
+                    ) * 2.54;
+
+            }
+
+
+            /* ================= WEIGHT ================= */
+
+            let weight =
+                parseFloat(
+                    document.getElementById("weight").value
+                );
+
+
+            /* ================= NECK ================= */
+
+            const neckValue =
+                parseFloat(
+                    document.getElementById("neck").value
+                );
+
+            const neckUnit =
+                document.getElementById("neckUnit").value;
+
+
+            /* ================= WAIST ================= */
+
+            const waistValue =
+                parseFloat(
+                    document.getElementById("waist").value
+                );
+
+            const waistUnit =
+                document.getElementById("waistUnit").value;
+
+
+            /* ================= HIP ================= */
+
+            const hipValue =
+                parseFloat(
+                    document.getElementById("hip").value
+                );
+
+            const hipUnit =
+                document.getElementById("hipUnit").value;
+
+
+            /* ================= VALIDATION ================= */
+
+            if (
+                isNaN(heightCmValue) ||
+                heightCmValue <= 0 ||
+                isNaN(weight) ||
+                weight <= 0 ||
+                isNaN(neckValue) ||
+                neckValue <= 0 ||
+                isNaN(waistValue) ||
+                waistValue <= 0
+            ) {
+
+                errorMessage.textContent =
+                    "Please fill in all required fields correctly.";
+
+                return;
+
+            }
+
+
+            if (
+                selectedGender === "female" &&
+                (
+                    isNaN(hipValue) ||
+                    hipValue <= 0
+                )
+            ) {
+
+                errorMessage.textContent =
+                    "Please enter your hip measurement.";
+
+                return;
+
+            }
+
+
+            /* =================
+               EACH MEASUREMENT
+               ALADA UNIT THEKE CM
+            ================= */
+
+            const neckCm =
+                convertToCm(
+                    neckValue,
+                    neckUnit
+                );
+
+
+            const waistCm =
+                convertToCm(
+                    waistValue,
+                    waistUnit
+                );
+
+
+            let hipCm = 0;
+
+
+            if (selectedGender === "female") {
+
+                hipCm =
+                    convertToCm(
+                        hipValue,
+                        hipUnit
+                    );
+
+            }
+
+
+            /* Waist অবশ্যই Neck-এর থেকে বড় হতে হবে */
+
+            if (waistCm <= neckCm) {
+
+                errorMessage.textContent =
+                    "Waist measurement must be greater than neck measurement.";
+
+                return;
+
+            }
+
+
+            /* =================
+               WEIGHT LB → KG
+            ================= */
+
+            if (selectedWeightUnit === "lb") {
+
+                weight =
+                    weight * 0.45359237;
+
+            }
+
+
+            /* =================
+               CM → INCH
+               US NAVY FORMULA
+               inches-এ ব্যবহার করে
+            ================= */
+
+            const heightInches =
+                heightCmValue / 2.54;
+
+            const neckInches =
+                neckCm / 2.54;
+
+            const waistInches =
+                waistCm / 2.54;
+
+            const hipInches =
+                hipCm / 2.54;
+
+
+            /* =================
+               BODY FAT FORMULA
+            ================= */
+
+            let bodyFat;
+
+
+            if (selectedGender === "male") {
+
+                const difference =
+                    waistInches - neckInches;
+
+
+                if (difference <= 0) {
+
+                    errorMessage.textContent =
+                        "Please check your waist and neck measurements.";
+
+                    return;
+
+                }
+
+
+                bodyFat =
+                    (86.010 * Math.log10(difference))
+                    -
+                    (70.041 * Math.log10(heightInches))
+                    +
+                    36.76;
+
+            } else {
+
+                const difference =
+                    waistInches +
+                    hipInches -
+                    neckInches;
+
+
+                if (difference <= 0) {
+
+                    errorMessage.textContent =
+                        "Please check your measurements.";
+
+                    return;
+
+                }
+
+
+                bodyFat =
+                    (163.205 * Math.log10(difference))
+                    -
+                    (97.684 * Math.log10(heightInches))
+                    -
+                    78.387;
+
+            }
+
+
+            /* =================
+               RESULT VALIDATION
+            ================= */
+
+            if (
+                isNaN(bodyFat) ||
+                !isFinite(bodyFat) ||
+                bodyFat <= 0
+            ) {
+
+                errorMessage.textContent =
+                    "Unable to calculate. Please check your measurements.";
+
+                return;
+
+            }
+
+
+            /* =================
+               CATEGORY
+            ================= */
+
+            const category =
+                getBodyFatCategory(
+                    bodyFat,
+                    selectedGender
+                );
+
+
+            /* =================
+               FAT MASS
+            ================= */
+
+            const fatMassValue =
+                weight * (bodyFat / 100);
+
+
+            /* =================
+               LEAN BODY MASS
+            ================= */
+
+            const leanMassValue =
+                weight - fatMassValue;
+
+
+            /* =================
+               SHOW RESULT
+            ================= */
+
+            document
+                .getElementById("bodyFatValue")
+                .textContent =
+                bodyFat.toFixed(1);
+
+
+            document
+                .getElementById("bodyFatCategory")
+                .textContent =
+                category;
+
+
+            document
+                .getElementById("detailBodyFat")
+                .textContent =
+                bodyFat.toFixed(1) + "%";
+
+
+            document
+                .getElementById("detailCategory")
+                .textContent =
+                category;
+
+
+            document
+                .getElementById("fatMass")
+                .textContent =
+                fatMassValue.toFixed(1) + " kg";
+
+
+            document
+                .getElementById("leanMass")
+                .textContent =
+                leanMassValue.toFixed(1) + " kg";
+
+
+            document
+                .getElementById("bodyFatResult")
+                .classList.remove("hidden");
+
+
+            document
+                .getElementById("bodyFatDetails")
+                .classList.remove("hidden");
+
+
+            document
+                .getElementById("bodyFatResult")
+                .scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest"
+                });
+
+        }
+
+
+        /* =========================
+           BODY FAT CATEGORY
+        ========================== */
+
+        function getBodyFatCategory(
+            bodyFat,
+            gender
+        ) {
+
+
+            if (gender === "male") {
+
+                if (bodyFat < 6) {
+                    return "Essential Fat";
+                }
+
+                if (bodyFat < 14) {
+                    return "Athletes";
+                }
+
+                if (bodyFat < 18) {
+                    return "Fitness";
+                }
+
+                if (bodyFat < 25) {
+                    return "Average";
+                }
+
+                return "High Body Fat";
+
+            }
+
+
+            /* FEMALE */
+
+            if (bodyFat < 14) {
+                return "Essential Fat";
+            }
+
+            if (bodyFat < 21) {
+                return "Athletes";
+            }
+
+            if (bodyFat < 25) {
+                return "Fitness";
+            }
+
+            if (bodyFat < 32) {
+                return "Average";
+            }
+
+            return "High Body Fat";
+
+        }
+
+    </script>
+
+</body>
+
+</html>

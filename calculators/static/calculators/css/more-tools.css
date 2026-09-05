@@ -1,0 +1,274 @@
+/* =========================================
+   MORE TOOLS PAGE
+========================================= */
+
+.more-tools-page {
+    min-height: 100vh;
+    background: #090D1A;
+    color: #f3f1ed;
+    padding: 0 20px 90px;
+}
+
+
+/* =========================================
+   HERO
+========================================= */
+
+.more-tools-hero {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 0 55px;
+    text-align: center;
+}
+
+.more-tools-tag {
+    display: inline-block;
+    padding: 9px 18px;
+    margin-bottom: 24px;
+
+    border: 1px solid rgba(126, 87, 194, 0.45);
+    border-radius: 999px;
+
+    background: rgba(107, 70, 160, 0.12);
+    color: #b9a7ff;
+
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.more-tools-hero h1 {
+    margin: 0;
+
+    color: #f3f1ed;
+
+    font-size: clamp(42px, 5vw, 72px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -2px;
+}
+
+.more-tools-hero h1 span {
+    background: linear-gradient(
+        90deg,
+        #a86bd7,
+        #e25598,
+        #ffae35
+    );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.more-tools-hero p {
+    max-width: 650px;
+    margin: 20px auto 0;
+
+    color: #aeb8c9;
+
+    font-size: 17px;
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   TOOLS SECTION
+========================================= */
+
+.more-tools-section {
+    width: 100%;
+    max-width: 1100px;
+
+    margin: 0 auto;
+}
+
+.more-tools-section h2 {
+    margin: 0 0 28px;
+
+    color: #f3f1ed;
+
+    font-size: 30px;
+    font-weight: 700;
+}
+
+
+/* =========================================
+   TOOLS GRID
+========================================= */
+
+.more-tools-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 24px;
+}
+
+
+/* =========================================
+   TOOL CARD
+========================================= */
+
+.more-tool-card {
+    min-height: 250px;
+
+    padding: 30px;
+
+    background: #202B3B;
+
+    border: 1px solid #34465d;
+    border-radius: 20px;
+
+    box-sizing: border-box;
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.more-tool-card:hover {
+    transform: translateY(-6px);
+
+    border-color: #7654ad;
+
+    box-shadow:
+        0 14px 35px rgba(0, 0, 0, 0.22);
+}
+
+
+/* =========================================
+   ICON
+========================================= */
+
+.more-tool-icon {
+    width: 64px;
+    height: 64px;
+
+    margin-bottom: 28px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(107, 70, 160, 0.22);
+
+    border-radius: 18px;
+
+    font-size: 30px;
+}
+
+
+/* =========================================
+   CARD TEXT
+========================================= */
+
+.more-tool-card h3 {
+    margin: 0 0 14px;
+
+    color: #f3f1ed;
+
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.more-tool-card p {
+    margin: 0;
+
+    color: #afbacb;
+
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 900px) {
+
+    .more-tools-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 768px) {
+
+    .more-tools-page {
+        padding: 0 16px 70px;
+    }
+
+    .more-tools-hero {
+        padding: 60px 10px 45px;
+    }
+
+    .more-tools-hero h1 {
+        font-size: 48px;
+        letter-spacing: -1px;
+    }
+
+    .more-tools-hero p {
+        font-size: 15px;
+    }
+
+    .more-tools-section h2 {
+        font-size: 27px;
+    }
+
+    .more-tool-card {
+        min-height: 230px;
+        padding: 25px;
+    }
+
+}
+
+
+@media (max-width: 520px) {
+
+    .more-tools-hero {
+        padding-top: 45px;
+    }
+
+    .more-tools-hero h1 {
+        font-size: 38px;
+    }
+
+    .more-tools-tag {
+        padding: 8px 15px;
+        font-size: 10px;
+    }
+
+    .more-tools-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .more-tool-card {
+        min-height: auto;
+        padding: 24px;
+    }
+
+    .more-tool-icon {
+        width: 58px;
+        height: 58px;
+
+        margin-bottom: 22px;
+
+        font-size: 27px;
+    }
+
+    .more-tool-card h3 {
+        font-size: 20px;
+    }
+
+    .more-tool-card p {
+        font-size: 15px;
+    }
+
+}

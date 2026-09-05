@@ -1,0 +1,1443 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Equation Solver | CalcVerse</title>
+
+    <link rel="stylesheet"
+          href="{% static 'calculators/css/calculator.css' %}">
+
+</head>
+
+
+<body>
+
+<header class="navbar">
+
+    <a href="/" class="logo">
+        Calc<span>Verse</span>
+    </a>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/category/scientific/">Scientific</a>
+    </nav>
+
+</header>
+
+
+<main class="tool-container">
+
+
+    <!-- HERO -->
+
+    <div class="tool-hero">
+
+        <span class="hero-badge">
+            SCIENTIFIC TOOL
+        </span>
+
+        <h1>
+            Equation <span>Solver</span>
+        </h1>
+
+        <p>
+            Add multiple linear equations and solve for the variables instantly.
+        </p>
+
+    </div>
+
+
+    <!-- SOLVER CARD -->
+
+    <div class="tool-card equation-card">
+
+
+        <div class="equation-info">
+            Start with two equations. Add more equations when needed.
+            Use variables such as <strong>x, y, z, w</strong>.
+        </div>
+
+
+        <!-- EQUATIONS CONTAINER -->
+
+        <div id="equationsContainer">
+
+
+            <!-- EQUATION 1 -->
+
+            <div class="equation-row">
+
+                <div class="input-group">
+
+                    <label>Equation 1</label>
+
+                    <input
+                        type="text"
+                        class="equation-input"
+                        placeholder="Example: 2x + y = 10"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- EQUATION 2 -->
+
+            <div class="equation-row">
+
+                <div class="input-group">
+
+                    <label>Equation 2</label>
+
+                    <input
+                        type="text"
+                        class="equation-input"
+                        placeholder="Example: x - y = 2"
+                    >
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- ADD EQUATION -->
+
+        <button
+            type="button"
+            class="add-equation-btn"
+            onclick="addEquation()"
+        >
+            + Add Equation
+        </button>
+
+
+        <!-- SOLVE -->
+
+        <button
+            type="button"
+            class="calculate-btn"
+            onclick="solveEquations()"
+        >
+            Solve Equations
+        </button>
+
+
+        <!-- RESULT -->
+
+        <div class="result-box">
+
+            <span>RESULT</span>
+
+            <div
+                class="equation-result"
+                id="equationResult"
+            >
+                Enter equations and click Solve.
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- STEP BY STEP -->
+
+    <div
+        class="solution-box"
+        id="solutionBox"
+        style="display: none;"
+    >
+
+        <h2>
+            Step-by-Step <span>Solution</span>
+        </h2>
+
+        <div id="solutionSteps"></div>
+
+    </div>
+
+
+    <!-- EXAMPLES -->
+
+    <div class="examples-section">
+
+        <h2>
+            Try <span>Examples</span>
+        </h2>
+
+
+        <div class="example-buttons">
+
+
+            <button
+                type="button"
+                onclick="setExample([
+                    '2x + y = 10',
+                    'x - y = 2'
+                ])"
+            >
+                2x + y = 10
+                <br>
+                x − y = 2
+            </button>
+
+
+            <button
+                type="button"
+                onclick="setExample([
+                    'x + y = 12',
+                    'x - y = 4'
+                ])"
+            >
+                x + y = 12
+                <br>
+                x − y = 4
+            </button>
+
+
+            <button
+                type="button"
+                onclick="setExample([
+                    'x + y + z = 6',
+                    'x - y + z = 2',
+                    'x + y - z = 4'
+                ])"
+            >
+                x + y + z = 6
+                <br>
+                x − y + z = 2
+                <br>
+                x + y − z = 4
+            </button>
+
+
+        </div>
+
+    </div>
+
+
+</main>
+
+
+
+<script>
+
+
+/* =========================================
+   VARIABLES SUPPORTED
+========================================= */
+
+const variableOrder = [
+    "x",
+    "y",
+    "z",
+    "w",
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f"
+];
+
+
+
+/* =========================================
+   ADD EQUATION
+========================================= */
+
+function addEquation() {
+
+    const container =
+        document.getElementById("equationsContainer");
+
+    const equationNumber =
+        container.querySelectorAll(".equation-row").length + 1;
+
+
+    const row =
+        document.createElement("div");
+
+
+    row.className =
+        "equation-row";
+
+
+    row.innerHTML = `
+
+        <div class="input-group">
+
+            <label>
+                Equation ${equationNumber}
+            </label>
+
+            <input
+                type="text"
+                class="equation-input"
+                placeholder="Example: x + y + z = 10"
+            >
+
+        </div>
+
+
+        <button
+            type="button"
+            class="remove-equation-btn"
+            onclick="removeEquation(this)"
+            title="Remove Equation"
+        >
+            ×
+        </button>
+
+    `;
+
+
+    container.appendChild(row);
+
+}
+
+
+
+/* =========================================
+   REMOVE EQUATION
+========================================= */
+
+function removeEquation(button) {
+
+    const container =
+        document.getElementById("equationsContainer");
+
+
+    const rows =
+        container.querySelectorAll(".equation-row");
+
+
+    /* Minimum 2 equations */
+
+    if (rows.length <= 2) {
+        return;
+    }
+
+
+    const row =
+        button.closest(".equation-row");
+
+
+    row.remove();
+
+
+    updateEquationNumbers();
+
+}
+
+
+
+/* =========================================
+   UPDATE EQUATION NUMBERS
+========================================= */
+
+function updateEquationNumbers() {
+
+    const rows =
+        document.querySelectorAll(".equation-row");
+
+
+    rows.forEach(function(row, index) {
+
+        const label =
+            row.querySelector("label");
+
+
+        label.textContent =
+            `Equation ${index + 1}`;
+
+    });
+
+}
+
+
+
+/* =========================================
+   SET EXAMPLE
+========================================= */
+
+function setExample(equations) {
+
+    const container =
+        document.getElementById("equationsContainer");
+
+
+    /* Clear existing equations */
+
+    container.innerHTML = "";
+
+
+    equations.forEach(function(equation, index) {
+
+        const row =
+            document.createElement("div");
+
+
+        row.className =
+            "equation-row";
+
+
+        let removeButton = "";
+
+
+        if (index >= 2) {
+
+            removeButton = `
+
+                <button
+                    type="button"
+                    class="remove-equation-btn"
+                    onclick="removeEquation(this)"
+                    title="Remove Equation"
+                >
+                    ×
+                </button>
+
+            `;
+
+        }
+
+
+        row.innerHTML = `
+
+            <div class="input-group">
+
+                <label>
+                    Equation ${index + 1}
+                </label>
+
+                <input
+                    type="text"
+                    class="equation-input"
+                    value="${equation}"
+                >
+
+            </div>
+
+            ${removeButton}
+
+        `;
+
+
+        container.appendChild(row);
+
+    });
+
+
+    document.getElementById("equationResult").innerHTML =
+        "Example loaded. Click <strong>Solve Equations</strong>.";
+
+    document.getElementById("solutionBox").style.display =
+        "none";
+
+}
+
+
+
+/* =========================================
+   GET ALL EQUATIONS
+========================================= */
+
+function getEquations() {
+
+    const inputs =
+        document.querySelectorAll(".equation-input");
+
+
+    const equations = [];
+
+
+    inputs.forEach(function(input) {
+
+        const value =
+            input.value.trim();
+
+
+        if (value !== "") {
+            equations.push(value);
+        }
+
+    });
+
+
+    return equations;
+
+}
+
+
+
+/* =========================================
+   NORMALIZE EQUATION
+========================================= */
+
+function normalizeEquation(equation) {
+
+    return equation
+        .toLowerCase()
+        .replace(/\s+/g, "")
+        .replace(/−/g, "-")
+        .replace(/²/g, "^2")
+        .replace(/³/g, "^3");
+
+}
+
+
+
+/* =========================================
+   FIND VARIABLES USED
+========================================= */
+
+function findVariables(equations) {
+
+    const foundVariables = [];
+
+
+    equations.forEach(function(equation) {
+
+        const normalized =
+            normalizeEquation(equation);
+
+
+        variableOrder.forEach(function(variable) {
+
+            const regex =
+                new RegExp(variable, "g");
+
+
+            if (
+                regex.test(normalized) &&
+                !foundVariables.includes(variable)
+            ) {
+
+                foundVariables.push(variable);
+
+            }
+
+        });
+
+    });
+
+
+    return foundVariables;
+
+}
+
+
+
+/* =========================================
+   PARSE ONE SIDE
+   Converts:
+   2x - 3y + z + 5
+   into coefficients
+========================================= */
+
+function parseSide(side, variables) {
+
+    const coefficients = {};
+
+
+    variables.forEach(function(variable) {
+        coefficients[variable] = 0;
+    });
+
+
+    let constant = 0;
+
+
+    side =
+        side
+        .replace(/−/g, "-")
+        .replace(/\s+/g, "");
+
+
+    if (
+        side[0] !== "+" &&
+        side[0] !== "-"
+    ) {
+        side = "+" + side;
+    }
+
+
+    const terms =
+        side.match(/[+-][^+-]+/g);
+
+
+    if (!terms) {
+        throw new Error("Invalid equation");
+    }
+
+
+    terms.forEach(function(term) {
+
+        const sign =
+            term[0] === "-" ? -1 : 1;
+
+
+        const value =
+            term.substring(1);
+
+
+        let variableFound = null;
+
+
+        variables.forEach(function(variable) {
+
+            if (value.includes(variable)) {
+                variableFound = variable;
+            }
+
+        });
+
+
+        /* VARIABLE TERM */
+
+        if (variableFound !== null) {
+
+            let coefficientText =
+                value.replace(variableFound, "");
+
+
+            /*
+               Powers are not allowed in
+               linear equation solver
+            */
+
+            if (
+                coefficientText.includes("^")
+            ) {
+                throw new Error(
+                    "Only linear equations are supported"
+                );
+            }
+
+
+            let coefficient;
+
+
+            if (
+                coefficientText === ""
+            ) {
+                coefficient = 1;
+            }
+
+            else {
+                coefficient =
+                    Number(coefficientText);
+            }
+
+
+            if (
+                isNaN(coefficient)
+            ) {
+                throw new Error(
+                    "Invalid coefficient"
+                );
+            }
+
+
+            coefficients[variableFound] +=
+                sign * coefficient;
+
+        }
+
+
+        /* CONSTANT */
+
+        else {
+
+            const number =
+                Number(value);
+
+
+            if (
+                isNaN(number)
+            ) {
+                throw new Error(
+                    "Invalid constant"
+                );
+            }
+
+
+            constant +=
+                sign * number;
+
+        }
+
+    });
+
+
+    return {
+        coefficients,
+        constant
+    };
+
+}
+
+
+
+/* =========================================
+   PARSE EQUATION
+   ax + by + cz = d
+========================================= */
+
+function parseEquation(
+    equation,
+    variables
+) {
+
+    const normalized =
+        normalizeEquation(equation);
+
+
+    if (
+        !normalized.includes("=")
+    ) {
+        throw new Error(
+            "Every equation must contain ="
+        );
+    }
+
+
+    const parts =
+        normalized.split("=");
+
+
+    if (
+        parts.length !== 2
+    ) {
+        throw new Error(
+            "Invalid equation"
+        );
+    }
+
+
+    const left =
+        parseSide(
+            parts[0],
+            variables
+        );
+
+
+    const right =
+        parseSide(
+            parts[1],
+            variables
+        );
+
+
+    const coefficients = [];
+
+
+    variables.forEach(function(variable) {
+
+        coefficients.push(
+            left.coefficients[variable] -
+            right.coefficients[variable]
+        );
+
+    });
+
+
+    const constant =
+        right.constant -
+        left.constant;
+
+
+    return {
+        coefficients,
+        constant
+    };
+
+}
+
+
+
+/* =========================================
+   GAUSSIAN ELIMINATION
+========================================= */
+
+function solveMatrix(matrix) {
+
+    const rows =
+        matrix.length;
+
+
+    const columns =
+        matrix[0].length - 1;
+
+
+    if (
+        rows !== columns
+    ) {
+        return {
+            success: false,
+            message:
+                "Number of equations must match the number of variables."
+        };
+    }
+
+
+    const steps = [];
+
+
+    for (
+        let pivot = 0;
+        pivot < columns;
+        pivot++
+    ) {
+
+        let maxRow =
+            pivot;
+
+
+        for (
+            let row = pivot + 1;
+            row < rows;
+            row++
+        ) {
+
+            if (
+                Math.abs(
+                    matrix[row][pivot]
+                )
+                >
+                Math.abs(
+                    matrix[maxRow][pivot]
+                )
+            ) {
+
+                maxRow = row;
+
+            }
+
+        }
+
+
+        /*
+           Swap rows if needed
+        */
+
+        if (
+            maxRow !== pivot
+        ) {
+
+            const temp =
+                matrix[pivot];
+
+            matrix[pivot] =
+                matrix[maxRow];
+
+            matrix[maxRow] =
+                temp;
+
+
+            steps.push(
+                `Swap Equation ${pivot + 1} with Equation ${maxRow + 1}`
+            );
+
+        }
+
+
+        /*
+           No pivot means no unique solution
+        */
+
+        if (
+            Math.abs(
+                matrix[pivot][pivot]
+            )
+            < 0.0000000001
+        ) {
+
+            return {
+                success: false,
+                message:
+                    "This system does not have a unique solution."
+            };
+
+        }
+
+
+        /*
+           Make pivot = 1
+        */
+
+        const pivotValue =
+            matrix[pivot][pivot];
+
+
+        for (
+            let column = pivot;
+            column <= columns;
+            column++
+        ) {
+
+            matrix[pivot][column] =
+                matrix[pivot][column] /
+                pivotValue;
+
+        }
+
+
+        /*
+           Eliminate all other rows
+        */
+
+        for (
+            let row = 0;
+            row < rows;
+            row++
+        ) {
+
+            if (
+                row === pivot
+            ) {
+                continue;
+            }
+
+
+            const factor =
+                matrix[row][pivot];
+
+
+            for (
+                let column = pivot;
+                column <= columns;
+                column++
+            ) {
+
+                matrix[row][column] =
+                    matrix[row][column] -
+                    factor *
+                    matrix[pivot][column];
+
+            }
+
+        }
+
+
+        steps.push(
+            `Eliminate variable ${pivot + 1} using row operations.`
+        );
+
+    }
+
+
+    const solution = [];
+
+
+    for (
+        let row = 0;
+        row < rows;
+        row++
+    ) {
+
+        solution.push(
+            matrix[row][columns]
+        );
+
+    }
+
+
+    return {
+        success: true,
+        solution: solution,
+        steps: steps
+    };
+
+}
+
+
+
+/* =========================================
+   MAIN SOLVER
+========================================= */
+
+function solveEquations() {
+
+    const equations =
+        getEquations();
+
+
+    const resultBox =
+        document.getElementById(
+            "equationResult"
+        );
+
+
+    const solutionBox =
+        document.getElementById(
+            "solutionBox"
+        );
+
+
+    const solutionSteps =
+        document.getElementById(
+            "solutionSteps"
+        );
+
+
+    /* Minimum 2 */
+
+    if (
+        equations.length < 2
+    ) {
+
+        resultBox.textContent =
+            "Please enter at least 2 equations.";
+
+        solutionBox.style.display =
+            "none";
+
+        return;
+
+    }
+
+
+    try {
+
+        /*
+           Find all variables
+        */
+
+        const variables =
+            findVariables(equations);
+
+
+        if (
+            variables.length === 0
+        ) {
+
+            throw new Error(
+                "No variables found"
+            );
+
+        }
+
+
+        /*
+           IMPORTANT:
+           Number of equations must equal
+           number of variables
+        */
+
+        if (
+            equations.length !==
+            variables.length
+        ) {
+
+            resultBox.innerHTML =
+                `You entered <strong>${equations.length}</strong> equations but used <strong>${variables.length}</strong> variables.<br><br>
+                For a unique solution, the number of equations should match the number of variables.`;
+
+            solutionBox.style.display =
+                "none";
+
+            return;
+
+        }
+
+
+        /*
+           Parse equations
+        */
+
+        const matrix = [];
+
+
+        equations.forEach(function(equation) {
+
+            const parsed =
+                parseEquation(
+                    equation,
+                    variables
+                );
+
+
+            const row = [
+                ...parsed.coefficients,
+                parsed.constant
+            ];
+
+
+            matrix.push(row);
+
+        });
+
+
+        /*
+           Keep original matrix for display
+        */
+
+        const originalMatrix =
+            matrix.map(function(row) {
+                return [...row];
+            });
+
+
+        /*
+           Solve
+        */
+
+        const solved =
+            solveMatrix(matrix);
+
+
+        if (
+            !solved.success
+        ) {
+
+            resultBox.textContent =
+                solved.message;
+
+            solutionBox.style.display =
+                "none";
+
+            return;
+
+        }
+
+
+        /*
+           RESULT DISPLAY
+        */
+
+        let resultHTML = "";
+
+
+        variables.forEach(function(
+            variable,
+            index
+        ) {
+
+            resultHTML += `
+                <strong>
+                    ${variable} = ${formatNumber(
+                        solved.solution[index]
+                    )}
+                </strong>
+            `;
+
+        });
+
+
+        resultBox.innerHTML =
+            resultHTML;
+
+
+        /*
+           STEP BY STEP DISPLAY
+        */
+
+        let givenEquationsHTML = "";
+
+
+        equations.forEach(function(
+            equation,
+            index
+        ) {
+
+            givenEquationsHTML += `
+                <p>
+                    Equation ${index + 1}:
+                    ${formatEquation(equation)}
+                </p>
+            `;
+
+        });
+
+
+        let standardFormHTML = "";
+
+
+        originalMatrix.forEach(function(
+            row,
+            index
+        ) {
+
+            standardFormHTML += `
+                <p>
+                    Equation ${index + 1}:
+                    ${formatMatrixEquation(
+                        row,
+                        variables
+                    )}
+                </p>
+            `;
+
+        });
+
+
+        let rowOperationHTML = "";
+
+
+        solved.steps.forEach(function(step) {
+
+            rowOperationHTML += `
+                <p>${step}</p>
+            `;
+
+        });
+
+
+        let finalHTML = "";
+
+
+        variables.forEach(function(
+            variable,
+            index
+        ) {
+
+            finalHTML += `
+                <p>
+                    <strong>
+                        ${variable} =
+                        ${formatNumber(
+                            solved.solution[index]
+                        )}
+                    </strong>
+                </p>
+            `;
+
+        });
+
+
+        solutionSteps.innerHTML = `
+
+
+            <div class="solution-step">
+
+                <h3>
+                    Step 1: Given Equations
+                </h3>
+
+                ${givenEquationsHTML}
+
+            </div>
+
+
+            <div class="solution-step">
+
+                <h3>
+                    Step 2: Standard Form
+                </h3>
+
+                ${standardFormHTML}
+
+            </div>
+
+
+            <div class="solution-step">
+
+                <h3>
+                    Step 3: Row Reduction
+                </h3>
+
+                ${rowOperationHTML}
+
+            </div>
+
+
+            <div class="solution-step final-step">
+
+                <h3>
+                    Final Answer
+                </h3>
+
+                ${finalHTML}
+
+            </div>
+
+        `;
+
+
+        solutionBox.style.display =
+            "block";
+
+    }
+
+
+    catch (error) {
+
+        console.error(error);
+
+
+        resultBox.textContent =
+            error.message ||
+            "Invalid equation format.";
+
+
+        solutionBox.style.display =
+            "none";
+
+    }
+
+}
+
+
+
+/* =========================================
+   FORMAT NUMBER
+========================================= */
+
+function formatNumber(number) {
+
+    if (
+        Math.abs(number) <
+        0.0000000001
+    ) {
+        return "0";
+    }
+
+
+    if (
+        Number.isInteger(number)
+    ) {
+        return String(number);
+    }
+
+
+    return String(
+        Number(
+            number.toFixed(6)
+        )
+    );
+
+}
+
+
+
+/* =========================================
+   FORMAT EQUATION
+========================================= */
+
+function formatEquation(equation) {
+
+    return String(equation)
+        .replace(/-/g, "−");
+
+}
+
+
+
+/* =========================================
+   FORMAT MATRIX EQUATION
+========================================= */
+
+function formatMatrixEquation(
+    row,
+    variables
+) {
+
+    const constant =
+        row[row.length - 1];
+
+
+    let result = "";
+
+
+    variables.forEach(function(
+        variable,
+        index
+    ) {
+
+        const coefficient =
+            row[index];
+
+
+        if (
+            coefficient === 0
+        ) {
+            return;
+        }
+
+
+        const absolute =
+            Math.abs(coefficient);
+
+
+        let term = "";
+
+
+        if (
+            absolute === 1
+        ) {
+            term = variable;
+        }
+
+        else {
+            term =
+                absolute + variable;
+        }
+
+
+        if (
+            result === ""
+        ) {
+
+            if (
+                coefficient < 0
+            ) {
+                result += "−";
+            }
+
+            result += term;
+
+        }
+
+        else {
+
+            if (
+                coefficient < 0
+            ) {
+                result += " − " + term;
+            }
+
+            else {
+                result += " + " + term;
+            }
+
+        }
+
+    });
+
+
+    if (
+        result === ""
+    ) {
+        result = "0";
+    }
+
+
+    result +=
+        " = " +
+        formatNumber(constant);
+
+
+    return result;
+
+}
+
+
+</script>
+
+
+</body>
+</html>

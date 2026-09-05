@@ -1,0 +1,365 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Word Counter | CalcVerse</title>
+
+    <link rel="stylesheet" href="{% static 'calculators/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'calculators/css/word-counter.css' %}">
+</head>
+
+<body>
+
+<!-- ================================
+     NAVBAR
+================================= -->
+<header class="navbar">
+    <div class="nav-container">
+
+        <a href="/" class="logo">
+            Calc<span>Verse</span>
+        </a>
+
+        <nav>
+            <a href="/">Home</a>
+            <a href="/category/">Categories</a>
+        </nav>
+
+    </div>
+</header>
+
+
+<!-- ================================
+     MAIN PAGE
+================================= -->
+<main class="word-counter-page">
+
+
+    <!-- HERO -->
+    <section class="word-counter-hero">
+
+        <div class="word-counter-tag">
+            TEXT TOOL
+        </div>
+
+        <h1>
+            Word <span>Counter</span>
+        </h1>
+
+        <p>
+            Paste or type your text and instantly see
+            the total words, characters, sentences and more.
+        </p>
+
+    </section>
+
+
+    <!-- COUNTER CARD -->
+    <section class="word-counter-card">
+
+        <div class="word-counter-heading">
+
+            <h2>Count Your Text</h2>
+
+            <p>
+                Start typing or paste your text below.
+                Your statistics update automatically.
+            </p>
+
+        </div>
+
+
+        <!-- TEXT INPUT -->
+        <div class="word-counter-form-group">
+
+            <label for="textInput">
+                Enter or Paste Your Text
+            </label>
+
+            <textarea
+                id="textInput"
+                class="word-counter-textarea"
+                placeholder="Start typing or paste your text here..."
+            ></textarea>
+
+        </div>
+
+
+        <!-- CLEAR BUTTON -->
+        <button
+            type="button"
+            class="clear-text-button"
+            onclick="clearText()"
+        >
+            Clear Text
+        </button>
+
+
+        <!-- STATISTICS -->
+        <div class="text-statistics">
+
+
+            <div class="stat-box">
+                <span class="stat-label">
+                    WORDS
+                </span>
+
+                <strong
+                    id="wordCount"
+                    class="stat-value"
+                >
+                    0
+                </strong>
+            </div>
+
+
+            <div class="stat-box">
+                <span class="stat-label">
+                    CHARACTERS
+                </span>
+
+                <strong
+                    id="characterCount"
+                    class="stat-value"
+                >
+                    0
+                </strong>
+            </div>
+
+
+            <div class="stat-box">
+                <span class="stat-label">
+                    NO SPACES
+                </span>
+
+                <strong
+                    id="characterWithoutSpaces"
+                    class="stat-value"
+                >
+                    0
+                </strong>
+            </div>
+
+
+            <div class="stat-box">
+                <span class="stat-label">
+                    SENTENCES
+                </span>
+
+                <strong
+                    id="sentenceCount"
+                    class="stat-value"
+                >
+                    0
+                </strong>
+            </div>
+
+
+            <div class="stat-box">
+                <span class="stat-label">
+                    PARAGRAPHS
+                </span>
+
+                <strong
+                    id="paragraphCount"
+                    class="stat-value"
+                >
+                    0
+                </strong>
+            </div>
+
+
+            <div class="stat-box">
+                <span class="stat-label">
+                    LINES
+                </span>
+
+                <strong
+                    id="lineCount"
+                    class="stat-value"
+                >
+                    0
+                </strong>
+            </div>
+
+
+        </div>
+
+
+        <!-- READING TIME -->
+        <div class="reading-time-box">
+
+            <span>
+                ESTIMATED READING TIME
+            </span>
+
+            <strong id="readingTime">
+                0 min
+            </strong>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<!-- ================================
+     FOOTER
+================================= -->
+<footer>
+    <p>© 2026 CalcVerse — Calculate Smarter.</p>
+</footer>
+
+
+<!-- ================================
+     JAVASCRIPT
+================================= -->
+<script>
+
+const textInput =
+    document.getElementById("textInput");
+
+
+/* =========================================
+   UPDATE ALL COUNTS
+========================================= */
+
+function updateTextStatistics() {
+
+    const text =
+        textInput.value;
+
+
+    /* Characters */
+
+    const characters =
+        text.length;
+
+
+    /* Characters without spaces */
+
+    const charactersWithoutSpaces =
+        text.replace(/\s/g, "").length;
+
+
+    /* Words */
+
+    const trimmedText =
+        text.trim();
+
+    const words =
+        trimmedText === ""
+            ? 0
+            : trimmedText.split(/\s+/).length;
+
+
+    /* Sentences */
+
+    const sentences =
+        trimmedText === ""
+            ? 0
+            : trimmedText
+                .split(/[.!?]+/)
+                .filter(
+                    sentence =>
+                        sentence.trim() !== ""
+                )
+                .length;
+
+
+    /* Paragraphs */
+
+    const paragraphs =
+        trimmedText === ""
+            ? 0
+            : trimmedText
+                .split(/\n\s*\n/)
+                .filter(
+                    paragraph =>
+                        paragraph.trim() !== ""
+                )
+                .length;
+
+
+    /* Lines */
+
+    const lines =
+        text === ""
+            ? 0
+            : text.split(/\r?\n/).length;
+
+
+    /* Reading time
+       Average reading speed: 200 words/minute */
+
+    const minutes =
+        words === 0
+            ? 0
+            : Math.ceil(words / 200);
+
+
+    /* Update UI */
+
+    document.getElementById("wordCount").textContent =
+        words.toLocaleString();
+
+    document.getElementById("characterCount").textContent =
+        characters.toLocaleString();
+
+    document.getElementById(
+        "characterWithoutSpaces"
+    ).textContent =
+        charactersWithoutSpaces.toLocaleString();
+
+    document.getElementById("sentenceCount").textContent =
+        sentences.toLocaleString();
+
+    document.getElementById("paragraphCount").textContent =
+        paragraphs.toLocaleString();
+
+    document.getElementById("lineCount").textContent =
+        lines.toLocaleString();
+
+    document.getElementById("readingTime").textContent =
+        minutes === 0
+            ? "0 min"
+            : minutes + " min";
+
+}
+
+
+/* =========================================
+   INPUT EVENT
+========================================= */
+
+textInput.addEventListener(
+    "input",
+    updateTextStatistics
+);
+
+
+/* =========================================
+   CLEAR TEXT
+========================================= */
+
+function clearText() {
+
+    textInput.value = "";
+
+    updateTextStatistics();
+
+    textInput.focus();
+
+}
+
+</script>
+
+</body>
+</html>

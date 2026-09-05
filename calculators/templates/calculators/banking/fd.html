@@ -1,0 +1,247 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FD Calculator | CalcVerse</title>
+
+    <link rel="stylesheet"
+          href="{% static 'calculators/css/style.css' %}">
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="nav-container">
+
+        <a href="/" class="logo">
+            Calc<span>Verse</span>
+        </a>
+
+        <nav>
+            <a href="/">Home</a>
+            <a href="{% url 'banking_finance' %}">Calculators</a>
+        </nav>
+
+    </div>
+</header>
+
+
+<main>
+
+    <section class="hero">
+
+        <div class="badge">BANKING & FINANCE</div>
+
+        <h1>
+            FD <span>Calculator</span>
+        </h1>
+
+        <p>
+            Calculate the maturity amount and interest earned on your
+            Fixed Deposit investment.
+        </p>
+
+    </section>
+
+
+    <section class="calculator-section">
+
+        <div class="calculator-card banking-calculator-card">
+
+            <div class="input-group">
+                <label for="principal">Deposit Amount (₹)</label>
+
+                <input
+                    type="number"
+                    id="principal"
+                    placeholder="Enter deposit amount"
+                    min="1"
+                >
+            </div>
+
+
+            <div class="input-group">
+                <label for="rate">Annual Interest Rate (%)</label>
+
+                <input
+                    type="number"
+                    id="rate"
+                    placeholder="Enter annual interest rate"
+                    min="0"
+                    step="0.01"
+                >
+            </div>
+
+
+            <div class="input-group">
+                <label for="years">Investment Period (Years)</label>
+
+                <input
+                    type="number"
+                    id="years"
+                    placeholder="Enter investment period"
+                    min="1"
+                    step="0.1"
+                >
+            </div>
+
+
+            <div class="input-group">
+                <label for="frequency">Compounding Frequency</label>
+
+                <select id="frequency">
+                    <option value="1">Annually</option>
+                    <option value="2">Half-Yearly</option>
+                    <option value="4">Quarterly</option>
+                    <option value="12">Monthly</option>
+                </select>
+            </div>
+
+
+            <button
+                class="calculate-btn"
+                onclick="calculateFD()"
+            >
+                Calculate FD
+            </button>
+
+
+            <div
+                class="result-box"
+                id="resultBox"
+                style="display: none;"
+            >
+
+                <span>MATURITY AMOUNT</span>
+
+                <strong id="maturityAmount">
+                    ₹0
+                </strong>
+
+            </div>
+
+
+            <div
+                class="solution-box"
+                id="solutionBox"
+                style="display: none;"
+            >
+
+                <h2>FD Calculation</h2>
+
+                <div class="step-item">
+                    <strong>Deposit Amount</strong>
+                    <p id="displayPrincipal"></p>
+                </div>
+
+                <div class="step-item">
+                    <strong>Interest Earned</strong>
+                    <p id="interestEarned"></p>
+                </div>
+
+                <div class="step-item">
+                    <strong>Maturity Amount</strong>
+                    <p id="displayMaturity"></p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer>
+    <p>© 2026 CalcVerse — Calculate Smarter.</p>
+</footer>
+
+
+<script>
+
+function formatCurrency(amount) {
+    return new Intl.NumberFormat('en-IN', {
+        style: 'currency',
+        currency: 'INR',
+        maximumFractionDigits: 2
+    }).format(amount);
+}
+
+
+function calculateFD() {
+
+    const principal = parseFloat(
+        document.getElementById("principal").value
+    );
+
+    const rate = parseFloat(
+        document.getElementById("rate").value
+    );
+
+    const years = parseFloat(
+        document.getElementById("years").value
+    );
+
+    const frequency = parseFloat(
+        document.getElementById("frequency").value
+    );
+
+
+    if (
+        isNaN(principal) ||
+        isNaN(rate) ||
+        isNaN(years) ||
+        principal <= 0 ||
+        rate < 0 ||
+        years <= 0
+    ) {
+        alert("Please enter valid values.");
+        return;
+    }
+
+
+    // A = P(1 + r/n)^(nt)
+
+    const maturityAmount =
+        principal *
+        Math.pow(
+            1 + (rate / 100) / frequency,
+            frequency * years
+        );
+
+
+    const interest =
+        maturityAmount - principal;
+
+
+    document.getElementById("maturityAmount").textContent =
+        formatCurrency(maturityAmount);
+
+
+    document.getElementById("displayPrincipal").textContent =
+        formatCurrency(principal);
+
+
+    document.getElementById("interestEarned").textContent =
+        formatCurrency(interest);
+
+
+    document.getElementById("displayMaturity").textContent =
+        formatCurrency(maturityAmount);
+
+
+    document.getElementById("resultBox").style.display = "block";
+
+    document.getElementById("solutionBox").style.display = "block";
+}
+
+</script>
+
+</body>
+</html>

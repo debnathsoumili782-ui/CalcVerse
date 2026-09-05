@@ -1,0 +1,259 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Random Picker | CalcVerse</title>
+
+    <link rel="stylesheet" href="{% static 'calculators/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'calculators/css/random-picker.css' %}">
+</head>
+
+<body>
+
+<!-- ================================
+     NAVBAR
+================================= -->
+<header class="navbar">
+    <div class="nav-container">
+
+        <a href="/" class="logo">
+            Calc<span>Verse</span>
+        </a>
+
+        <nav>
+            <a href="/">Home</a>
+            <a href="/category/">Categories</a>
+        </nav>
+
+    </div>
+</header>
+
+
+<!-- ================================
+     MAIN PAGE
+================================= -->
+<main class="random-picker-page">
+
+
+    <!-- HERO -->
+    <section class="random-picker-hero">
+
+        <div class="random-picker-tag">
+            RANDOM TOOL
+        </div>
+
+        <h1>
+            Random <span>Picker</span>
+        </h1>
+
+        <p>
+            Add your options and let CalcVerse
+            randomly pick one for you.
+        </p>
+
+    </section>
+
+
+    <!-- PICKER CARD -->
+    <section class="random-picker-card">
+
+        <div class="random-picker-heading">
+
+            <h2>Pick a Random Option</h2>
+
+            <p>
+                Enter one option per line, then click
+                the button to choose randomly.
+            </p>
+
+        </div>
+
+
+        <!-- OPTIONS INPUT -->
+        <div class="picker-form-group">
+
+            <label for="pickerOptions">
+                Your Options
+            </label>
+
+            <textarea
+                id="pickerOptions"
+                class="picker-textarea"
+                placeholder="Example:
+Pizza
+Burger
+Pasta
+Biryani"
+            ></textarea>
+
+        </div>
+
+
+        <!-- OPTION COUNT -->
+        <div class="option-count">
+            <span id="optionCount">0</span> options added
+        </div>
+
+
+        <!-- PICK BUTTON -->
+        <button
+            type="button"
+            class="pick-button"
+            onclick="pickRandomOption()"
+        >
+            Pick Randomly
+        </button>
+
+
+        <!-- ERROR -->
+        <p
+            id="pickerError"
+            class="picker-error"
+        ></p>
+
+
+        <!-- RESULT -->
+        <div
+            id="pickerResult"
+            class="picker-result hidden"
+        >
+
+            <div class="picker-result-label">
+                RANDOMLY PICKED
+            </div>
+
+            <div
+                id="pickedOption"
+                class="picked-option"
+            ></div>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<!-- ================================
+     FOOTER
+================================= -->
+<footer>
+    <p>© 2026 CalcVerse — Calculate Smarter.</p>
+</footer>
+
+
+<!-- ================================
+     JAVASCRIPT
+================================= -->
+<script>
+
+const optionsTextarea =
+    document.getElementById("pickerOptions");
+
+const optionCountElement =
+    document.getElementById("optionCount");
+
+
+/* =========================================
+   COUNT OPTIONS
+========================================= */
+
+function getOptions() {
+
+    return optionsTextarea.value
+        .split("\n")
+        .map(option => option.trim())
+        .filter(option => option !== "");
+
+}
+
+
+function updateOptionCount() {
+
+    const options = getOptions();
+
+    optionCountElement.textContent =
+        options.length;
+
+}
+
+
+optionsTextarea.addEventListener(
+    "input",
+    updateOptionCount
+);
+
+
+/* =========================================
+   PICK RANDOM OPTION
+========================================= */
+
+function pickRandomOption() {
+
+    const options = getOptions();
+
+    const errorElement =
+        document.getElementById("pickerError");
+
+    const resultElement =
+        document.getElementById("pickerResult");
+
+    const pickedOptionElement =
+        document.getElementById("pickedOption");
+
+
+    /* Clear previous error */
+    errorElement.textContent = "";
+
+
+    /* Validation */
+    if (options.length === 0) {
+
+        errorElement.textContent =
+            "Please enter at least one option.";
+
+        resultElement.classList.add("hidden");
+
+        return;
+    }
+
+
+    if (options.length < 2) {
+
+        errorElement.textContent =
+            "Please enter at least two options.";
+
+        resultElement.classList.add("hidden");
+
+        return;
+    }
+
+
+    /* Pick random option */
+    const randomIndex =
+        Math.floor(
+            Math.random() * options.length
+        );
+
+    const selectedOption =
+        options[randomIndex];
+
+
+    /* Show result */
+    pickedOptionElement.textContent =
+        selectedOption;
+
+    resultElement.classList.remove("hidden");
+
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,346 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Academic Calculators — CalcVerse</title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'calculators/css/style.css' %}"
+    >
+</head>
+
+
+<body>
+
+
+<!-- NAVBAR -->
+
+<header class="navbar">
+
+    <div class="nav-container">
+
+        <a href="/" class="logo">
+            Calc<span>Verse</span>
+        </a>
+
+        <nav>
+            <a href="/">Home</a>
+            <a href="#universitySection">Academic</a>
+        </nav>
+
+    </div>
+
+</header>
+
+
+
+<main>
+
+
+    <!-- HERO -->
+
+    <section class="hero calculator-hero">
+
+        <div class="badge">
+            ACADEMIC
+        </div>
+
+        <h1>
+            Academic <span>Calculators</span>
+        </h1>
+
+        <p>
+            Select your university and calculate your CGPA,
+            SGPA, DGPA and YGPA.
+        </p>
+
+    </section>
+
+
+
+    <!-- UNIVERSITY SELECTION -->
+
+    <section
+        class="calculator-section"
+        id="universitySection"
+    >
+
+        <div class="banking-calculator-card">
+
+
+            <div class="academic-heading">
+
+                <h2>
+                    Select Your University
+                </h2>
+
+                <p>
+                    Choose your university to see available
+                    academic calculators.
+                </p>
+
+            </div>
+
+
+            <!-- UNIVERSITY DROPDOWN -->
+
+            <div class="input-group">
+
+                <label for="university">
+                    University
+                </label>
+
+                <select id="university">
+
+                    <option value="">
+                        Select Your University
+                    </option>
+
+                    <option value="makaut">
+                        MAKAUT
+                    </option>
+
+                    <option value="calcutta">
+                        University of Calcutta
+                    </option>
+
+                    <option value="wbsu">
+                        West Bengal State University
+                    </option>
+
+                    <option value="burdwan">
+                        University of Burdwan
+                    </option>
+
+                    <option value="aktu">
+                        Dr. A.P.J. Abdul Kalam Technical University (AKTU)
+                    </option>
+
+                    <option value="brainware">
+                        Brainware University
+                    </option>
+
+                    <option value="adamas">
+                        Adamas University
+                    </option>
+
+                    <option value="other">
+                        Other University
+                    </option>
+
+
+                </select>
+
+            </div>
+
+
+            <!-- CONTINUE BUTTON -->
+
+            <button
+                type="button"
+                class="calculate-btn"
+                onclick="showCalculators()"
+            >
+                Continue
+            </button>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- CALCULATOR SELECTION -->
+
+    <section
+        class="categories"
+        id="calculatorSection"
+        style="display: none;"
+    >
+
+
+        <div class="section-heading">
+
+            <p>ACADEMIC TOOLS</p>
+
+            <h2>Choose a Calculator</h2>
+
+        </div>
+
+
+        <div class="category-grid">
+
+            <!-- CGPA -->
+
+            <a href="{% url 'cgpa_calculator' %}" class="category-card">
+                <div class="category-icon">📊</div>
+                <h3>CGPA Calculator</h3>
+                <p>Calculate your Cumulative Grade Point Average.</p>
+            </a>
+            <!-- SGPA -->
+
+            <a href="{% url 'sgpa_calculator' %}" class="category-card">
+                <div class="card-icon">📚</div>
+                <h2>SGPA Calculator</h2>
+                <p>Calculate your SGPA using subject credits and grade points.</p>
+            </a>
+            <!-- DGPA -->
+
+            <a href="{% url 'dgpa_calculator' %}" class="category-card">
+                <div class="category-icon">🎯</div>
+                <h3>DGPA Calculator</h3>
+                <p>Calculate your Diploma Grade Point Average.</p>
+            </a>
+            <!-- YGPA -->
+
+            <a href="{% url 'ygpa_calculator' %}" class="category-card">
+                <div class="category-icon">🏆</div>
+                <h3>YGPA Calculator</h3>
+                <p>Calculate your Year Grade Point Average.</p>
+            </a>
+            <!-- PERCENTAGE -->
+
+            <a href="{% url 'percentage_converter' %}" class="category-card">
+                <div class="card-icon">%</div>
+                <h2>Percentage Converter</h2>
+                <p>Convert your CGPA, SGPA, YGPA or DGPA into percentage.</p>
+            </a>
+        </div>
+
+    </section>
+
+
+</main>
+
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <p>
+        © 2026 CalcVerse — Calculate Smarter.
+    </p>
+
+</footer>
+
+
+
+<!-- JAVASCRIPT -->
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const universitySelect =
+            document.getElementById(
+                "university"
+            );
+
+
+        /*
+            আগে university select করা থাকলে
+            dropdown-এ সেই university দেখাবে
+        */
+
+        const savedUniversity =
+            localStorage.getItem(
+                "selectedUniversity"
+            );
+
+
+        if (savedUniversity) {
+
+            universitySelect.value =
+                savedUniversity;
+
+        }
+
+    }
+);
+
+
+
+function showCalculators() {
+
+
+    const university =
+        document.getElementById(
+            "university"
+        ).value;
+
+
+    const calculatorSection =
+        document.getElementById(
+            "calculatorSection"
+        );
+
+
+    /* University select না করলে */
+
+    if (university === "") {
+
+        alert(
+            "Please select your university first."
+        );
+
+
+        calculatorSection.style.display =
+            "none";
+
+
+        return;
+
+    }
+
+
+    /*
+        Selected university save হবে।
+
+        CGPA / SGPA / YGPA / DGPA /
+        Percentage Converter page-এ
+        এই university automatically পাওয়া যাবে।
+    */
+
+    localStorage.setItem(
+        "selectedUniversity",
+        university
+    );
+
+
+    /* Calculator cards show */
+
+    calculatorSection.style.display =
+        "block";
+
+
+    /* Calculator section-এ scroll */
+
+    calculatorSection.scrollIntoView({
+
+        behavior: "smooth",
+
+        block: "start"
+
+    });
+
+}
+
+</script>
+
+
+</body>
+</html>

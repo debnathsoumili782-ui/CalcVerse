@@ -1,0 +1,485 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Roman Numeral Converter | CalcVerse</title>
+
+    <link rel="stylesheet" href="{% static 'calculators/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'calculators/css/roman-numeral.css' %}">
+</head>
+
+<body>
+
+
+<!-- ================================
+     NAVBAR
+================================= -->
+
+<header class="navbar">
+    <div class="nav-container">
+
+        <a href="/" class="logo">
+            Calc<span>Verse</span>
+        </a>
+
+        <nav>
+            <a href="/">Home</a>
+            <a href="/category/">Categories</a>
+        </nav>
+
+    </div>
+</header>
+
+
+<!-- ================================
+     MAIN PAGE
+================================= -->
+
+<main class="roman-numeral-page">
+
+
+    <!-- HERO -->
+
+    <section class="roman-numeral-hero">
+
+        <div class="roman-numeral-tag">
+            NUMBER TOOL
+        </div>
+
+        <h1>
+            Roman Numeral <span>Converter</span>
+        </h1>
+
+        <p>
+            Convert numbers into Roman numerals or Roman numerals
+            back into numbers instantly.
+        </p>
+
+    </section>
+
+
+    <!-- CONVERTER CARD -->
+
+    <section class="roman-numeral-card">
+
+        <div class="roman-numeral-heading">
+
+            <h2>Convert Roman Numerals</h2>
+
+            <p>
+                Enter a number or Roman numeral and get
+                the converted result instantly.
+            </p>
+
+        </div>
+
+
+        <!-- CONVERSION TYPE -->
+
+        <div class="roman-form-group">
+
+            <label for="conversionType">
+                Conversion Type
+            </label>
+
+            <select
+                id="conversionType"
+                class="roman-select"
+            >
+                <option value="numberToRoman">
+                    Number to Roman Numeral
+                </option>
+
+                <option value="romanToNumber">
+                    Roman Numeral to Number
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- INPUT -->
+
+        <div class="roman-form-group">
+
+            <label
+                id="inputLabel"
+                for="romanInput"
+            >
+                Enter Number
+            </label>
+
+            <input
+                type="text"
+                id="romanInput"
+                class="roman-input"
+                placeholder="Enter a number from 1 to 3999"
+            >
+
+        </div>
+
+
+        <!-- CONVERT BUTTON -->
+
+        <button
+            type="button"
+            class="roman-convert-button"
+            onclick="convertRoman()"
+        >
+            Convert
+        </button>
+
+
+        <!-- ERROR -->
+
+        <p
+            id="romanError"
+            class="roman-error"
+        ></p>
+
+
+        <!-- RESULT -->
+
+        <div
+            id="romanResult"
+            class="roman-result hidden"
+        >
+
+            <div class="roman-result-label">
+                CONVERTED RESULT
+            </div>
+
+            <div
+                id="romanResultValue"
+                class="roman-result-value"
+            >
+            </div>
+
+            <div
+                id="romanResultDetails"
+                class="roman-result-details"
+            >
+            </div>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<!-- ================================
+     FOOTER
+================================= -->
+
+<footer>
+    <p>© 2026 CalcVerse — Calculate Smarter.</p>
+</footer>
+
+
+<!-- ================================
+     JAVASCRIPT
+================================= -->
+
+<script>
+
+
+const conversionType =
+    document.getElementById("conversionType");
+
+const romanInput =
+    document.getElementById("romanInput");
+
+const inputLabel =
+    document.getElementById("inputLabel");
+
+const romanError =
+    document.getElementById("romanError");
+
+const romanResult =
+    document.getElementById("romanResult");
+
+const romanResultValue =
+    document.getElementById("romanResultValue");
+
+const romanResultDetails =
+    document.getElementById("romanResultDetails");
+
+
+/* =========================================
+   CHANGE INPUT TYPE
+========================================= */
+
+conversionType.addEventListener(
+    "change",
+    function () {
+
+        romanInput.value = "";
+
+        romanError.textContent = "";
+
+        romanResult.classList.add("hidden");
+
+
+        if (
+            conversionType.value === "numberToRoman"
+        ) {
+
+            inputLabel.textContent =
+                "Enter Number";
+
+            romanInput.placeholder =
+                "Enter a number from 1 to 3999";
+
+        }
+
+        else {
+
+            inputLabel.textContent =
+                "Enter Roman Numeral";
+
+            romanInput.placeholder =
+                "Example: XIV, XLII, MCMXC";
+
+        }
+
+    }
+);
+
+
+/* =========================================
+   NUMBER TO ROMAN
+========================================= */
+
+function numberToRoman(number) {
+
+    const romanValues = [
+
+        [1000, "M"],
+        [900, "CM"],
+        [500, "D"],
+        [400, "CD"],
+        [100, "C"],
+        [90, "XC"],
+        [50, "L"],
+        [40, "XL"],
+        [10, "X"],
+        [9, "IX"],
+        [5, "V"],
+        [4, "IV"],
+        [1, "I"]
+
+    ];
+
+
+    let result = "";
+
+
+    for (
+        let i = 0;
+        i < romanValues.length;
+        i++
+    ) {
+
+        while (
+            number >= romanValues[i][0]
+        ) {
+
+            result += romanValues[i][1];
+
+            number -= romanValues[i][0];
+
+        }
+
+    }
+
+
+    return result;
+
+}
+
+
+/* =========================================
+   ROMAN TO NUMBER
+========================================= */
+
+function romanToNumber(roman) {
+
+    const values = {
+
+        I: 1,
+        V: 5,
+        X: 10,
+        L: 50,
+        C: 100,
+        D: 500,
+        M: 1000
+
+    };
+
+
+    let total = 0;
+
+
+    for (
+        let i = 0;
+        i < roman.length;
+        i++
+    ) {
+
+        const current =
+            values[roman[i]];
+
+        const next =
+            values[roman[i + 1]] || 0;
+
+
+        if (
+            current < next
+        ) {
+
+            total -= current;
+
+        }
+
+        else {
+
+            total += current;
+
+        }
+
+    }
+
+
+    return total;
+
+}
+
+
+/* =========================================
+   VALIDATE ROMAN NUMERAL
+========================================= */
+
+function isValidRoman(roman) {
+
+    const validRomanPattern =
+        /^M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/;
+
+
+    return validRomanPattern.test(
+        roman
+    );
+
+}
+
+
+/* =========================================
+   MAIN CONVERSION
+========================================= */
+
+function convertRoman() {
+
+    const input =
+        romanInput.value.trim().toUpperCase();
+
+
+    romanError.textContent = "";
+
+    romanResult.classList.add("hidden");
+
+
+    /* Empty Input */
+
+    if (input === "") {
+
+        romanError.textContent =
+            "Please enter a value.";
+
+        return;
+
+    }
+
+
+    /* Number → Roman */
+
+    if (
+        conversionType.value ===
+        "numberToRoman"
+    ) {
+
+        const number =
+            Number(input);
+
+
+        if (
+            !Number.isInteger(number) ||
+            number < 1 ||
+            number > 3999
+        ) {
+
+            romanError.textContent =
+                "Please enter a whole number from 1 to 3999.";
+
+            return;
+
+        }
+
+
+        const result =
+            numberToRoman(number);
+
+
+        romanResultValue.textContent =
+            result;
+
+        romanResultDetails.textContent =
+            number + " = " + result;
+
+    }
+
+
+    /* Roman → Number */
+
+    else {
+
+        if (
+            !isValidRoman(input)
+        ) {
+
+            romanError.textContent =
+                "Please enter a valid Roman numeral.";
+
+            return;
+
+        }
+
+
+        const result =
+            romanToNumber(input);
+
+
+        romanResultValue.textContent =
+            result;
+
+        romanResultDetails.textContent =
+            input + " = " + result;
+
+    }
+
+
+    romanResult.classList.remove("hidden");
+
+}
+
+
+</script>
+
+</body>
+</html>

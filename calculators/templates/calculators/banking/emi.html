@@ -1,0 +1,272 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>EMI Calculator — CalcVerse</title>
+
+    <link rel="stylesheet" href="{% static 'calculators/css/style.css' %}">
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="nav-container">
+        <a href="/" class="logo">
+            Calc<span>Verse</span>
+        </a>
+
+        <nav>
+            <a href="/">Home</a>
+            <a href="{% url 'banking_finance' %}">Calculators</a>
+        </nav>
+    </div>
+</header>
+
+
+<main>
+
+    <section class="hero calculator-hero">
+
+        <div class="badge">BANKING & FINANCE</div>
+
+        <h1>
+            EMI <span>Calculator</span>
+        </h1>
+
+        <p>
+            Calculate your monthly EMI, total interest and total payment.
+        </p>
+
+    </section>
+
+
+    <section class="calculator-section">
+
+        <div class="banking-calculator-card">
+
+            <!-- Loan Amount -->
+            <div class="input-group">
+                <label for="loanAmount">
+                    Loan Amount (₹)
+                </label>
+
+                <input
+                    type="number"
+                    id="loanAmount"
+                    placeholder="Enter loan amount"
+                >
+            </div>
+
+
+            <!-- Interest Rate -->
+            <div class="input-group">
+                <label for="interestRate">
+                    Annual Interest Rate (%)
+                </label>
+
+                <input
+                    type="number"
+                    id="interestRate"
+                    placeholder="Enter annual interest rate"
+                    step="0.01"
+                >
+            </div>
+
+
+            <!-- Loan Tenure -->
+            <div class="input-group">
+                <label for="loanYears">
+                    Loan Tenure (Years)
+                </label>
+
+                <input
+                    type="number"
+                    id="loanYears"
+                    placeholder="Enter loan tenure"
+                    step="0.5"
+                >
+            </div>
+
+
+            <!-- Calculate Button -->
+            <button
+                type="button"
+                class="calculate-btn"
+                onclick="calculateEMI()"
+            >
+                Calculate EMI
+            </button>
+
+
+            <!-- Main Result -->
+            <div class="result-box">
+
+                <span>MONTHLY EMI</span>
+
+                <strong id="monthlyEMI">
+                    ₹0.00
+                </strong>
+
+            </div>
+
+
+            <!-- Calculation Details -->
+            <div
+                class="solution-box"
+                id="emiSolution"
+                style="display: none;"
+            >
+
+                <h2>EMI Calculation</h2>
+
+
+                <div class="step-item">
+                    <strong>Loan Amount</strong>
+
+                    <p id="displayLoanAmount">
+                        ₹0.00
+                    </p>
+                </div>
+
+
+                <div class="step-item">
+                    <strong>Total Interest</strong>
+
+                    <p id="totalInterest">
+                        ₹0.00
+                    </p>
+                </div>
+
+
+                <div class="step-item">
+                    <strong>Total Payment</strong>
+
+                    <p id="totalPayment">
+                        ₹0.00
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer>
+    <p>© 2026 CalcVerse — Calculate Smarter.</p>
+</footer>
+
+
+<script>
+
+function calculateEMI() {
+
+    const loanAmount = parseFloat(
+        document.getElementById("loanAmount").value
+    );
+
+    const annualRate = parseFloat(
+        document.getElementById("interestRate").value
+    );
+
+    const loanYears = parseFloat(
+        document.getElementById("loanYears").value
+    );
+
+
+    if (
+        isNaN(loanAmount) ||
+        isNaN(annualRate) ||
+        isNaN(loanYears) ||
+        loanAmount <= 0 ||
+        annualRate < 0 ||
+        loanYears <= 0
+    ) {
+        alert("Please enter valid values.");
+        return;
+    }
+
+
+    const monthlyRate =
+        annualRate / 12 / 100;
+
+    const totalMonths =
+        loanYears * 12;
+
+    let emi;
+
+
+    if (monthlyRate === 0) {
+
+        emi =
+            loanAmount / totalMonths;
+
+    } else {
+
+        emi =
+            loanAmount *
+            monthlyRate *
+            Math.pow(
+                1 + monthlyRate,
+                totalMonths
+            ) /
+            (
+                Math.pow(
+                    1 + monthlyRate,
+                    totalMonths
+                ) - 1
+            );
+
+    }
+
+
+    const totalPayment =
+        emi * totalMonths;
+
+    const totalInterest =
+        totalPayment - loanAmount;
+
+
+    function formatCurrency(amount) {
+
+        return "₹" +
+            amount.toLocaleString(
+                "en-IN",
+                {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }
+            );
+
+    }
+
+
+    document.getElementById("monthlyEMI").textContent =
+        formatCurrency(emi);
+
+    document.getElementById("displayLoanAmount").textContent =
+        formatCurrency(loanAmount);
+
+    document.getElementById("totalInterest").textContent =
+        formatCurrency(totalInterest);
+
+    document.getElementById("totalPayment").textContent =
+        formatCurrency(totalPayment);
+
+
+    document.getElementById("emiSolution").style.display =
+        "block";
+
+}
+
+</script>
+
+</body>
+</html>

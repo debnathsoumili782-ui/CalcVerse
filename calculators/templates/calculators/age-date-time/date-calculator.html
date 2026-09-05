@@ -1,0 +1,549 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Date Calculator — CalcVerse</title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'calculators/css/style.css' %}"
+    >
+</head>
+
+
+<body>
+
+<header class="navbar">
+
+    <div class="nav-container">
+
+        <a href="/" class="logo">
+            Calc<span>Verse</span>
+        </a>
+
+        <nav>
+            <a href="/">Home</a>
+
+            <a href="{% url 'age_date_time' %}">
+                Age, Date & Time
+            </a>
+        </nav>
+
+    </div>
+
+</header>
+
+
+<main>
+
+
+    <!-- HERO -->
+
+    <section class="hero calculator-hero">
+
+        <div class="badge">
+            DATE CALCULATOR
+        </div>
+
+        <h1>
+            Calculate <span>Dates</span>
+        </h1>
+
+        <p>
+            Add or subtract years, months and days from any date.
+        </p>
+
+    </section>
+
+
+
+    <!-- CALCULATOR -->
+
+    <section class="calculator-section">
+
+        <div class="banking-calculator-card">
+
+
+            <div class="academic-heading">
+
+                <h2>
+                    Calculate Your Date
+                </h2>
+
+                <p>
+                    Select a date and choose the time period to add or subtract.
+                </p>
+
+            </div>
+
+
+
+            <!-- START DATE -->
+
+            <div class="input-group">
+
+                <label for="baseDate">
+                    Starting Date
+                </label>
+
+                <input
+                    type="date"
+                    id="baseDate"
+                >
+
+            </div>
+
+
+
+            <!-- OPERATION -->
+
+            <div class="input-group">
+
+                <label>
+                    Choose Operation
+                </label>
+
+                <div class="format-toggle">
+
+                    <button
+                        type="button"
+                        class="format-option active"
+                        id="addOperation"
+                        onclick="setDateOperation('add')"
+                    >
+                        + Add
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="format-option"
+                        id="subtractOperation"
+                        onclick="setDateOperation('subtract')"
+                    >
+                        − Subtract
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- YEARS / MONTHS / DAYS -->
+
+            <div class="date-values-grid">
+
+
+                <div class="input-group">
+
+                    <label for="yearsValue">
+                        Years
+                    </label>
+
+                    <input
+                        type="number"
+                        id="yearsValue"
+                        min="0"
+                        value="0"
+                    >
+
+                </div>
+
+
+
+                <div class="input-group">
+
+                    <label for="monthsValue">
+                        Months
+                    </label>
+
+                    <input
+                        type="number"
+                        id="monthsValue"
+                        min="0"
+                        value="0"
+                    >
+
+                </div>
+
+
+
+                <div class="input-group">
+
+                    <label for="daysValue">
+                        Days
+                    </label>
+
+                    <input
+                        type="number"
+                        id="daysValue"
+                        min="0"
+                        value="0"
+                    >
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- BUTTON -->
+
+            <button
+                type="button"
+                class="calculate-btn"
+                onclick="calculateDate()"
+            >
+                Calculate Date
+            </button>
+
+
+
+            <!-- RESULT -->
+
+            <div
+                class="result-box"
+                id="dateResultBox"
+                style="display: none;"
+            >
+
+                <span>
+                    RESULTING DATE
+                </span>
+
+                <strong id="dateResult">
+                    --
+                </strong>
+
+            </div>
+
+
+
+            <!-- DETAILS -->
+
+            <div
+                class="solution-box"
+                id="dateDetails"
+                style="display: none;"
+            >
+
+                <h2>
+                    Calculation Details
+                </h2>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Starting Date
+                    </strong>
+
+                    <p id="displayBaseDate">
+                        -
+                    </p>
+
+                </div>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Operation
+                    </strong>
+
+                    <p id="displayOperation">
+                        -
+                    </p>
+
+                </div>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Period
+                    </strong>
+
+                    <p id="displayDatePeriod">
+                        -
+                    </p>
+
+                </div>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Resulting Date
+                    </strong>
+
+                    <p id="displayResultDate">
+                        -
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+
+<footer>
+
+    <p>
+        © 2026 CalcVerse — Calculate Smarter.
+    </p>
+
+</footer>
+
+
+
+<script>
+
+let dateOperation = "add";
+
+
+function setDateOperation(operation) {
+
+    dateOperation = operation;
+
+
+    const addButton =
+        document.getElementById("addOperation");
+
+    const subtractButton =
+        document.getElementById("subtractOperation");
+
+
+    if (operation === "add") {
+
+        addButton.classList.add("active");
+
+        subtractButton.classList.remove("active");
+
+    } else {
+
+        subtractButton.classList.add("active");
+
+        addButton.classList.remove("active");
+
+    }
+
+}
+
+
+/* =========================
+   FORMAT DATE
+========================= */
+
+function formatDate(date) {
+
+    return date.toLocaleDateString(
+        "en-GB",
+        {
+            day: "2-digit",
+            month: "long",
+            year: "numeric"
+        }
+    );
+
+}
+
+
+
+/* =========================
+   CALCULATE DATE
+========================= */
+
+function calculateDate() {
+
+    const baseDateValue =
+        document.getElementById("baseDate").value;
+
+    const years =
+        Number(
+            document.getElementById("yearsValue").value
+        );
+
+    const months =
+        Number(
+            document.getElementById("monthsValue").value
+        );
+
+    const days =
+        Number(
+            document.getElementById("daysValue").value
+        );
+
+
+    if (!baseDateValue) {
+
+        alert("Please select a starting date.");
+
+        return;
+
+    }
+
+
+    if (
+        years < 0 ||
+        months < 0 ||
+        days < 0
+    ) {
+
+        alert(
+            "Please enter valid values."
+        );
+
+        return;
+
+    }
+
+
+    /*
+    Using local date avoids
+    timezone display problems
+    */
+
+    const parts =
+        baseDateValue.split("-");
+
+
+    const resultDate =
+        new Date(
+            Number(parts[0]),
+            Number(parts[1]) - 1,
+            Number(parts[2])
+        );
+
+
+    const direction =
+        dateOperation === "add"
+            ? 1
+            : -1;
+
+
+    /*
+    Add/Subtract years
+    */
+
+    resultDate.setFullYear(
+        resultDate.getFullYear()
+        + (years * direction)
+    );
+
+
+    /*
+    Add/Subtract months
+    */
+
+    resultDate.setMonth(
+        resultDate.getMonth()
+        + (months * direction)
+    );
+
+
+    /*
+    Add/Subtract days
+    */
+
+    resultDate.setDate(
+        resultDate.getDate()
+        + (days * direction)
+    );
+
+
+    const formattedBaseDate =
+        formatDate(
+            new Date(
+                Number(parts[0]),
+                Number(parts[1]) - 1,
+                Number(parts[2])
+            )
+        );
+
+
+    const formattedResultDate =
+        formatDate(resultDate);
+
+
+    const operationText =
+        dateOperation === "add"
+            ? "Add"
+            : "Subtract";
+
+
+    const periodText =
+        `${years} Year${years !== 1 ? "s" : ""}, `
+        + `${months} Month${months !== 1 ? "s" : ""}, `
+        + `${days} Day${days !== 1 ? "s" : ""}`;
+
+
+    /* SHOW RESULT */
+
+    document.getElementById(
+        "dateResult"
+    ).textContent =
+        formattedResultDate;
+
+
+    document.getElementById(
+        "displayBaseDate"
+    ).textContent =
+        formattedBaseDate;
+
+
+    document.getElementById(
+        "displayOperation"
+    ).textContent =
+        operationText;
+
+
+    document.getElementById(
+        "displayDatePeriod"
+    ).textContent =
+        periodText;
+
+
+    document.getElementById(
+        "displayResultDate"
+    ).textContent =
+        formattedResultDate;
+
+
+    document.getElementById(
+        "dateResultBox"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "dateDetails"
+    ).style.display =
+        "block";
+
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1032 @@
+/* =========================================
+   BMR CALCULATOR - COMPLETE STYLESHEET
+========================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body.bmr-page {
+    min-height: 100vh;
+    background: #090D1A;
+    color: #f3eee8;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+/* =========================================
+   NAVBAR - SAME AS BMI
+========================================= */
+
+.bmr-page .navbar {
+    width: 100%;
+    border-bottom: 1px solid #27364a;
+    background: #090D1A;
+}
+
+.bmr-page .nav-container {
+    width: min(100% - 64px, 1180px);
+    margin: 0 auto;
+    min-height: 56px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.bmr-page .logo {
+    text-decoration: none;
+    color: #f2eee9;
+
+    font-size: 23px;
+    font-weight: 800;
+    letter-spacing: -0.6px;
+}
+
+.bmr-page .logo span {
+    background: linear-gradient(
+        90deg,
+        #9c72e8,
+        #dc659b,
+        #ff9d2e
+    );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.bmr-page .navbar nav {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+.bmr-page .navbar nav a {
+    text-decoration: none;
+    color: #aeb9ca;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    transition: color 0.2s ease;
+}
+
+.bmr-page .navbar nav a:hover {
+    color: #ffffff;
+}
+
+
+/* MOBILE NAVBAR */
+
+@media (max-width: 700px) {
+    .bmr-page .nav-container {
+        width: min(100% - 36px, 1180px);
+    }
+
+    .bmr-page .navbar nav {
+        gap: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .bmr-page .nav-container {
+        width: calc(100% - 28px);
+        min-height: 56px;
+    }
+
+    .bmr-page .logo {
+        font-size: 20px;
+    }
+
+    .bmr-page .navbar nav {
+        gap: 13px;
+    }
+
+    .bmr-page .navbar nav a {
+        font-size: 10px;
+    }
+}
+/* =========================================
+   HERO
+========================================= */
+
+.bmr-page .hero {
+    text-align: center;
+    padding: 78px 20px 52px;
+}
+
+.bmr-page .badge {
+    width: fit-content;
+    margin: 0 auto 22px;
+    padding: 7px 14px;
+
+    border: 1px solid #48347b;
+    border-radius: 999px;
+
+    background: #201d3b;
+    color: #c2a7ef;
+
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+.bmr-page .hero h1 {
+    font-size: clamp(44px, 5vw, 68px);
+    line-height: 1.05;
+    font-weight: 800;
+    letter-spacing: -2px;
+    color: #f1eee9;
+}
+
+.bmr-page .hero h1 span {
+    background: linear-gradient(
+        90deg,
+        #a879ed 0%,
+        #d45e99 55%,
+        #ff9f2f 100%
+    );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.bmr-page .hero p {
+    margin-top: 16px;
+    color: #aeb9c9;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   MAIN CALCULATOR SECTION
+========================================= */
+
+.bmr-page .calculator-section {
+    width: 100%;
+    padding: 0 20px 70px;
+}
+
+.bmr-page .calculator-box {
+    width: min(100%, 620px);
+    margin: 0 auto;
+    padding: 26px;
+
+    background: #253243;
+    border: 1px solid #3a4d65;
+    border-radius: 18px;
+
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.18);
+}
+
+
+/* =========================================
+   CALCULATOR HEADING
+========================================= */
+
+.bmr-page .calculator-heading {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.bmr-page .calculator-heading h2 {
+    margin-bottom: 8px;
+    color: #f1eee9;
+    font-size: 23px;
+    font-weight: 750;
+}
+
+.bmr-page .calculator-heading p {
+    color: #aeb9c9;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+
+/* =========================================
+   INPUT GROUPS
+========================================= */
+
+.bmr-page .input-group {
+    margin-bottom: 16px;
+}
+
+.bmr-page .input-group label {
+    display: block;
+    margin-bottom: 8px;
+
+    color: #f0ece5;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.bmr-page input[type="number"] {
+    width: 100%;
+    height: 42px;
+    padding: 0 14px;
+
+    background: #202c3c;
+    color: #f2eee8;
+
+    border: 1px solid #40536a;
+    border-radius: 11px;
+
+    outline: none;
+    font-size: 14px;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.bmr-page input[type="number"]::placeholder {
+    color: #748196;
+}
+
+.bmr-page input[type="number"]:focus {
+    border-color: #8d62d4;
+    box-shadow: 0 0 0 3px rgba(141, 98, 212, 0.12);
+}
+
+.bmr-page input[type="number"]::-webkit-inner-spin-button,
+.bmr-page input[type="number"]::-webkit-outer-spin-button {
+    appearance: none;
+    margin: 0;
+}
+
+.bmr-page input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+
+/* =========================================
+   AGE INPUT
+========================================= */
+
+.bmr-page .age-input {
+    position: relative;
+}
+
+.bmr-page .age-input input {
+    padding-right: 70px;
+}
+
+.bmr-page .age-input span {
+    position: absolute;
+    top: 50%;
+    right: 14px;
+
+    transform: translateY(-50%);
+
+    color: #9daabd;
+    font-size: 11px;
+}
+
+
+/* =========================================
+   TOGGLE BUTTONS
+========================================= */
+
+.bmr-page .toggle-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 7px;
+}
+
+.bmr-page .toggle-btn {
+    width: 100%;
+    height: 38px;
+
+    border: 1px solid #40536a;
+    border-radius: 9px;
+
+    background: #202c3c;
+    color: #aeb9c9;
+
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.15s ease;
+}
+
+.bmr-page .toggle-btn:hover {
+    border-color: #7550b7;
+    color: #f2eee8;
+}
+
+.bmr-page .toggle-btn:active {
+    transform: scale(0.98);
+}
+
+.bmr-page .toggle-btn.active {
+    color: #ffffff;
+    border-color: #8358cb;
+
+    background: linear-gradient(
+        90deg,
+        #69469d,
+        #8154bd
+    );
+
+    box-shadow: 0 5px 15px rgba(108, 69, 163, 0.2);
+}
+
+
+/* =========================================
+   HEIGHT INPUTS
+========================================= */
+
+.bmr-page #cmHeightBox {
+    width: 100%;
+}
+
+.bmr-page .height-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.bmr-page .small-input {
+    position: relative;
+}
+
+.bmr-page .small-input input {
+    padding-right: 40px;
+}
+
+.bmr-page .small-input span {
+    position: absolute;
+    top: 50%;
+    right: 13px;
+
+    transform: translateY(-50%);
+
+    color: #aab6c7;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* =========================================
+   HIDDEN
+========================================= */
+
+.bmr-page .hidden {
+    display: none !important;
+}
+
+
+/* =========================================
+   CALCULATE BUTTON
+========================================= */
+
+.bmr-page .calculate-btn {
+    width: 100%;
+    height: 45px;
+    margin-top: 4px;
+
+    border: none;
+    border-radius: 10px;
+
+    color: #ffffff;
+
+    background: linear-gradient(
+        90deg,
+        #7449aa,
+        #8a59c7
+    );
+
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.2s ease,
+        filter 0.2s ease;
+}
+
+.bmr-page .calculate-btn:hover {
+    filter: brightness(1.08);
+    box-shadow: 0 8px 22px rgba(119, 74, 175, 0.28);
+}
+
+.bmr-page .calculate-btn:active {
+    transform: scale(0.99);
+}
+
+
+/* =========================================
+   MAIN RESULT
+========================================= */
+
+.bmr-page .result-box {
+    margin-top: 16px;
+    padding: 25px 20px;
+
+    text-align: center;
+
+    border: 1px solid #8154bb;
+    border-radius: 16px;
+
+    background: linear-gradient(
+        120deg,
+        rgba(123, 78, 180, 0.16),
+        rgba(37, 50, 67, 0.25)
+    );
+}
+
+.bmr-page .result-label {
+    display: block;
+    margin-bottom: 8px;
+
+    color: #c4a7ee;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 1.8px;
+}
+
+.bmr-page .result-box h3 {
+    margin-bottom: 9px;
+
+    color: #f4f0eb;
+    font-size: clamp(40px, 6vw, 50px);
+    line-height: 1;
+    font-weight: 800;
+}
+
+.bmr-page .result-box p {
+    color: #b5c0d0;
+    font-size: 13px;
+}
+
+
+/* =========================================
+   BMR SCALE BOX
+========================================= */
+
+.bmr-page .bmr-scale-box {
+    margin-top: 16px;
+    padding: 20px;
+
+    border: 1px solid #40536a;
+    border-radius: 16px;
+
+    background: #2a3747;
+}
+
+.bmr-page .bmr-scale-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 18px;
+    margin-bottom: 15px;
+}
+
+.bmr-page .bmr-scale-title {
+    flex: 1;
+}
+
+.bmr-page .scale-label {
+    display: block;
+    margin-bottom: 7px;
+
+    color: #c2a7ed;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 1.6px;
+}
+
+.bmr-page .bmr-scale-title h3 {
+    margin-bottom: 7px;
+
+    color: #f2eee8;
+    font-size: 21px;
+    line-height: 1.2;
+}
+
+.bmr-page .bmr-scale-title p {
+    max-width: 370px;
+
+    color: #aeb9c9;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+
+/* =========================================
+   YOUR BMR MINI CARD
+========================================= */
+
+.bmr-page .your-bmr-mini {
+    min-width: 105px;
+    padding: 12px 10px;
+
+    text-align: center;
+
+    border: 1px solid #40536a;
+    border-radius: 11px;
+
+    background: #202c3c;
+}
+
+.bmr-page .your-bmr-mini span {
+    display: block;
+    margin-bottom: 5px;
+
+    color: #aeb9c9;
+    font-size: 10px;
+}
+
+.bmr-page .your-bmr-mini strong {
+    display: block;
+    margin-bottom: 3px;
+
+    color: #f2eee8;
+    font-size: 20px;
+    line-height: 1.1;
+}
+
+.bmr-page .your-bmr-mini small {
+    color: #9daabd;
+    font-size: 9px;
+}
+
+
+/* =========================================
+   BMR BAR
+========================================= */
+
+.bmr-page .bmr-reference-heading {
+    margin-bottom: 13px;
+}
+
+.bmr-page .bmr-reference-heading span {
+    color: #c0cad8;
+    font-size: 12px;
+    line-height: 1.45;
+}
+
+.bmr-page .bmr-bar-section {
+    position: relative;
+    padding-top: 34px;
+}
+
+.bmr-page .bmr-bar {
+    width: 100%;
+    height: 11px;
+
+    display: flex;
+    overflow: hidden;
+
+    border-radius: 999px;
+    background: #1e2938;
+}
+
+.bmr-page .bar-segment {
+    height: 100%;
+}
+
+.bmr-page .bar-segment.lower {
+    width: 25%;
+    background: #e9b84e;
+}
+
+.bmr-page .bar-segment.typical {
+    width: 37.5%;
+    background: #58b88a;
+}
+
+.bmr-page .bar-segment.higher {
+    width: 37.5%;
+    background: #e06b6b;
+}
+
+
+/* =========================================
+   BMR MARKER
+========================================= */
+
+.bmr-page .bmr-marker {
+    position: absolute;
+    top: 0;
+
+    transform: translateX(-50%);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    pointer-events: none;
+    z-index: 2;
+}
+
+.bmr-page .bmr-marker span {
+    min-width: 48px;
+    padding: 6px 8px;
+
+    text-align: center;
+
+    border-radius: 7px;
+
+    color: #ffffff;
+    background: #8154bf;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.22);
+}
+
+.bmr-page .marker-line {
+    width: 2px;
+    height: 19px;
+
+    margin-top: 3px;
+
+    background: #f4f0eb;
+    border-radius: 999px;
+}
+
+
+/* =========================================
+   RANGE LABELS
+========================================= */
+
+.bmr-page .bmr-range-labels {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 7px;
+    margin-top: 11px;
+}
+
+.bmr-page .bmr-range-card {
+    min-height: 60px;
+    padding: 10px 7px;
+
+    text-align: center;
+
+    border: 1px solid #40536a;
+    border-radius: 9px;
+
+    background: #202c3c;
+}
+
+.bmr-page .bmr-range-card strong {
+    display: block;
+    margin-bottom: 5px;
+
+    color: #f0ece5;
+    font-size: 10px;
+}
+
+.bmr-page .bmr-range-card span {
+    display: block;
+
+    color: #9facbd;
+    font-size: 9px;
+    line-height: 1.3;
+}
+
+.bmr-page .lower-range {
+    border-top: 2px solid #e9b84e;
+}
+
+.bmr-page .typical-range {
+    border-top: 2px solid #58b88a;
+}
+
+.bmr-page .higher-range {
+    border-top: 2px solid #e06b6b;
+}
+
+
+/* =========================================
+   BMR CONTEXT MESSAGE
+========================================= */
+
+.bmr-page .bmr-context-message {
+    margin-top: 14px;
+    padding: 12px 13px;
+
+    border-left: 2px solid #8b5dd1;
+    border-radius: 8px;
+
+    background: #202c3c;
+    color: #b9c5d5;
+
+    font-size: 11px;
+    line-height: 1.55;
+}
+
+.bmr-page .bmr-context-message strong {
+    color: #e7e0f3;
+}
+
+.bmr-page .bmr-scale-note {
+    margin-top: 12px;
+
+    color: #98a6b8;
+    font-size: 10px;
+    line-height: 1.55;
+}
+
+
+/* =========================================
+   INFORMATION BOX
+========================================= */
+
+.bmr-page .bmr-info {
+    margin-top: 16px;
+    padding: 20px;
+
+    border: 1px solid #40536a;
+    border-radius: 15px;
+
+    background: #2a3747;
+}
+
+.bmr-page .bmr-info h3 {
+    margin-bottom: 10px;
+
+    color: #f1eee9;
+    font-size: 19px;
+}
+
+.bmr-page .bmr-info > p {
+    color: #afbac9;
+    font-size: 11px;
+    line-height: 1.7;
+}
+
+
+/* =========================================
+   DAILY BASELINE
+========================================= */
+
+.bmr-page .info-card {
+    margin-top: 15px;
+    padding: 13px 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    border-left: 2px solid #8859cf;
+    border-radius: 8px;
+
+    background: #202c3c;
+}
+
+.bmr-page .info-card span {
+    color: #aeb9c9;
+    font-size: 11px;
+}
+
+.bmr-page .info-card strong {
+    color: #f1eee9;
+    font-size: 13px;
+    font-weight: 800;
+    text-align: right;
+}
+
+
+/* =========================================
+   DETAILS BOX
+========================================= */
+
+.bmr-page .details-box {
+    margin-top: 16px;
+    padding: 20px;
+
+    border: 1px solid #40536a;
+    border-radius: 15px;
+
+    background: #2a3747;
+}
+
+.bmr-page .details-box h3 {
+    margin-bottom: 13px;
+
+    color: #f1eee9;
+    font-size: 19px;
+}
+
+.bmr-page .detail-card {
+    min-height: 46px;
+    padding: 12px 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 18px;
+
+    border-bottom: 1px solid #405064;
+}
+
+.bmr-page .detail-card:last-child {
+    border-bottom: none;
+}
+
+.bmr-page .detail-card strong {
+    color: #c9d2de;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.bmr-page .detail-card span {
+    color: #aeb9c9;
+    font-size: 11px;
+    text-align: right;
+}
+
+.bmr-page .final-detail span {
+    color: #c39af3;
+    font-weight: 800;
+}
+
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.bmr-page footer {
+    padding: 26px 20px;
+    text-align: center;
+
+    border-top: 1px solid #27364a;
+
+    color: #8f9caf;
+    font-size: 11px;
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 700px) {
+
+    .bmr-page .nav-container {
+        width: min(100% - 36px, 1180px);
+    }
+
+    .bmr-page .navbar nav {
+        gap: 18px;
+    }
+
+    .bmr-page .hero {
+        padding: 60px 18px 40px;
+    }
+
+    .bmr-page .hero h1 {
+        font-size: 48px;
+        letter-spacing: -1.5px;
+    }
+
+    .bmr-page .calculator-section {
+        padding: 0 14px 55px;
+    }
+
+    .bmr-page .calculator-box {
+        padding: 20px;
+        border-radius: 15px;
+    }
+
+    .bmr-page .bmr-scale-header {
+        flex-direction: column;
+    }
+
+    .bmr-page .your-bmr-mini {
+        width: 100%;
+    }
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 480px) {
+
+    .bmr-page .nav-container {
+        width: calc(100% - 28px);
+        min-height: 62px;
+    }
+
+    .bmr-page .logo {
+        font-size: 20px;
+    }
+
+    .bmr-page .navbar nav {
+        gap: 13px;
+    }
+
+    .bmr-page .navbar nav a {
+        font-size: 10px;
+    }
+
+    .bmr-page .hero {
+        padding: 50px 16px 35px;
+    }
+
+    .bmr-page .badge {
+        margin-bottom: 17px;
+    }
+
+    .bmr-page .hero h1 {
+        font-size: 40px;
+        letter-spacing: -1px;
+    }
+
+    .bmr-page .hero p {
+        font-size: 12px;
+    }
+
+    .bmr-page .calculator-section {
+        padding: 0 10px 45px;
+    }
+
+    .bmr-page .calculator-box {
+        padding: 16px;
+    }
+
+    .bmr-page .calculator-heading h2 {
+        font-size: 20px;
+    }
+
+    .bmr-page .toggle-btn {
+        font-size: 10px;
+    }
+
+    .bmr-page .height-row {
+        gap: 8px;
+    }
+
+    .bmr-page .result-box h3 {
+        font-size: 42px;
+    }
+
+    .bmr-page .bmr-scale-box,
+    .bmr-page .bmr-info,
+    .bmr-page .details-box {
+        padding: 15px;
+    }
+
+    .bmr-page .bmr-scale-title h3 {
+        font-size: 18px;
+    }
+
+    .bmr-page .bmr-range-labels {
+        gap: 5px;
+    }
+
+    .bmr-page .bmr-range-card {
+        padding: 8px 4px;
+    }
+
+    .bmr-page .bmr-range-card strong {
+        font-size: 9px;
+    }
+
+    .bmr-page .bmr-range-card span {
+        font-size: 8px;
+    }
+
+    .bmr-page .info-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .bmr-page .info-card strong {
+        text-align: left;
+    }
+
+    .bmr-page .detail-card {
+        gap: 10px;
+    }
+
+    .bmr-page .detail-card span {
+        max-width: 58%;
+        line-height: 1.4;
+    }
+}

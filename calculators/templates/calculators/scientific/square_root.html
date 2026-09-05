@@ -1,0 +1,80 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Square Root Calculator | CalcVerse</title>
+
+    <link rel="stylesheet" href="{% static 'calculators/css/calculator.css' %}">
+</head>
+
+<body>
+
+<header class="navbar">
+    <a href="/" class="logo">Calc<span>Verse</span></a>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/category/scientific/">Scientific</a>
+    </nav>
+</header>
+
+<main class="tool-container">
+
+    <div class="tool-hero">
+        <span class="hero-badge">SCIENTIFIC TOOL</span>
+
+        <h1>Square <span>Root</span></h1>
+
+        <p>Calculate the square root of any number instantly.</p>
+    </div>
+
+    <div class="tool-card">
+
+        <div class="input-group">
+            <label for="number">Enter a Number</label>
+
+            <input
+                type="number"
+                id="number"
+                placeholder="Enter a number"
+            >
+        </div>
+
+        <button class="calculate-btn" onclick="calculateSquareRoot()">
+            Calculate √
+        </button>
+
+        <div class="result-box">
+            <span>Result</span>
+            <strong id="result">—</strong>
+        </div>
+
+    </div>
+
+</main>
+
+<script>
+function calculateSquareRoot() {
+    const number = parseFloat(document.getElementById("number").value);
+    const result = document.getElementById("result");
+
+    if (isNaN(number)) {
+        result.textContent = "Enter a valid number";
+        return;
+    }
+
+    if (number < 0) {
+        result.textContent = "No real square root";
+        return;
+    }
+
+    result.textContent = Math.sqrt(number);
+}
+</script>
+
+</body>
+</html>

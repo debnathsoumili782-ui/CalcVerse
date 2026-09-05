@@ -1,0 +1,365 @@
+/* =========================================
+   RANDOM PICKER PAGE
+========================================= */
+
+.random-picker-page {
+    min-height: 100vh;
+    background: #090D1A;
+    color: #f3f1ed;
+    padding: 0 20px 90px;
+}
+
+
+/* =========================================
+   HERO
+========================================= */
+
+.random-picker-hero {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 0 55px;
+    text-align: center;
+}
+
+.random-picker-tag {
+    display: inline-block;
+    padding: 9px 18px;
+    margin-bottom: 24px;
+
+    border: 1px solid rgba(126, 87, 194, 0.45);
+    border-radius: 999px;
+
+    background: rgba(107, 70, 160, 0.12);
+    color: #b9a7ff;
+
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.random-picker-hero h1 {
+    margin: 0;
+
+    color: #f3f1ed;
+
+    font-size: clamp(42px, 5vw, 72px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -2px;
+}
+
+.random-picker-hero h1 span {
+    background: linear-gradient(
+        90deg,
+        #a86bd7,
+        #e25598,
+        #ffae35
+    );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    color: transparent;
+}
+
+.random-picker-hero p {
+    max-width: 650px;
+    margin: 20px auto 0;
+
+    color: #aeb8c9;
+
+    font-size: 17px;
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   PICKER CARD
+========================================= */
+
+.random-picker-card {
+    width: 100%;
+    max-width: 780px;
+
+    margin: 0 auto;
+    padding: 30px;
+
+    background: #202B3B;
+
+    border: 1px solid #34465d;
+    border-radius: 18px;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================
+   CARD HEADING
+========================================= */
+
+.random-picker-heading {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.random-picker-heading h2 {
+    margin: 0 0 10px;
+
+    color: #f3f1ed;
+
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.random-picker-heading p {
+    margin: 0;
+
+    color: #afbacb;
+
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+
+/* =========================================
+   FORM GROUP
+========================================= */
+
+.picker-form-group {
+    margin-bottom: 14px;
+}
+
+.picker-form-group label {
+    display: block;
+    margin-bottom: 10px;
+
+    color: #f0ece5;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+/* =========================================
+   TEXTAREA
+========================================= */
+
+.picker-textarea {
+    width: 100%;
+    min-height: 190px;
+
+    padding: 16px;
+
+    border: 1px solid #41536b;
+    border-radius: 12px;
+
+    background: #263345;
+    color: #f2f4f7;
+
+    font-family: inherit;
+    font-size: 16px;
+    line-height: 1.6;
+
+    resize: vertical;
+    outline: none;
+
+    box-sizing: border-box;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.picker-textarea::placeholder {
+    color: #8997aa;
+}
+
+.picker-textarea:focus {
+    border-color: #8055ba;
+
+    box-shadow:
+        0 0 0 3px rgba(128, 85, 186, 0.12);
+}
+
+
+/* =========================================
+   OPTION COUNT
+========================================= */
+
+.option-count {
+    margin-bottom: 24px;
+
+    color: #9caabd;
+
+    font-size: 13px;
+}
+
+.option-count span {
+    color: #b9a7ff;
+    font-weight: 700;
+}
+
+
+/* =========================================
+   PICK BUTTON
+========================================= */
+
+.pick-button {
+    width: 100%;
+    height: 56px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: linear-gradient(
+        135deg,
+        #68479a,
+        #8558be
+    );
+
+    color: #ffffff;
+
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.pick-button:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 10px 24px rgba(105, 70, 157, 0.28);
+}
+
+.pick-button:active {
+    transform: translateY(0);
+}
+
+
+/* =========================================
+   ERROR MESSAGE
+========================================= */
+
+.picker-error {
+    min-height: 20px;
+
+    margin: 14px 0 0;
+
+    color: #ff8f9a;
+
+    font-size: 14px;
+    text-align: center;
+}
+
+
+/* =========================================
+   RESULT
+========================================= */
+
+.picker-result {
+    margin-top: 24px;
+    padding: 28px 20px;
+
+    text-align: center;
+
+    background: #222d3e;
+
+    border: 1px solid #7654ad;
+    border-radius: 14px;
+}
+
+.picker-result-label {
+    margin-bottom: 16px;
+
+    color: #b9a7ff;
+
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.picked-option {
+    color: #f5f2ed;
+
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 800;
+    line-height: 1.3;
+
+    word-break: break-word;
+}
+
+
+/* =========================================
+   HIDDEN
+========================================= */
+
+.hidden {
+    display: none !important;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 768px) {
+
+    .random-picker-page {
+        padding: 0 16px 70px;
+    }
+
+    .random-picker-hero {
+        padding: 60px 10px 45px;
+    }
+
+    .random-picker-hero h1 {
+        font-size: 48px;
+        letter-spacing: -1px;
+    }
+
+    .random-picker-hero p {
+        font-size: 15px;
+    }
+
+    .random-picker-card {
+        padding: 24px 18px;
+        border-radius: 16px;
+    }
+
+}
+
+
+@media (max-width: 520px) {
+
+    .random-picker-hero {
+        padding-top: 45px;
+    }
+
+    .random-picker-hero h1 {
+        font-size: 38px;
+    }
+
+    .random-picker-tag {
+        padding: 8px 15px;
+        font-size: 10px;
+    }
+
+    .random-picker-card {
+        padding: 20px 14px;
+    }
+
+    .random-picker-heading h2 {
+        font-size: 22px;
+    }
+
+    .picker-textarea {
+        min-height: 170px;
+    }
+
+}

@@ -1,0 +1,156 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Profit & Loss Calculator | CalcVerse</title>
+
+    <link rel="stylesheet" href="{% static 'calculators/css/calculator.css' %}">
+</head>
+
+<body>
+
+<header class="navbar">
+    <a href="/" class="logo">Calc<span>Verse</span></a>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/category/basic/">Basic Calculators</a>
+    </nav>
+</header>
+
+
+<main class="calculator-page">
+
+    <div class="calculator-header">
+        <div class="badge">PROFIT & LOSS CALCULATOR</div>
+
+        <h1>Calculate <span>Profit or Loss.</span></h1>
+
+        <p>Enter the cost price and selling price to see your profit or loss.</p>
+    </div>
+
+
+    <div class="profit-loss-box">
+
+        <div class="profit-loss-field">
+            <label for="cost-price">Cost Price</label>
+
+            <input
+                type="number"
+                id="cost-price"
+                placeholder="e.g. 1000"
+                min="0"
+            >
+        </div>
+
+        <div class="profit-loss-field">
+            <label for="selling-price">Selling Price</label>
+
+            <input
+                type="number"
+                id="selling-price"
+                placeholder="e.g. 1200"
+                min="0"
+            >
+        </div>
+
+
+        <button onclick="calculateProfitLoss()" class="profit-loss-btn">
+            Calculate
+        </button>
+
+
+        <div class="profit-loss-results">
+
+            <div class="profit-loss-card">
+                <span>Result</span>
+                <strong id="profit-loss-type">—</strong>
+            </div>
+
+            <div class="profit-loss-card">
+                <span>Amount</span>
+                <strong id="profit-loss-amount">—</strong>
+            </div>
+
+            <div class="profit-loss-card">
+                <span>Percentage</span>
+                <strong id="profit-loss-percent">—</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<footer>
+    © 2026 CalcVerse — Calculate Smarter.
+</footer>
+
+
+<script>
+    function calculateProfitLoss() {
+        const costPrice = parseFloat(
+            document.getElementById("cost-price").value
+        );
+
+        const sellingPrice = parseFloat(
+            document.getElementById("selling-price").value
+        );
+
+        const typeBox = document.getElementById("profit-loss-type");
+        const amountBox = document.getElementById("profit-loss-amount");
+        const percentBox = document.getElementById("profit-loss-percent");
+
+
+        if (
+            isNaN(costPrice) ||
+            isNaN(sellingPrice) ||
+            costPrice < 0 ||
+            sellingPrice < 0
+        ) {
+            typeBox.textContent = "Invalid";
+            amountBox.textContent = "Invalid";
+            percentBox.textContent = "Invalid";
+            return;
+        }
+
+        if (costPrice === 0) {
+            typeBox.textContent = "Invalid";
+            amountBox.textContent = "—";
+            percentBox.textContent = "Cost price cannot be 0";
+            return;
+        }
+
+
+        if (sellingPrice > costPrice) {
+            const profit = sellingPrice - costPrice;
+            const profitPercent = (profit / costPrice) * 100;
+
+            typeBox.textContent = "Profit";
+            amountBox.textContent = profit.toFixed(2);
+            percentBox.textContent = profitPercent.toFixed(2) + "%";
+
+        } else if (sellingPrice < costPrice) {
+            const loss = costPrice - sellingPrice;
+            const lossPercent = (loss / costPrice) * 100;
+
+            typeBox.textContent = "Loss";
+            amountBox.textContent = loss.toFixed(2);
+            percentBox.textContent = lossPercent.toFixed(2) + "%";
+
+        } else {
+            typeBox.textContent = "No Profit / No Loss";
+            amountBox.textContent = "0.00";
+            percentBox.textContent = "0%";
+        }
+    }
+</script>
+
+</body>
+</html>

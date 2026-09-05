@@ -1,0 +1,239 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Simple Interest Calculator — CalcVerse</title>
+
+    <link rel="stylesheet" href="{% static 'calculators/css/style.css' %}">
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="nav-container">
+        <a href="/" class="logo">
+            Calc<span>Verse</span>
+        </a>
+
+        <nav>
+            <a href="/">Home</a>
+            <a href="{% url 'banking_finance' %}">Calculators</a>
+        </nav>
+    </div>
+</header>
+
+
+<main>
+
+    <section class="hero calculator-hero">
+
+        <div class="badge">BANKING & FINANCE</div>
+
+        <h1>
+            Simple Interest <span>Calculator</span>
+        </h1>
+
+        <p>
+            Calculate simple interest and the total amount on your investment or loan.
+        </p>
+
+    </section>
+
+
+    <section class="calculator-section">
+
+        <div class="banking-calculator-card">
+
+            <!-- Principal Amount -->
+            <div class="input-group">
+                <label for="principal">
+                    Principal Amount (₹)
+                </label>
+
+                <input
+                    type="number"
+                    id="principal"
+                    placeholder="Enter principal amount"
+                >
+            </div>
+
+
+            <!-- Interest Rate -->
+            <div class="input-group">
+                <label for="interestRate">
+                    Annual Interest Rate (%)
+                </label>
+
+                <input
+                    type="number"
+                    id="interestRate"
+                    placeholder="Enter annual interest rate"
+                    step="0.01"
+                >
+            </div>
+
+
+            <!-- Time Period -->
+            <div class="input-group">
+                <label for="timePeriod">
+                    Time Period (Years)
+                </label>
+
+                <input
+                    type="number"
+                    id="timePeriod"
+                    placeholder="Enter time period"
+                    step="0.5"
+                >
+            </div>
+
+
+            <!-- Calculate Button -->
+            <button
+                type="button"
+                class="calculate-btn"
+                onclick="calculateSimpleInterest()"
+            >
+                Calculate Interest
+            </button>
+
+
+            <!-- Main Result -->
+            <div class="result-box">
+
+                <span>SIMPLE INTEREST</span>
+
+                <strong id="simpleInterest">
+                    ₹0.00
+                </strong>
+
+            </div>
+
+
+            <!-- Calculation Details -->
+            <div
+                class="solution-box"
+                id="interestSolution"
+                style="display: none;"
+            >
+
+                <h2>Simple Interest Calculation</h2>
+
+
+                <div class="step-item">
+                    <strong>Principal Amount</strong>
+
+                    <p id="displayPrincipal">
+                        ₹0.00
+                    </p>
+                </div>
+
+
+                <div class="step-item">
+                    <strong>Interest Earned</strong>
+
+                    <p id="displayInterest">
+                        ₹0.00
+                    </p>
+                </div>
+
+
+                <div class="step-item">
+                    <strong>Total Amount</strong>
+
+                    <p id="totalAmount">
+                        ₹0.00
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer>
+    <p>© 2026 CalcVerse — Calculate Smarter.</p>
+</footer>
+
+
+<script>
+
+function calculateSimpleInterest() {
+
+    const principal = parseFloat(
+        document.getElementById("principal").value
+    );
+
+    const annualRate = parseFloat(
+        document.getElementById("interestRate").value
+    );
+
+    const timePeriod = parseFloat(
+        document.getElementById("timePeriod").value
+    );
+
+
+    if (
+        isNaN(principal) ||
+        isNaN(annualRate) ||
+        isNaN(timePeriod) ||
+        principal <= 0 ||
+        annualRate < 0 ||
+        timePeriod <= 0
+    ) {
+        alert("Please enter valid values.");
+        return;
+    }
+
+
+    const interest =
+        (principal * annualRate * timePeriod) / 100;
+
+    const total =
+        principal + interest;
+
+
+    function formatCurrency(amount) {
+
+        return "₹" +
+            amount.toLocaleString(
+                "en-IN",
+                {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }
+            );
+
+    }
+
+
+    document.getElementById("simpleInterest").textContent =
+        formatCurrency(interest);
+
+    document.getElementById("displayPrincipal").textContent =
+        formatCurrency(principal);
+
+    document.getElementById("displayInterest").textContent =
+        formatCurrency(interest);
+
+    document.getElementById("totalAmount").textContent =
+        formatCurrency(total);
+
+
+    document.getElementById("interestSolution").style.display =
+        "block";
+
+}
+
+</script>
+
+</body>
+</html>

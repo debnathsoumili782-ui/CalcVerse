@@ -1,0 +1,358 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>CAGR Calculator — CalcVerse</title>
+
+    <link rel="stylesheet"
+          href="{% static 'calculators/css/style.css' %}">
+</head>
+
+
+<body>
+
+<header class="navbar">
+
+    <div class="nav-container">
+
+        <a href="/" class="logo">
+            Calc<span>Verse</span>
+        </a>
+
+        <nav>
+            <a href="/">Home</a>
+
+            <a href="{% url 'banking_finance' %}">
+                Calculators
+            </a>
+        </nav>
+
+    </div>
+
+</header>
+
+
+<main>
+
+
+    <!-- HERO -->
+
+    <section class="hero calculator-hero">
+
+        <div class="badge">
+            BANKING & FINANCE
+        </div>
+
+        <h1>
+            CAGR <span>Calculator</span>
+        </h1>
+
+        <p>
+            Calculate the Compound Annual Growth Rate of your investment.
+        </p>
+
+    </section>
+
+
+
+    <!-- CALCULATOR -->
+
+    <section class="calculator-section">
+
+        <div class="banking-calculator-card">
+
+
+            <!-- Initial Value -->
+
+            <div class="input-group">
+
+                <label for="initialValue">
+                    Initial Investment Value (₹)
+                </label>
+
+                <input
+                    type="number"
+                    id="initialValue"
+                    placeholder="Enter initial investment value"
+                >
+
+            </div>
+
+
+            <!-- Final Value -->
+
+            <div class="input-group">
+
+                <label for="finalValue">
+                    Final Investment Value (₹)
+                </label>
+
+                <input
+                    type="number"
+                    id="finalValue"
+                    placeholder="Enter final investment value"
+                >
+
+            </div>
+
+
+            <!-- Years -->
+
+            <div class="input-group">
+
+                <label for="years">
+                    Investment Period (Years)
+                </label>
+
+                <input
+                    type="number"
+                    id="years"
+                    placeholder="Enter investment period"
+                    step="0.1"
+                >
+
+            </div>
+
+
+            <!-- BUTTON -->
+
+            <button
+                type="button"
+                class="calculate-btn"
+                onclick="calculateCAGR()"
+            >
+                Calculate CAGR
+            </button>
+
+
+
+            <!-- MAIN RESULT -->
+
+            <div
+                class="result-box"
+                id="resultBox"
+                style="display: none;"
+            >
+
+                <span>
+                    COMPOUND ANNUAL GROWTH RATE
+                </span>
+
+                <strong id="cagrResult">
+                    0.00%
+                </strong>
+
+            </div>
+
+
+
+            <!-- DETAILS -->
+
+            <div
+                class="solution-box"
+                id="solutionBox"
+                style="display: none;"
+            >
+
+                <h2>
+                    CAGR Calculation
+                </h2>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Initial Investment
+                    </strong>
+
+                    <p id="initialResult">
+                        ₹0.00
+                    </p>
+
+                </div>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Final Investment
+                    </strong>
+
+                    <p id="finalResult">
+                        ₹0.00
+                    </p>
+
+                </div>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        Investment Period
+                    </strong>
+
+                    <p id="yearsResult">
+                        0 Years
+                    </p>
+
+                </div>
+
+
+                <div class="step-item">
+
+                    <strong>
+                        CAGR
+                    </strong>
+
+                    <p id="cagrDetail">
+                        0.00%
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer>
+    <p>© 2026 CalcVerse — Calculate Smarter.</p>
+</footer>
+
+
+
+<script>
+
+function calculateCAGR() {
+
+    const initialValue = parseFloat(
+        document.getElementById("initialValue").value
+    );
+
+    const finalValue = parseFloat(
+        document.getElementById("finalValue").value
+    );
+
+    const years = parseFloat(
+        document.getElementById("years").value
+    );
+
+
+    // Validation
+
+    if (
+        isNaN(initialValue) ||
+        isNaN(finalValue) ||
+        isNaN(years) ||
+        initialValue <= 0 ||
+        finalValue <= 0 ||
+        years <= 0
+    ) {
+
+        alert("Please enter all valid values.");
+        return;
+
+    }
+
+
+    /*
+        CAGR Formula:
+
+        CAGR = (Final Value / Initial Value)^(1 / Years) - 1
+    */
+
+    const cagr =
+        (
+            Math.pow(
+                finalValue / initialValue,
+                1 / years
+            ) - 1
+        ) * 100;
+
+
+    // Currency Formatter
+
+    function formatCurrency(amount) {
+
+        return "₹" +
+            amount.toLocaleString(
+                "en-IN",
+                {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }
+            );
+
+    }
+
+
+    // Percentage Formatter
+
+    const formattedCAGR =
+        cagr.toFixed(2) + "%";
+
+
+    // Update Main Result
+
+    document.getElementById(
+        "cagrResult"
+    ).textContent =
+        formattedCAGR;
+
+
+    // Update Details
+
+    document.getElementById(
+        "initialResult"
+    ).textContent =
+        formatCurrency(initialValue);
+
+
+    document.getElementById(
+        "finalResult"
+    ).textContent =
+        formatCurrency(finalValue);
+
+
+    document.getElementById(
+        "yearsResult"
+    ).textContent =
+        years + " Years";
+
+
+    document.getElementById(
+        "cagrDetail"
+    ).textContent =
+        formattedCAGR;
+
+
+    // Show results only after calculation
+
+    document.getElementById(
+        "resultBox"
+    ).style.display = "block";
+
+
+    document.getElementById(
+        "solutionBox"
+    ).style.display = "block";
+
+}
+
+</script>
+
+
+</body>
+</html>

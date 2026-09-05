@@ -1,0 +1,138 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Discount Calculator | CalcVerse</title>
+
+    <link rel="stylesheet" href="{% static 'calculators/css/calculator.css' %}">
+</head>
+
+<body>
+
+<header class="navbar">
+    <a href="/" class="logo">Calc<span>Verse</span></a>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/category/basic/">Basic Calculators</a>
+    </nav>
+</header>
+
+
+<main class="calculator-page">
+
+    <div class="calculator-header">
+        <div class="badge">DISCOUNT CALCULATOR</div>
+
+        <h1>Calculate Your <span>Discount.</span></h1>
+
+        <p>Find the discount amount and final price instantly.</p>
+    </div>
+
+
+    <div class="discount-box">
+
+        <div class="discount-field">
+            <label for="original-price">Original Price</label>
+
+            <input
+                type="number"
+                id="original-price"
+                placeholder="e.g. 1000"
+                min="0"
+            >
+        </div>
+
+        <div class="discount-field">
+            <label for="discount-percent">Discount Percentage</label>
+
+            <div class="discount-input">
+                <input
+                    type="number"
+                    id="discount-percent"
+                    placeholder="e.g. 20"
+                    min="0"
+                >
+                <span>%</span>
+            </div>
+        </div>
+
+        <button onclick="calculateDiscount()" class="discount-btn">
+            Calculate Discount
+        </button>
+
+
+        <div class="discount-results">
+
+            <div class="discount-result-card">
+                <span>You Save</span>
+                <strong id="discount-amount">—</strong>
+            </div>
+
+            <div class="discount-result-card final-price">
+                <span>Final Price</span>
+                <strong id="final-price">—</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<footer>
+    © 2026 CalcVerse — Calculate Smarter.
+</footer>
+
+
+<script>
+    function calculateDiscount() {
+        const originalPrice = parseFloat(
+            document.getElementById("original-price").value
+        );
+
+        const discountPercent = parseFloat(
+            document.getElementById("discount-percent").value
+        );
+
+        const discountAmountBox =
+            document.getElementById("discount-amount");
+
+        const finalPriceBox =
+            document.getElementById("final-price");
+
+
+        if (
+            isNaN(originalPrice) ||
+            isNaN(discountPercent) ||
+            originalPrice < 0 ||
+            discountPercent < 0
+        ) {
+            discountAmountBox.textContent = "Invalid";
+            finalPriceBox.textContent = "Invalid";
+            return;
+        }
+
+
+        const discountAmount =
+            (originalPrice * discountPercent) / 100;
+
+        const finalPrice =
+            originalPrice - discountAmount;
+
+
+        discountAmountBox.textContent =
+            discountAmount.toFixed(2);
+
+        finalPriceBox.textContent =
+            finalPrice.toFixed(2);
+    }
+</script>
+
+</body>
+</html>
