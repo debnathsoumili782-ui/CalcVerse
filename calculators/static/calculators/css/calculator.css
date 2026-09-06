@@ -4258,3 +4258,227 @@ body {
     }
 
 }
+/* ==========================================
+   EXTRA COMPACT SCIENTIFIC CALCULATOR - MOBILE
+   ========================================== */
+
+@media (max-width: 650px) {
+
+    .scientific-calculator {
+        padding: 8px !important;
+        border-radius: 14px !important;
+    }
+
+    .scientific-calculator #display,
+    .scientific-calculator .calculator-display {
+        height: 50px !important;
+        min-height: 50px !important;
+        font-size: 19px !important;
+        padding: 0 10px !important;
+        margin-bottom: 5px !important;
+    }
+
+    .scientific-calculator .angle-mode {
+        margin: 0 0 5px !important;
+        gap: 4px !important;
+    }
+
+    .scientific-calculator .angle-mode button {
+        padding: 4px 7px !important;
+        font-size: 9px !important;
+    }
+
+    .scientific-calculator .calculator-buttons,
+    .scientific-calculator .top-actions,
+    .scientific-calculator .scientific-grid,
+    .scientific-calculator .keypad-section,
+    .scientific-calculator .operator-column,
+    .scientific-calculator .number-grid {
+        gap: 4px !important;
+    }
+
+    .scientific-calculator .calculator-buttons button,
+    .scientific-calculator .top-actions button,
+    .scientific-calculator .scientific-grid button,
+    .scientific-calculator .operator-column button,
+    .scientific-calculator .number-grid button {
+        height: 34px !important;
+        min-height: 34px !important;
+        font-size: 11px !important;
+        padding: 0 !important;
+        border-radius: 7px !important;
+    }
+
+    .scientific-calculator .operator-column {
+        grid-template-rows: repeat(5, 34px) !important;
+    }
+
+    .scientific-calculator .number-grid {
+        grid-template-rows: repeat(4, 34px) !important;
+    }
+
+    .scientific-calculator .calculator-buttons {
+        gap: 4px !important;
+    }
+
+
+    /* HISTORY FIX */
+    .scientific-calculator .history-item,
+    .history-item {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) auto !important;
+        align-items: center !important;
+        gap: 8px !important;
+        padding: 10px 12px !important;
+    }
+
+    .scientific-calculator .history-item span,
+    .history-item span {
+        min-width: 0 !important;
+        overflow-wrap: anywhere !important;
+        word-break: break-word !important;
+    }
+
+    .scientific-calculator .history-item strong,
+    .history-item strong {
+        white-space: nowrap !important;
+        font-size: 14px !important;
+    }
+}
+/* ==========================================
+   ULTRA COMPACT SCIENTIFIC CALCULATOR MOBILE
+   ========================================== */
+
+@media (max-width: 650px) {
+
+    .scientific-calculator {
+        padding: 6px !important;
+    }
+
+    /* Display আরও ছোট */
+    .scientific-calculator #display,
+    .scientific-calculator .calculator-display {
+        height: 38px !important;
+        min-height: 38px !important;
+        font-size: 16px !important;
+        padding: 0 8px !important;
+        margin-bottom: 3px !important;
+    }
+
+    /* DEG / RAD */
+    .scientific-calculator .angle-mode {
+        margin: 0 0 3px !important;
+        gap: 3px !important;
+    }
+
+    .scientific-calculator .angle-mode button {
+        padding: 2px 6px !important;
+        font-size: 8px !important;
+    }
+
+    /* সব gap আরও কম */
+    .scientific-calculator .calculator-buttons,
+    .scientific-calculator .top-actions,
+    .scientific-calculator .scientific-grid,
+    .scientific-calculator .keypad-section,
+    .scientific-calculator .operator-column,
+    .scientific-calculator .number-grid {
+        gap: 3px !important;
+    }
+
+    /* সব button ultra compact */
+    .scientific-calculator .calculator-buttons button,
+    .scientific-calculator .top-actions button,
+    .scientific-calculator .scientific-grid button,
+    .scientific-calculator .operator-column button,
+    .scientific-calculator .number-grid button {
+        height: 28px !important;
+        min-height: 28px !important;
+        padding: 0 !important;
+        font-size: 10px !important;
+        line-height: 1 !important;
+        border-radius: 6px !important;
+    }
+
+    /* Fixed grid heights */
+    .scientific-calculator .operator-column {
+        grid-template-rows: repeat(5, 28px) !important;
+    }
+
+    .scientific-calculator .number-grid {
+        grid-template-rows: repeat(4, 28px) !important;
+    }
+
+    /* = button যেন History-র মধ্যে না ঢোকে */
+    .scientific-calculator .equals-btn {
+        position: static !important;
+        transform: none !important;
+        margin: 0 !important;
+        min-height: 28px !important;
+        height: 28px !important;
+        z-index: 1 !important;
+    }
+
+    /* History-এর আগে clear separation */
+    .scientific-calculator .calculation-history,
+    .scientific-calculator .history-section,
+    .scientific-calculator .history-card {
+        margin-top: 10px !important;
+        clear: both !important;
+    }
+}
+/* MOBILE - SHRINK SCIENTIFIC CALCULATOR WIDTH + HEIGHT */
+@media (max-width: 650px) {
+
+    .scientific-calculator {
+        width: 88% !important;
+        max-width: 88% !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        padding: 5px !important;
+    }
+
+    /* একটু সরু হলে button-গুলোকেও compact রাখবে */
+    .scientific-calculator .calculator-buttons button,
+    .scientific-calculator .top-actions button,
+    .scientific-calculator .scientific-grid button,
+    .scientific-calculator .operator-column button,
+    .scientific-calculator .number-grid button {
+        height: 26px !important;
+        min-height: 26px !important;
+        font-size: 9px !important;
+    }
+
+    .scientific-calculator .operator-column {
+        grid-template-rows: repeat(5, 26px) !important;
+    }
+
+    .scientific-calculator .number-grid {
+        grid-template-rows: repeat(4, 26px) !important;
+    }
+
+    .scientific-calculator .calculator-buttons,
+    .scientific-calculator .top-actions,
+    .scientific-calculator .scientific-grid,
+    .scientific-calculator .keypad-section,
+    .scientific-calculator .operator-column,
+    .scientific-calculator .number-grid {
+        gap: 2px !important;
+    }
+
+    .scientific-calculator .calculation-history,
+    .scientific-calculator .history-section,
+    .scientific-calculator .history-card {
+        margin-top: 12px !important;
+    }
+}
+@media (max-width: 650px) {
+    .scientific-calculator .calculator-buttons button,
+    .scientific-calculator .top-actions button,
+    .scientific-calculator .scientific-grid button,
+    .scientific-calculator .operator-column button,
+    .scientific-calculator .number-grid button {
+        border: 1px solid rgba(90, 110, 140, 0.45) !important;
+        border-radius: 5px !important;
+    }
+}
